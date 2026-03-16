@@ -18,7 +18,7 @@ export class TierLimitError extends Error {
 }
 
 export async function checkIntegrationLimit(
-  supabase: ReturnType<typeof import("@/lib/supabase/server").createClient>,
+  supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
   userId: string,
   service: ServiceType
 ): Promise<void> {
@@ -37,7 +37,7 @@ export async function checkIntegrationLimit(
 }
 
 export async function checkAlertChannelLimit(
-  supabase: ReturnType<typeof import("@/lib/supabase/server").createClient>,
+  supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
   userId: string,
   channelType: ChannelType
 ): Promise<void> {
