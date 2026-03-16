@@ -116,7 +116,7 @@ export default async function DashboardPage() {
             .filter(([key]) => key.startsWith(`${integration.id}::`))
             .map(([, v]) => v);
 
-          if (integrationSnapshots.length === 0) {
+          if (integration.status === "unsupported" || integrationSnapshots.length === 0) {
             const isError = integration.status === "error";
             const isUnsupported = integration.status === "unsupported";
 

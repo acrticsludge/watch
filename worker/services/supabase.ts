@@ -53,10 +53,12 @@ export async function fetchSupabaseUsage(
         "Supabase: Token lacks permission to read project usage. " +
         "Ensure the Personal Access Token has the required scopes."
       );
-    case 404:
+    case 404: {
+      const body404 = await res.text().catch(() => "(unreadable)");
       throw new Error(
-        `Supabase: Project '${projectRef}' not found. Check the project_ref in the integration settings.`
+        `Supabase: 404 on /v1/projects/${projectRef}/usage — ${body404}`
       );
+    }
     case 429:
       throw new Error("Supabase: Rate limited. Will retry next cycle.");
   }
