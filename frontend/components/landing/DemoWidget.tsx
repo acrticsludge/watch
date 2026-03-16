@@ -80,7 +80,7 @@ export function DemoWidget() {
           <div className="h-3 w-3 rounded-full bg-[#28c840]" />
         </div>
         <div className="flex-1 bg-[#1a1a1a] rounded border border-white/6 px-3 py-1 text-xs text-zinc-500 max-w-xs mx-auto text-center font-mono">
-          stackwatch.app/dashboard
+          stackwatch.pulsemonitor.dev/dashboard
         </div>
       </div>
 

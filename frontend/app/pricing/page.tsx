@@ -8,6 +8,8 @@ export const metadata: Metadata = {
   title: "Pricing — Stackwatch",
   description:
     "Simple, transparent pricing. Start free and upgrade when you need more services, faster polling, or team collaboration.",
+  alternates: { canonical: "/pricing" },
+  openGraph: { url: "/pricing" },
 };
 
 export default async function PricingPage() {

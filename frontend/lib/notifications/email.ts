@@ -4,7 +4,7 @@ import { METRIC_LABELS, METRIC_UNITS } from "@/lib/utils";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "alerts@pulsemonitor.dev";
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.app";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
 
 export async function sendAlertEmail(
   to: string,

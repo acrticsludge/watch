@@ -6,6 +6,9 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = {
   title: "Terms of Service — Stackwatch",
   description: "Terms and conditions for using Stackwatch.",
+  alternates: { canonical: "/terms" },
+  openGraph: { url: "/terms" },
+  robots: { index: true, follow: false },
 };
 
 export default async function TermsPage() {
@@ -30,7 +33,7 @@ export default async function TermsPage() {
             <h2 className="text-base font-semibold text-zinc-200 mb-3">1. Acceptance of Terms</h2>
             <p>
               By accessing or using Stackwatch (&ldquo;Service&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) at{" "}
-              <span className="text-zinc-300">stackwatch.app</span>, you agree to be bound by these Terms of Service
+              <span className="text-zinc-300">stackwatch.pulsemonitor.dev</span>, you agree to be bound by these Terms of Service
               (&ldquo;Terms&rdquo;). If you do not agree, do not use the Service. These Terms constitute a legally binding
               agreement under the{" "}
               <span className="text-zinc-300">Information Technology Act, 2000</span> and the{" "}

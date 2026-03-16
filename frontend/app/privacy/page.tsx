@@ -6,6 +6,9 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = {
   title: "Privacy Policy — Stackwatch",
   description: "How Stackwatch collects, uses, and protects your personal data.",
+  alternates: { canonical: "/privacy" },
+  openGraph: { url: "/privacy" },
+  robots: { index: true, follow: false },
 };
 
 export default async function PrivacyPage() {
@@ -31,7 +34,7 @@ export default async function PrivacyPage() {
             <p>
               Stackwatch (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) is operated by an individual based in India. This Privacy Policy
               describes how we collect, use, store, and disclose information when you use our service at{" "}
-              <span className="text-zinc-300">stackwatch.app</span> (&ldquo;Service&rdquo;).
+              <span className="text-zinc-300">stackwatch.pulsemonitor.dev</span> (&ldquo;Service&rdquo;).
             </p>
             <p className="mt-3">
               This Policy is published in compliance with the{" "}

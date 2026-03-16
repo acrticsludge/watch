@@ -10,10 +10,50 @@ import { PricingSection } from "@/components/landing/PricingSection";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { createClient } from "@/lib/supabase/server";
 
+const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
+
 export const metadata: Metadata = {
   title: "Stackwatch — Monitor your dev stack limits",
   description:
     "Get alerted before you hit limits on GitHub Actions, Vercel, and Supabase. One dashboard, real-time alerts.",
+  alternates: {
+    canonical: APP_URL,
+  },
+  openGraph: {
+    url: APP_URL,
+  },
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Stackwatch",
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Web",
+  url: APP_URL,
+  description:
+    "Monitoring platform for developer tool usage limits. Get alerted before you hit limits on GitHub Actions, Vercel, and Supabase.",
+  offers: [
+    {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+      name: "Free",
+    },
+    {
+      "@type": "Offer",
+      price: "10",
+      priceCurrency: "USD",
+      name: "Pro",
+    },
+    {
+      "@type": "Offer",
+      price: "30",
+      priceCurrency: "USD",
+      name: "Team",
+    },
+  ],
 };
 
 export default async function LandingPage() {
@@ -24,6 +64,10 @@ export default async function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <LandingNav isLoggedIn={!!user} />
       <main>
         <Hero />
