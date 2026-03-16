@@ -27,18 +27,18 @@ export default async function DashboardPage() {
   if (!integrations || integrations.length === 0) {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 mb-1">Dashboard</h1>
-        <p className="text-slate-500 mb-8">Your usage overview</p>
+        <h1 className="text-xl font-bold text-white mb-1 tracking-tight">Dashboard</h1>
+        <p className="text-zinc-600 mb-8 text-sm">Your usage overview</p>
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="h-16 w-16 rounded-2xl bg-slate-100 flex items-center justify-center mb-5">
-            <svg className="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="h-14 w-14 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mb-5">
+            <svg className="h-7 w-7 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
           </div>
-          <h2 className="text-lg font-semibold text-slate-900 mb-2">
+          <h2 className="text-base font-semibold text-white mb-2">
             No services connected yet
           </h2>
-          <p className="text-slate-500 text-sm max-w-sm mb-6">
+          <p className="text-zinc-600 text-sm max-w-sm mb-6">
             Connect GitHub Actions, Vercel, or Supabase to start monitoring your
             usage and get alerted before you hit limits.
           </p>
@@ -50,7 +50,6 @@ export default async function DashboardPage() {
     );
   }
 
-  // Fetch latest snapshots for each integration
   const integrationIds = integrations.map((i) => i.id);
 
   const { data: snapshots } = await supabase
@@ -59,7 +58,6 @@ export default async function DashboardPage() {
     .in("integration_id", integrationIds)
     .order("recorded_at", { ascending: false });
 
-  // Get latest per (integration_id, metric_name)
   const latestMap = new Map<string, LatestSnapshot>();
   for (const s of snapshots ?? []) {
     const key = `${s.integration_id}::${s.metric_name}`;
@@ -71,10 +69,10 @@ export default async function DashboardPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
+        <h1 className="text-xl font-bold text-white tracking-tight">Dashboard</h1>
         <DashboardRefresher />
       </div>
-      <p className="text-slate-500 mb-8">
+      <p className="text-zinc-600 text-sm mb-8">
         {integrations.length} service{integrations.length !== 1 ? "s" : ""} connected
       </p>
 
@@ -88,18 +86,18 @@ export default async function DashboardPage() {
             return (
               <div
                 key={integration.id}
-                className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm"
+                className="bg-[#111] border border-white/[0.06] rounded-xl p-5"
               >
                 <div className="flex items-center gap-2.5 mb-3">
-                  <div className="h-8 w-8 rounded-lg bg-slate-200 animate-pulse" />
+                  <div className="h-8 w-8 rounded-lg bg-white/[0.05] animate-pulse" />
                   <div>
-                    <p className="text-sm font-medium text-slate-900">
+                    <p className="text-sm font-medium text-zinc-200">
                       {integration.account_label}
                     </p>
-                    <p className="text-xs text-slate-400">{integration.service}</p>
+                    <p className="text-xs text-zinc-600">{integration.service}</p>
                   </div>
                 </div>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-zinc-600">
                   {integration.status === "connected"
                     ? "Waiting for first sync..."
                     : `Status: ${integration.status}`}

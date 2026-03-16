@@ -1,20 +1,124 @@
-[00:00:04.824] Server  LOG     
-[00:00:04.825] Server  LOG       We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
-[00:00:04.826] Server  LOG       The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+[00:00:02.882] Server  WARN    ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:03.307] Server  LOG     ✓ Ready in 2.3s
+[00:00:06.131] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:10.025] Server  LOG     ✓ Compiled in 317ms
+[00:07:21.540] Server  LOG     ✓ Compiled in 232ms
+[00:07:46.788] Server  LOG     ✓ Compiled in 449ms
+[00:08:59.248] Server  LOG     ✓ Compiled in 301ms
+[00:09:09.827] Server  LOG     ✓ Compiled in 733ms
+[00:09:18.971] Server  LOG     ✓ Compiled in 992ms
+[00:09:39.094] Server  LOG     ✓ Compiled in 277ms
+[00:09:53.500] Server  LOG     ✓ Compiled in 203ms
+[00:10:01.004] Server  LOG     ✓ Compiled in 256ms
+[00:10:08.831] Server  LOG     ✓ Compiled in 244ms
+[00:10:14.762] Server  LOG     ✓ Compiled in 214ms
+[00:10:20.804] Server  LOG     ✓ Compiled in 196ms
+[00:10:56.159] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:10:59.048] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:24.385] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:26.609] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:28.014] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:11:31.745] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:11:33.562] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:11:33.562] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:11:41.479] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:11:41.479] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:11:44.226] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:11:44.226] Browser WARN    Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+[00:15:15.616] Server  LOG     ✓ Compiled in 311ms
+[00:15:25.642] Server  LOG     ✓ Compiled in 408ms
+[00:15:29.484] Server  LOG     ✓ Compiled in 222ms
+[00:16:15.319] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:16:18.290] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:18:33.657] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:18:38.475] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:18:46.705] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:27:13.218] Server  LOG     ✓ Compiled in 2.5s
+[00:27:18.805] Server  LOG     ✓ Compiled in 424ms
+[00:27:37.395] Server  LOG     ✓ Compiled in 403ms
+[00:28:33.532] Server  LOG     ✓ Compiled in 467ms
+[00:28:47.454] Server  LOG     ✓ Compiled in 338ms
+[00:28:54.975] Server  LOG     ✓ Compiled in 358ms
+[00:29:13.907] Server  LOG     ✓ Compiled in 286ms
+[00:30:15.990] Server  LOG     ✓ Compiled in 473ms
+[00:30:29.470] Server  LOG     ✓ Compiled in 587ms
+[00:30:35.516] Server  LOG     ✓ Compiled in 368ms
+[00:30:42.501] Server  LOG     ✓ Compiled in 259ms
+[00:30:51.236] Server  LOG     ✓ Compiled in 266ms
+[00:31:08.626] Server  LOG     ✓ Compiled in 319ms
+[00:31:10.872] Server  LOG     ✓ Compiled in 270ms
+[00:31:12.292] Server  LOG     ✓ Compiled in 225ms
+[00:31:59.452] Server  LOG     ✓ Compiled in 333ms
+[00:32:11.262] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:32:15.535] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:32:29.948] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:32:32.498] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:32:33.034] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
 
-[00:00:04.828] Server  LOG       	- include was updated to add '.next/dev/types/**/*.ts'
-[00:00:04.828] Server  LOG     
-[00:00:04.828] Server  LOG       The following mandatory changes were made to your tsconfig.json:
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
 
-[00:00:04.831] Server  LOG       	- jsx was set to react-jsx (next.js uses the React automatic runtime)
-[00:00:04.831] Server  LOG     
-[00:00:04.892] Server  WARN    ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
-[00:00:05.293] Server  LOG     ✓ Ready in 4.1s
-[00:00:17.673] Server  LOG     ○ Compiling / ...
-[00:00:23.251] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:43.021] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:50.482] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:56.853] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:06.476] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:09.607] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:11.931] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <InnerScrollAndFocusHandler segmentPath={[...]} focusAndScrollRef={{apply:false, ...}}>
+      <ErrorBoundary errorComponent={undefined} errorStyles={undefined} errorScripts={undefined}>
+        <LoadingBoundary name="/" loading={null}>
+          <HTTPAccessFallbackBoundary notFound={<SegmentViewNode>} forbidden={undefined} unauthorized={undefined}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<SegmentViewNode>} forbidden={undefined} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <InnerLayoutRouter url="/" tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>
+                    <SegmentViewNode type="page" pagePath="page.tsx">
+                      <SegmentTrieNode>
+                      <LandingPage>
+                        <div className="min-h-scre...">
+                          <header>
+                          <main>
+                            <section>
+                            <section>
+                            <section>
+                            <section>
+                            <section>
+                            <AlertChannelsSection>
+                              <section className="py-24 bg-[...">
+                                <div className="max-w-5xl ...">
+                                  <div>
+                                  <div
++                                   className="grid sm:grid-cols-2 md:grid-cols-4 gap-3"
+-                                   className="bg-[#111] border border-white/[0.06] rounded-xl p-5"
+                                  >
+                                    <div
++                                     className="bg-[#111] border border-white/[0.06] rounded-xl p-5"
+-                                     className="h-9 w-9 rounded-lg bg-white/[0.04] flex items-center justify-center mb-3"
+                                    >
++                                     <div
++                                       className="h-9 w-9 rounded-lg bg-white/[0.04] flex items-center justify-center..."
++                                     >
+-                                     <svg
+-                                       className="h-5 w-5 text-zinc-400"
+-                                       fill="none"
+-                                       viewBox="0 0 24 24"
+-                                       stroke="currentColor"
+-                                     >
+                                      ...
+                                    ...
+                            ...
+                          ...
+                    ...
+                  ...
+      ...
+
+[00:32:40.518] Server  LOG     ✓ Compiled in 462ms
+[00:33:12.682] Server  LOG     ✓ Compiled in 679ms
+[00:33:33.227] Server  LOG     ✓ Compiled in 353ms
+[00:33:47.767] Server  LOG     ✓ Compiled in 408ms
+[00:33:50.108] Server  LOG     ✓ Compiled in 300ms
+[00:33:53.525] Server  LOG     ✓ Compiled in 280ms
+[00:34:26.356] Server  LOG     ✓ Compiled in 816ms
+[00:34:59.608] Server  LOG     ✓ Compiled in 912ms

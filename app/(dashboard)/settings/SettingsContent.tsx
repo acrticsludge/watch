@@ -55,7 +55,6 @@ export function SettingsContent({
   const router = useRouter();
   const { toast } = useToast();
 
-  // Alert thresholds state
   const [thresholds, setThresholds] = useState<Record<string, { threshold: number; enabled: boolean }>>(() => {
     const map: Record<string, { threshold: number; enabled: boolean }> = {};
     for (const cfg of alertConfigs) {
@@ -67,22 +66,18 @@ export function SettingsContent({
     return map;
   });
 
-  // Email channel
   const emailChannel = alertChannels.find((c) => c.type === "email");
   const [emailEnabled, setEmailEnabled] = useState(emailChannel?.enabled ?? false);
   const [emailSaving, setEmailSaving] = useState(false);
 
-  // Slack webhook
   const slackChannel = alertChannels.find((c) => c.type === "slack");
   const [slackUrl, setSlackUrl] = useState((slackChannel?.config as { webhook_url?: string } | null)?.webhook_url ?? "");
   const [slackEnabled, setSlackEnabled] = useState(slackChannel?.enabled ?? false);
 
-  // Discord webhook
   const discordChannel = alertChannels.find((c) => c.type === "discord");
   const [discordUrl, setDiscordUrl] = useState((discordChannel?.config as { webhook_url?: string } | null)?.webhook_url ?? "");
   const [discordEnabled, setDiscordEnabled] = useState(discordChannel?.enabled ?? false);
 
-  // Account
   const [newPassword, setNewPassword] = useState("");
   const [pwSaving, setPwSaving] = useState(false);
 
@@ -162,25 +157,25 @@ export function SettingsContent({
 
   return (
     <Tabs defaultValue="alerts">
-      <TabsList className="mb-6">
-        <TabsTrigger value="alerts">Alert Thresholds</TabsTrigger>
-        <TabsTrigger value="notifications">Notifications</TabsTrigger>
-        <TabsTrigger value="account">Account</TabsTrigger>
+      <TabsList className="mb-6 bg-white/[0.04] border border-white/[0.06]">
+        <TabsTrigger value="alerts" className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500">Alert Thresholds</TabsTrigger>
+        <TabsTrigger value="notifications" className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500">Notifications</TabsTrigger>
+        <TabsTrigger value="account" className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500">Account</TabsTrigger>
       </TabsList>
 
       {/* ── Alert Thresholds ── */}
       <TabsContent value="alerts">
         {integrations.length === 0 ? (
-          <p className="text-slate-500 text-sm">
+          <p className="text-zinc-600 text-sm">
             Connect at least one service first.
           </p>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {integrations.map((intg) => {
               const metrics = DEFAULT_METRICS[intg.service] ?? [];
               return (
-                <div key={intg.id} className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-                  <h3 className="font-semibold text-slate-900 mb-4">
+                <div key={intg.id} className="bg-[#111] border border-white/[0.06] rounded-xl p-6">
+                  <h3 className="font-semibold text-white mb-4 text-sm">
                     {SERVICE_LABELS[intg.service]} — {intg.account_label}
                   </h3>
                   <div className="space-y-5">
@@ -200,10 +195,10 @@ export function SettingsContent({
                           />
                           <div className="flex-1">
                             <div className="flex items-center justify-between mb-1">
-                              <Label className="text-sm">
+                              <Label className="text-sm text-zinc-400">
                                 {METRIC_LABELS[metric] ?? metric}
                               </Label>
-                              <span className="text-sm font-medium text-slate-700">
+                              <span className="text-sm font-medium text-zinc-300">
                                 {val.threshold}%
                               </span>
                             </div>
@@ -225,6 +220,7 @@ export function SettingsContent({
                             size="sm"
                             variant="outline"
                             onClick={() => saveThreshold(intg.id, metric)}
+                            className="border-white/10 text-zinc-300 hover:bg-white/[0.06]"
                           >
                             Save
                           </Button>
@@ -241,13 +237,13 @@ export function SettingsContent({
 
       {/* ── Notifications ── */}
       <TabsContent value="notifications">
-        <div className="space-y-5">
+        <div className="space-y-4">
           {/* Email */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="font-semibold text-slate-900">Email</h3>
-                <p className="text-sm text-slate-500">{userEmail}</p>
+                <h3 className="font-semibold text-white text-sm">Email</h3>
+                <p className="text-sm text-zinc-600">{userEmail}</p>
               </div>
               <Switch
                 checked={emailEnabled}
@@ -264,11 +260,11 @@ export function SettingsContent({
           </div>
 
           {/* Slack */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="font-semibold text-slate-900">Slack</h3>
-                <p className="text-sm text-slate-500">Incoming webhook URL</p>
+                <h3 className="font-semibold text-white text-sm">Slack</h3>
+                <p className="text-sm text-zinc-600">Incoming webhook URL</p>
               </div>
               <Switch
                 checked={slackEnabled}
@@ -286,6 +282,7 @@ export function SettingsContent({
                 size="sm"
                 variant="outline"
                 onClick={() => saveWebhookChannel("slack", slackUrl, slackEnabled)}
+                className="border-white/10 text-zinc-300 hover:bg-white/[0.06] shrink-0"
               >
                 Save
               </Button>
@@ -293,11 +290,11 @@ export function SettingsContent({
           </div>
 
           {/* Discord */}
-          <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+          <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6">
             <div className="flex items-center justify-between mb-3">
               <div>
-                <h3 className="font-semibold text-slate-900">Discord</h3>
-                <p className="text-sm text-slate-500">Incoming webhook URL</p>
+                <h3 className="font-semibold text-white text-sm">Discord</h3>
+                <p className="text-sm text-zinc-600">Incoming webhook URL</p>
               </div>
               <Switch
                 checked={discordEnabled}
@@ -315,6 +312,7 @@ export function SettingsContent({
                 size="sm"
                 variant="outline"
                 onClick={() => saveWebhookChannel("discord", discordUrl, discordEnabled)}
+                className="border-white/10 text-zinc-300 hover:bg-white/[0.06] shrink-0"
               >
                 Save
               </Button>
@@ -325,15 +323,15 @@ export function SettingsContent({
 
       {/* ── Account ── */}
       <TabsContent value="account">
-        <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm max-w-lg">
-          <h3 className="font-semibold text-slate-900 mb-4">Change password</h3>
+        <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6 max-w-lg">
+          <h3 className="font-semibold text-white mb-4 text-sm">Change password</h3>
           <form onSubmit={handlePasswordChange} className="space-y-4">
-            <div className="space-y-1">
-              <Label>Email</Label>
+            <div className="space-y-1.5">
+              <Label className="text-zinc-400 text-xs">Email</Label>
               <Input value={userEmail} disabled />
             </div>
-            <div className="space-y-1">
-              <Label htmlFor="new-password">New password</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="new-password" className="text-zinc-400 text-xs">New password</Label>
               <Input
                 id="new-password"
                 type="password"

@@ -116,7 +116,7 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {SERVICES.map((svc) => {
         const connected = integrations.filter((i) => i.service === svc.id);
         const atLimit = connected.length >= 1;
@@ -124,20 +124,21 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
         return (
           <div
             key={svc.id}
-            className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm"
+            className="bg-[#111] border border-white/[0.06] rounded-xl p-6"
           >
             <div className="flex items-start justify-between mb-4">
               <div>
-                <h2 className="font-semibold text-slate-900 mb-0.5">
+                <h2 className="font-semibold text-white mb-0.5 text-sm">
                   {svc.name}
                 </h2>
-                <p className="text-sm text-slate-500">{svc.description}</p>
+                <p className="text-sm text-zinc-600">{svc.description}</p>
               </div>
               <Button
                 size="sm"
                 variant={atLimit ? "outline" : "default"}
                 onClick={() => openConnect(svc.id)}
                 disabled={atLimit}
+                className={atLimit ? "border-white/10 text-zinc-500 hover:bg-white/[0.04]" : ""}
               >
                 <Plus className="h-4 w-4 mr-1" />
                 {atLimit ? "Limit reached" : "Add account"}
@@ -145,32 +146,30 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
             </div>
 
             {atLimit && (
-              <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-md px-3 py-2 mb-4 flex items-center gap-1.5">
+              <p className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-md px-3 py-2 mb-4 flex items-center gap-1.5">
                 <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
                 Free plan allows 1 account per service. Remove the existing one to add a different account.
               </p>
             )}
 
             {connected.length === 0 ? (
-              <p className="text-sm text-slate-400">No accounts connected.</p>
+              <p className="text-sm text-zinc-700">No accounts connected.</p>
             ) : (
               <div className="space-y-2">
                 {connected.map((intg) => (
                   <div
                     key={intg.id}
-                    className="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-4 py-3"
+                    className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded-lg px-4 py-3"
                   >
-                    <div className="flex items-center gap-3">
-                      <div>
-                        <p className="text-sm font-medium text-slate-900">
-                          {intg.account_label}
-                        </p>
-                        <p className="text-xs text-slate-400">
-                          {intg.last_synced_at
-                            ? `Last synced ${new Date(intg.last_synced_at).toLocaleString()}`
-                            : "Never synced"}
-                        </p>
-                      </div>
+                    <div>
+                      <p className="text-sm font-medium text-zinc-200">
+                        {intg.account_label}
+                      </p>
+                      <p className="text-xs text-zinc-600">
+                        {intg.last_synced_at
+                          ? `Last synced ${new Date(intg.last_synced_at).toLocaleString()}`
+                          : "Never synced"}
+                      </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge
@@ -187,7 +186,7 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-slate-400 hover:text-red-500"
+                        className="h-8 w-8 text-zinc-600 hover:text-red-400 hover:bg-red-500/10"
                         onClick={() => handleDelete(intg.id)}
                         disabled={deletingId === intg.id}
                       >
@@ -202,7 +201,6 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
         );
       })}
 
-      {/* Connect dialogs */}
       {SERVICES.map((svc) => (
         <Dialog
           key={svc.id}
@@ -215,8 +213,8 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
             </DialogHeader>
             <div className="space-y-4 py-2">
               {svc.fields.map((field) => (
-                <div key={field.key} className="space-y-1">
-                  <Label>{field.label}</Label>
+                <div key={field.key} className="space-y-1.5">
+                  <Label className="text-zinc-400 text-xs">{field.label}</Label>
                   <Input
                     type={field.type}
                     placeholder={field.placeholder}
@@ -229,10 +227,10 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
                 </div>
               ))}
               {svc.helpText && (
-                <p className="text-xs text-slate-400">{svc.helpText}</p>
+                <p className="text-xs text-zinc-600">{svc.helpText}</p>
               )}
               {error && (
-                <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+                <p className="text-sm text-red-400 bg-red-500/10 border border-red-500/20 rounded-md px-3 py-2">
                   {error}
                 </p>
               )}
@@ -242,6 +240,7 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
                 variant="outline"
                 onClick={() => setOpenDialog(null)}
                 disabled={submitting}
+                className="border-white/10 text-zinc-300 hover:bg-white/[0.06]"
               >
                 Cancel
               </Button>

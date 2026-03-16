@@ -15,8 +15,8 @@ export default async function IntegrationsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900 mb-1">Integrations</h1>
-      <p className="text-slate-500 mb-8">
+      <h1 className="text-xl font-bold text-white mb-1 tracking-tight">Integrations</h1>
+      <p className="text-zinc-600 text-sm mb-8">
         Connect your services to start monitoring usage.
       </p>
       <IntegrationsContent integrations={integrations ?? []} />

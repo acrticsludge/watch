@@ -145,9 +145,9 @@ const badgeVariants = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_m
             secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
             destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
             outline: "text-foreground",
-            success: "border-transparent bg-green-100 text-green-800 hover:bg-green-100/80",
-            warning: "border-transparent bg-yellow-100 text-yellow-800 hover:bg-yellow-100/80",
-            danger: "border-transparent bg-red-100 text-red-800 hover:bg-red-100/80"
+            success: "border-green-500/20 bg-green-500/10 text-green-400",
+            warning: "border-amber-500/20 bg-amber-500/10 text-amber-400",
+            danger: "border-red-500/20 bg-red-500/10 text-red-400"
         }
     },
     defaultVariants: {
@@ -352,7 +352,7 @@ function UsageCard({ service, accountLabel, metricName, currentValue, limitValue
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                        className: `text-xs font-semibold ${(0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["getStatusColorClass"])(pct)}`,
+                        className: "text-xs text-slate-400",
                         children: [
                             pct,
                             "% used"
@@ -376,7 +376,7 @@ function UsageCard({ service, accountLabel, metricName, currentValue, limitValue
                         children: lastSyncedAt ? `Synced ${(0, __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$utils$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["relativeTime"])(lastSyncedAt)}` : "Never synced"
                     }, void 0, false, {
                         fileName: "[project]/components/dashboard/UsageCard.tsx",
-                        lineNumber: 99,
+                        lineNumber: 97,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -386,20 +386,20 @@ function UsageCard({ service, accountLabel, metricName, currentValue, limitValue
                                 className: `h-1.5 w-1.5 rounded-full ${status === "connected" ? "bg-green-500" : status === "error" ? "bg-red-500" : "bg-slate-300"}`
                             }, void 0, false, {
                                 fileName: "[project]/components/dashboard/UsageCard.tsx",
-                                lineNumber: 111,
+                                lineNumber: 109,
                                 columnNumber: 11
                             }, this),
                             status
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/dashboard/UsageCard.tsx",
-                        lineNumber: 102,
+                        lineNumber: 100,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/dashboard/UsageCard.tsx",
-                lineNumber: 98,
+                lineNumber: 96,
                 columnNumber: 7
             }, this)
         ]

@@ -37,7 +37,7 @@ export function OAuthButtons({ redirectTo = "/dashboard" }: OAuthButtonsProps) {
   return (
     <div className="space-y-3">
       {error && (
-        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2.5">
           {error}
         </p>
       )}
@@ -47,9 +47,9 @@ export function OAuthButtons({ redirectTo = "/dashboard" }: OAuthButtonsProps) {
         type="button"
         onClick={() => handleOAuth("github")}
         disabled={githubLoading || googleLoading}
-        className="w-full flex items-center justify-center gap-2.5 rounded-md px-4 py-2 text-sm font-medium
+        className="w-full h-10 flex items-center justify-center gap-2.5 rounded-md px-4 text-sm font-medium
           bg-[#24292e] text-white hover:bg-[#2f363d] disabled:opacity-60 disabled:cursor-not-allowed
-          transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2"
+          transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {githubLoading ? (
           <span className="h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
@@ -66,9 +66,9 @@ export function OAuthButtons({ redirectTo = "/dashboard" }: OAuthButtonsProps) {
         type="button"
         onClick={() => handleOAuth("google")}
         disabled={githubLoading || googleLoading}
-        className="w-full flex items-center justify-center gap-2.5 rounded-md border border-slate-300 px-4 py-2 text-sm font-medium
+        className="w-full h-10 flex items-center justify-center gap-2.5 rounded-md border border-slate-300 px-4 text-sm font-medium
           bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-60 disabled:cursor-not-allowed
-          transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+          transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {googleLoading ? (
           <span className="h-4 w-4 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin" />

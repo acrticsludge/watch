@@ -24,8 +24,8 @@ export default async function SettingsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-slate-900 mb-1">Settings</h1>
-      <p className="text-slate-500 mb-8">
+      <h1 className="text-xl font-bold text-white mb-1 tracking-tight">Settings</h1>
+      <p className="text-zinc-600 text-sm mb-8">
         Configure alert thresholds and notification channels.
       </p>
       <SettingsContent

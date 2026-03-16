@@ -199,7 +199,7 @@ function OAuthButtons({ redirectTo = "/dashboard" }) {
         className: "space-y-3",
         children: [
             error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                className: "text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2",
+                className: "text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2.5",
                 children: error
             }, void 0, false, {
                 fileName: "[project]/components/auth/OAuthButtons.tsx",
@@ -210,7 +210,7 @@ function OAuthButtons({ redirectTo = "/dashboard" }) {
                 type: "button",
                 onClick: ()=>handleOAuth("github"),
                 disabled: githubLoading || googleLoading,
-                className: "w-full flex items-center justify-center gap-2.5 rounded-md px-4 py-2 text-sm font-medium bg-[#24292e] text-white hover:bg-[#2f363d] disabled:opacity-60 disabled:cursor-not-allowed transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500 focus-visible:ring-offset-2",
+                className: "w-full h-10 flex items-center justify-center gap-2.5 rounded-md px-4 text-sm font-medium bg-[#24292e] text-white hover:bg-[#2f363d] disabled:opacity-60 disabled:cursor-not-allowed transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 children: [
                     githubLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         className: "h-4 w-4 border-2 border-white/40 border-t-white rounded-full animate-spin"
@@ -245,7 +245,7 @@ function OAuthButtons({ redirectTo = "/dashboard" }) {
                 type: "button",
                 onClick: ()=>handleOAuth("google"),
                 disabled: githubLoading || googleLoading,
-                className: "w-full flex items-center justify-center gap-2.5 rounded-md border border-slate-300 px-4 py-2 text-sm font-medium bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-60 disabled:cursor-not-allowed transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2",
+                className: "w-full h-10 flex items-center justify-center gap-2.5 rounded-md border border-slate-300 px-4 text-sm font-medium bg-white text-slate-700 hover:bg-slate-50 disabled:opacity-60 disabled:cursor-not-allowed transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 children: [
                     googleLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                         className: "h-4 w-4 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin"

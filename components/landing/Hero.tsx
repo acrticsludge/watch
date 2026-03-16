@@ -2,46 +2,39 @@ import { Button } from "@/components/ui/button";
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-white pt-20 pb-28">
-      {/* Subtle grid background */}
+    <section className="relative bg-[#0a0a0a] pt-28 pb-28 overflow-hidden">
+      {/* Subtle dot grid */}
       <div
-        className="absolute inset-0 opacity-40"
+        className="absolute inset-0 opacity-[0.12]"
         style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, #e2e8f0 1px, transparent 0)",
-          backgroundSize: "32px 32px",
+          backgroundImage: "radial-gradient(circle at 1px 1px, #555 1px, transparent 0)",
+          backgroundSize: "28px 28px",
         }}
       />
-      {/* Gradient blob */}
-      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-blue-100 opacity-60 blur-3xl" />
-      <div className="absolute -bottom-20 -left-20 h-72 w-72 rounded-full bg-indigo-100 opacity-50 blur-3xl" />
-
-      <div className="relative max-w-4xl mx-auto px-6 text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm text-blue-700 font-medium mb-8">
-          <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
-          Free to start — no credit card required
-        </div>
-        <h1 className="text-5xl md:text-6xl font-bold text-slate-900 tracking-tight leading-tight mb-6">
-          Stop finding out about
-          <br />
-          <span className="text-blue-600">limits when it&apos;s too late</span>
-        </h1>
-        <p className="text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Stackwatch monitors your GitHub Actions, Vercel, and Supabase usage
-          and alerts you before you hit your limits — so you never get
-          blindsided by a broken deploy or a locked database.
+      <div className="relative max-w-3xl mx-auto px-6 text-center">
+        <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest mb-7">
+          GitHub Actions · Vercel · Supabase
         </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button asChild size="lg" className="text-base px-8">
+        <h1 className="text-5xl md:text-[4.5rem] font-bold text-white tracking-tight leading-[1.05] mb-6">
+          Know before you hit
+          <br />
+          <span className="text-zinc-500">your limits.</span>
+        </h1>
+        <p className="text-lg text-zinc-400 max-w-xl mx-auto mb-10 leading-relaxed">
+          Stackwatch monitors your dev tool usage and alerts you before
+          something breaks — no more surprise failures at 2am.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <Button asChild size="lg" className="px-8 text-sm font-medium">
             <a href="/signup">Start monitoring free</a>
           </Button>
-          <Button asChild size="lg" variant="outline" className="text-base px-8">
-            <a href="#how-it-works">See how it works</a>
-          </Button>
+          <a
+            href="#how-it-works"
+            className="text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            See how it works →
+          </a>
         </div>
-        <p className="mt-6 text-sm text-slate-400">
-          Connect in 2 minutes · GitHub Actions, Vercel, Supabase
-        </p>
       </div>
     </section>
   );
