@@ -12,8 +12,9 @@ const UpdateSchema = z.object({
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -22,7 +23,7 @@ export async function PATCH(
   const { data: existing } = await supabase
     .from("integrations")
     .select("id")
-    .eq("id", params.id)
+    .eq("id", id)
     .eq("user_id", user.id)
     .single();
 
@@ -46,7 +47,7 @@ export async function PATCH(
   const { data, error } = await serviceClient
     .from("integrations")
     .update(updates)
-    .eq("id", params.id)
+    .eq("id", id)
     .select("id, service, account_label, status")
     .single();
 
@@ -56,8 +57,9 @@ export async function PATCH(
 
 export async function DELETE(
   _request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -66,7 +68,7 @@ export async function DELETE(
   const { data: existing } = await supabase
     .from("integrations")
     .select("id")
-    .eq("id", params.id)
+    .eq("id", id)
     .eq("user_id", user.id)
     .single();
 
@@ -78,7 +80,7 @@ export async function DELETE(
   const { error } = await serviceClient
     .from("integrations")
     .delete()
-    .eq("id", params.id);
+    .eq("id", id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return new NextResponse(null, { status: 204 });
