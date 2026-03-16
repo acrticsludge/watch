@@ -23,7 +23,7 @@ interface Integration {
   status: string;
   created_at: string;
   last_synced_at: string | null;
-  meta?: { project_ref?: string } | null;
+  meta?: unknown;
 }
 
 interface IntegrationsContentProps {
@@ -84,9 +84,13 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
   }
 
   function openEdit(intg: Integration) {
+    const meta =
+      intg.meta && typeof intg.meta === "object" && !Array.isArray(intg.meta)
+        ? (intg.meta as Record<string, unknown>)
+        : null;
     setFormData({
       account_label: intg.account_label,
-      ...(intg.meta?.project_ref ? { "meta.project_ref": intg.meta.project_ref } : {}),
+      ...(meta?.project_ref ? { "meta.project_ref": String(meta.project_ref) } : {}),
     });
     setError("");
     setEditingIntegration(intg);
