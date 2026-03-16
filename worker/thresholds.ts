@@ -1,5 +1,5 @@
-import { createServiceClient } from "../lib/supabase/service";
-import { fireAlerts } from "../lib/notifications";
+import { createServiceClient } from "./lib/supabase/service";
+import { fireAlerts } from "./lib/notifications";
 import type { UsageMetric } from "./pollCycle";
 
 export async function checkThresholds(

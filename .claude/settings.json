@@ -6,7 +6,10 @@
       "Bash(npx tsc:*)",
       "Bash(node -e \"console.log\\(require\\(''./package.json''\\).dependencies.next\\)\")",
       "Bash(npm show:*)",
-      "Bash(node -e \"console.log\\(require\\(''./package.json''\\).devDependencies.eslint\\)\")"
+      "Bash(node -e \"console.log\\(require\\(''./package.json''\\).devDependencies.eslint\\)\")",
+      "Bash(grep -E '\\\\.\\(ts|tsx|json\\)$')",
+      "Bash(find \"c:\\\\Anubhav\\\\Web Dev Projects\\\\Watch\\\\watch/app/\\(auth\\)\" -type f)",
+      "Bash(find \"c:\\\\Anubhav\\\\Web Dev Projects\\\\Watch\\\\watch/app/\\(dashboard\\)\" -type f)"
     ]
   }
 }

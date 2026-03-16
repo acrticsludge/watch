@@ -1,4 +1,4 @@
-import { createServiceClient } from "../lib/supabase/service";
+import { createServiceClient } from "./lib/supabase/service";
 import { fetchGitHubUsage } from "./services/github";
 import { fetchVercelUsage } from "./services/vercel";
 import { fetchSupabaseUsage } from "./services/supabase";

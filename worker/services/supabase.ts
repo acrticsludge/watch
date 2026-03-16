@@ -1,4 +1,4 @@
-import { decrypt } from "../../lib/encryption";
+import { decrypt } from "../lib/encryption";
 import type { UsageMetric } from "../pollCycle";
 
 interface Integration {

@@ -2,7 +2,8 @@ import * as dotenv from "dotenv";
 import * as cron from "node-cron";
 import { runPollCycle } from "./pollCycle";
 
-dotenv.config({ path: "../.env.local" });
+// Load .env locally; on Railway, env vars are injected automatically
+dotenv.config();
 
 console.log("[worker] Starting Stackwatch polling worker...");
 
