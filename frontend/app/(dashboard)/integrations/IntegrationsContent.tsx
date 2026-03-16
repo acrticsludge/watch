@@ -34,17 +34,19 @@ const SERVICES = [
   {
     id: "github",
     name: "GitHub Actions",
-    description: "Track Actions minutes vs monthly limit, broken down by repo.",
+    description: "Track Actions minutes vs monthly limit.",
+    caveat: "Requires GitHub's legacy billing system. Personal accounts on the new billing platform and most accounts created after 2023 are not supported — the API returns no data.",
     fields: [
       { key: "api_key", label: "Personal Access Token", type: "password", placeholder: "ghp_..." },
       { key: "account_label", label: "Account label", type: "text", placeholder: "e.g. personal" },
     ],
-    helpText: "Token needs repo and read:org scopes.",
+    helpText: "Token needs repo, read:org, and read:user scopes.",
   },
   {
     id: "vercel",
     name: "Vercel",
     description: "Monitor bandwidth, build minutes, and function invocations.",
+    caveat: "Hobby plan accounts are not supported — Vercel does not expose billing data via API for Hobby. Pro or Team plan required.",
     fields: [
       { key: "api_key", label: "API Token", type: "password", placeholder: "Your Vercel API token" },
       { key: "account_label", label: "Account label", type: "text", placeholder: "e.g. personal" },
@@ -54,7 +56,8 @@ const SERVICES = [
   {
     id: "supabase",
     name: "Supabase",
-    description: "Watch database size, row count, storage, and MAU.",
+    description: "Watch database size, storage, and monthly active users.",
+    caveat: null,
     fields: [
       { key: "api_key", label: "Management API Key", type: "password", placeholder: "sbp_..." },
       { key: "meta.project_ref", label: "Project ref", type: "text", placeholder: "abcdefghijklmnop" },
@@ -161,11 +164,14 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
             className="bg-[#111] border border-white/[0.06] rounded-xl p-6"
           >
             <div className="flex items-start justify-between mb-4">
-              <div>
+              <div className="flex-1 min-w-0 mr-4">
                 <h2 className="font-semibold text-white mb-0.5 text-sm">
                   {svc.name}
                 </h2>
                 <p className="text-sm text-zinc-600">{svc.description}</p>
+                {svc.caveat && (
+                  <p className="text-xs text-amber-500/80 mt-1.5">{svc.caveat}</p>
+                )}
               </div>
               <Button
                 size="sm"
@@ -212,10 +218,12 @@ export function IntegrationsContent({ integrations }: IntegrationsContentProps) 
                             ? "success"
                             : intg.status === "error"
                               ? "danger"
-                              : "secondary"
+                              : intg.status === "unsupported"
+                                ? "warning"
+                                : "secondary"
                         }
                       >
-                        {intg.status}
+                        {intg.status === "unsupported" ? "plan limit" : intg.status}
                       </Badge>
                       <Button
                         variant="ghost"

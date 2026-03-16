@@ -12,6 +12,7 @@ export default async function SettingsPage() {
     { data: integrations },
     { data: alertConfigs },
     { data: alertChannels },
+    { data: subscription },
   ] = await Promise.all([
     supabase.auth.getUser(),
     supabase
@@ -20,6 +21,7 @@ export default async function SettingsPage() {
       .neq("status", "disconnected"),
     supabase.from("alert_configs").select("*"),
     supabase.from("alert_channels").select("id, type, config, enabled"),
+    supabase.from("subscriptions").select("tier").eq("status", "active").maybeSingle(),
   ]);
 
   return (
@@ -33,6 +35,7 @@ export default async function SettingsPage() {
         integrations={integrations ?? []}
         alertConfigs={alertConfigs ?? []}
         alertChannels={alertChannels ?? []}
+        tier={subscription?.tier ?? "free"}
       />
     </div>
   );

@@ -16,7 +16,7 @@ export async function fetchVercelUsage(
   const token = decrypt(integration.api_key);
   // NEVER log token
 
-  const res = await fetch("https://api.vercel.com/v2/billing/usage", {
+  const res = await fetch("https://api.vercel.com/v6/usage", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -28,8 +28,8 @@ export async function fetchVercelUsage(
     case 403:
       throw new Error("Vercel: Token lacks billing read permissions.");
     case 404:
-      // Vercel does not expose a public billing/usage API for Hobby accounts.
-      // Return empty so the integration stays connected but shows no data.
+      // Vercel does not expose a billing/usage API for Hobby accounts.
+      // Return empty — pollCycle will mark the integration as "unsupported".
       console.warn(
         `[vercel] Billing API unavailable for integration ${integration.id} — Hobby plan accounts are not supported.`
       );
@@ -42,16 +42,29 @@ export async function fetchVercelUsage(
     throw new Error(`Vercel billing API error: ${res.status}`);
   }
 
-  const data = await res.json() as {
+  // v6 response: { usage: { bandwidth: { usage, limit }, buildExecutionTime: { usage, limit }, serverlessFunctionExecution: { usage, limit } } }
+  // Also handles v2-style flat fields as fallback.
+  const raw = await res.json() as {
+    usage?: {
+      bandwidth?: { usage: number; limit: number };
+      buildExecutionTime?: { usage: number; limit: number };
+      serverlessFunctionExecution?: { usage: number; limit: number };
+    };
+    // v2 fallback
     bandwidth?: { usage: number; limit: number };
     buildMinutes?: { usage: number; limit: number };
     functionInvocations?: { usage: number; limit: number };
   };
 
+  const nested = raw.usage ?? {};
+  const bw = nested.bandwidth ?? raw.bandwidth;
+  const build = nested.buildExecutionTime ?? raw.buildMinutes;
+  const fn = nested.serverlessFunctionExecution ?? raw.functionInvocations;
+
   const metrics: UsageMetric[] = [];
 
-  if (data.bandwidth) {
-    const { usage, limit } = data.bandwidth;
+  if (bw) {
+    const { usage, limit } = bw;
     metrics.push({
       metricName: "bandwidth_gb",
       currentValue: Math.round((usage / (1024 ** 3)) * 100) / 100,
@@ -60,8 +73,8 @@ export async function fetchVercelUsage(
     });
   }
 
-  if (data.buildMinutes) {
-    const { usage, limit } = data.buildMinutes;
+  if (build) {
+    const { usage, limit } = build;
     metrics.push({
       metricName: "build_minutes",
       currentValue: usage,
@@ -70,8 +83,8 @@ export async function fetchVercelUsage(
     });
   }
 
-  if (data.functionInvocations) {
-    const { usage, limit } = data.functionInvocations;
+  if (fn) {
+    const { usage, limit } = fn;
     metrics.push({
       metricName: "function_invocations",
       currentValue: usage,

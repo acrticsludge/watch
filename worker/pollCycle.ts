@@ -85,6 +85,13 @@ export async function runPollCycle(): Promise<void> {
 
           // Check thresholds and fire alerts if needed
           await checkThresholds(integration.user_id, integration.id, metrics);
+        } else {
+          // Service connected successfully but returned no data (e.g. plan doesn't expose billing API).
+          // Mark as "unsupported" so the dashboard can show a clear message instead of an error.
+          await supabase
+            .from("integrations")
+            .update({ last_synced_at: new Date().toISOString(), status: "unsupported" })
+            .eq("id", integration.id);
         }
       } catch (err) {
         console.error(

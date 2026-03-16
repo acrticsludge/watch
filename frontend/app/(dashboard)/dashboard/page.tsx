@@ -118,16 +118,22 @@ export default async function DashboardPage() {
 
           if (integrationSnapshots.length === 0) {
             const isError = integration.status === "error";
+            const isUnsupported = integration.status === "unsupported";
+
+            let borderClass = "border-white/6";
+            if (isError) borderClass = "border-red-500/20";
+            if (isUnsupported) borderClass = "border-amber-500/20";
+
             return (
               <div
                 key={integration.id}
-                className={`bg-[#111] border rounded-xl p-5 ${isError ? "border-red-500/20" : "border-white/6"}`}
+                className={`bg-[#111] border rounded-xl p-5 ${borderClass}`}
               >
                 <div className="flex items-center gap-2.5 mb-3">
-                  {isError ? (
+                  {isError || isUnsupported ? (
                     <>
-                      <div className="h-8 w-8 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0">
-                        <svg className="h-4 w-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${isError ? "bg-red-500/10" : "bg-amber-500/10"}`}>
+                        <svg className={`h-4 w-4 ${isError ? "text-red-400" : "text-amber-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
@@ -146,10 +152,12 @@ export default async function DashboardPage() {
                     </>
                   )}
                 </div>
-                <p className={`text-sm ${isError ? "text-red-400" : "text-zinc-600"}`}>
+                <p className={`text-sm ${isError ? "text-red-400" : isUnsupported ? "text-amber-400/80" : "text-zinc-600"}`}>
                   {isError
                     ? "Sync failed — check your API key in Integrations."
-                    : "Waiting for first sync..."}
+                    : isUnsupported
+                      ? "Billing API not available for your current plan."
+                      : "Waiting for first sync..."}
                 </p>
               </div>
             );

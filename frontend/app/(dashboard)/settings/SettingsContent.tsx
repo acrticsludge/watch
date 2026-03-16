@@ -38,6 +38,7 @@ interface SettingsContentProps {
   integrations: Integration[];
   alertConfigs: AlertConfig[];
   alertChannels: AlertChannel[];
+  tier: string;
 }
 
 const DEFAULT_METRICS: Record<string, string[]> = {
@@ -51,7 +52,9 @@ export function SettingsContent({
   integrations,
   alertConfigs,
   alertChannels,
+  tier,
 }: SettingsContentProps) {
+  const isPro = tier === "pro" || tier === "team";
   const router = useRouter();
   const { toast } = useToast();
 
@@ -260,63 +263,75 @@ export function SettingsContent({
           </div>
 
           {/* Slack */}
-          <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6">
+          <div className={`bg-[#111] border rounded-xl p-6 ${!isPro ? "border-white/[0.06] opacity-60" : "border-white/[0.06]"}`}>
             <div className="flex items-center justify-between mb-3">
-              <div>
+              <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-white text-sm">Slack</h3>
-                <p className="text-sm text-zinc-600">Incoming webhook URL</p>
+                {!isPro && (
+                  <span className="text-[10px] font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">Pro</span>
+                )}
               </div>
-              <Switch
-                checked={slackEnabled}
-                onCheckedChange={setSlackEnabled}
-              />
+              <Switch checked={slackEnabled} onCheckedChange={setSlackEnabled} disabled={!isPro} />
             </div>
-            <div className="flex gap-2">
-              <Input
-                type="url"
-                placeholder="https://hooks.slack.com/services/..."
-                value={slackUrl}
-                onChange={(e) => setSlackUrl(e.target.value)}
-              />
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => saveWebhookChannel("slack", slackUrl, slackEnabled)}
-                className="border-white/10 text-zinc-300 hover:bg-white/[0.06] shrink-0"
-              >
-                Save
-              </Button>
-            </div>
+            {!isPro ? (
+              <p className="text-sm text-zinc-600">
+                Slack notifications are available on the{" "}
+                <a href="/pricing" className="text-zinc-400 hover:text-white underline underline-offset-2 transition-colors">Pro plan</a>.
+              </p>
+            ) : (
+              <div className="flex gap-2">
+                <Input
+                  type="url"
+                  placeholder="https://hooks.slack.com/services/..."
+                  value={slackUrl}
+                  onChange={(e) => setSlackUrl(e.target.value)}
+                />
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => saveWebhookChannel("slack", slackUrl, slackEnabled)}
+                  className="border-white/10 text-zinc-300 hover:bg-white/[0.06] shrink-0"
+                >
+                  Save
+                </Button>
+              </div>
+            )}
           </div>
 
           {/* Discord */}
-          <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6">
+          <div className={`bg-[#111] border rounded-xl p-6 ${!isPro ? "border-white/[0.06] opacity-60" : "border-white/[0.06]"}`}>
             <div className="flex items-center justify-between mb-3">
-              <div>
+              <div className="flex items-center gap-2">
                 <h3 className="font-semibold text-white text-sm">Discord</h3>
-                <p className="text-sm text-zinc-600">Incoming webhook URL</p>
+                {!isPro && (
+                  <span className="text-[10px] font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">Pro</span>
+                )}
               </div>
-              <Switch
-                checked={discordEnabled}
-                onCheckedChange={setDiscordEnabled}
-              />
+              <Switch checked={discordEnabled} onCheckedChange={setDiscordEnabled} disabled={!isPro} />
             </div>
-            <div className="flex gap-2">
-              <Input
-                type="url"
-                placeholder="https://discord.com/api/webhooks/..."
-                value={discordUrl}
-                onChange={(e) => setDiscordUrl(e.target.value)}
-              />
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => saveWebhookChannel("discord", discordUrl, discordEnabled)}
-                className="border-white/10 text-zinc-300 hover:bg-white/[0.06] shrink-0"
-              >
-                Save
-              </Button>
-            </div>
+            {!isPro ? (
+              <p className="text-sm text-zinc-600">
+                Discord notifications are available on the{" "}
+                <a href="/pricing" className="text-zinc-400 hover:text-white underline underline-offset-2 transition-colors">Pro plan</a>.
+              </p>
+            ) : (
+              <div className="flex gap-2">
+                <Input
+                  type="url"
+                  placeholder="https://discord.com/api/webhooks/..."
+                  value={discordUrl}
+                  onChange={(e) => setDiscordUrl(e.target.value)}
+                />
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => saveWebhookChannel("discord", discordUrl, discordEnabled)}
+                  className="border-white/10 text-zinc-300 hover:bg-white/[0.06] shrink-0"
+                >
+                  Save
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </TabsContent>
