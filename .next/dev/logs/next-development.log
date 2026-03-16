@@ -1,0 +1,20 @@
+[00:00:04.824] Server  LOG     
+[00:00:04.825] Server  LOG       We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+[00:00:04.826] Server  LOG       The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+
+[00:00:04.828] Server  LOG       	- include was updated to add '.next/dev/types/**/*.ts'
+[00:00:04.828] Server  LOG     
+[00:00:04.828] Server  LOG       The following mandatory changes were made to your tsconfig.json:
+
+[00:00:04.831] Server  LOG       	- jsx was set to react-jsx (next.js uses the React automatic runtime)
+[00:00:04.831] Server  LOG     
+[00:00:04.892] Server  WARN    ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+[00:00:05.293] Server  LOG     ✓ Ready in 4.1s
+[00:00:17.673] Server  LOG     ○ Compiling / ...
+[00:00:23.251] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:43.021] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:50.482] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:56.853] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:06.476] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:09.607] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:11.931] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
