@@ -10,7 +10,7 @@ const plans = [
     description: "For solo devs getting started",
     features: [
       "1 account per service",
-      "3 services (GitHub, Vercel, Supabase)",
+      "4 services (GitHub, Vercel, Supabase, Railway)",
       "Email alerts",
       "15-minute polling",
       "7-day alert history",

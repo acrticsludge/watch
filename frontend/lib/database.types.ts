@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export type ServiceType = "github" | "vercel" | "supabase";
+export type ServiceType = "github" | "vercel" | "supabase" | "railway";
 export type IntegrationStatus = "connected" | "error" | "disconnected" | "unsupported";
 export type ChannelType = "email" | "slack" | "discord" | "push";
 
@@ -57,6 +57,8 @@ export type Database = {
           current_value: number;
           limit_value: number;
           percent_used: number;
+          entity_id: string | null;
+          entity_label: string | null;
           recorded_at: string;
         };
         Insert: {
@@ -66,6 +68,8 @@ export type Database = {
           current_value: number;
           limit_value: number;
           percent_used: number;
+          entity_id?: string | null;
+          entity_label?: string | null;
           recorded_at?: string;
         };
         Update: {
@@ -75,6 +79,8 @@ export type Database = {
           current_value?: number;
           limit_value?: number;
           percent_used?: number;
+          entity_id?: string | null;
+          entity_label?: string | null;
           recorded_at?: string;
         };
         Relationships: [

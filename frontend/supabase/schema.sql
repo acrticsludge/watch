@@ -10,7 +10,7 @@ create extension if not exists "uuid-ossp";
 create table if not exists integrations (
   id              uuid primary key default uuid_generate_v4(),
   user_id         uuid not null references auth.users(id) on delete cascade,
-  service         text not null check (service in ('github', 'vercel', 'supabase')),
+  service         text not null check (service in ('github', 'vercel', 'supabase', 'railway')),
   account_label   text not null,
   api_key         text not null,           -- AES-256-GCM encrypted blob: iv:authTag:ciphertext
   status          text not null default 'disconnected'
@@ -33,11 +33,25 @@ create table if not exists usage_snapshots (
   current_value   numeric not null,
   limit_value     numeric not null,
   percent_used    numeric not null,
+  entity_id       text,          -- null = account-level aggregate; set = per-repo/project/bucket
+  entity_label    text,          -- human-readable entity name for display
   recorded_at     timestamptz not null default now()
 );
 
 create index if not exists usage_snapshots_integration_id_idx on usage_snapshots(integration_id);
 create index if not exists usage_snapshots_recorded_at_idx on usage_snapshots(recorded_at desc);
+create index if not exists usage_snapshots_entity_idx on usage_snapshots(integration_id, metric_name, entity_id);
+
+-- ============================================================
+-- Migration for existing databases (run if upgrading)
+-- ============================================================
+-- ALTER TABLE integrations DROP CONSTRAINT IF EXISTS integrations_service_check;
+-- ALTER TABLE integrations ADD CONSTRAINT integrations_service_check
+--   CHECK (service IN ('github', 'vercel', 'supabase', 'railway'));
+-- ALTER TABLE usage_snapshots ADD COLUMN IF NOT EXISTS entity_id text;
+-- ALTER TABLE usage_snapshots ADD COLUMN IF NOT EXISTS entity_label text;
+-- CREATE INDEX IF NOT EXISTS usage_snapshots_entity_idx
+--   ON usage_snapshots(integration_id, metric_name, entity_id);
 
 -- ============================================================
 -- alert_configs

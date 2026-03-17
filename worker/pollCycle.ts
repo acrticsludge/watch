@@ -2,6 +2,7 @@ import { createServiceClient } from "./lib/supabase/service";
 import { fetchGitHubUsage } from "./services/github";
 import { fetchVercelUsage } from "./services/vercel";
 import { fetchSupabaseUsage } from "./services/supabase";
+import { fetchRailwayUsage } from "./services/railway";
 import { checkThresholds } from "./thresholds";
 
 export interface UsageMetric {
@@ -9,6 +10,8 @@ export interface UsageMetric {
   currentValue: number;
   limitValue: number;
   percentUsed: number;
+  entityId?: string;    // undefined = account-level aggregate; set = per-repo/project/bucket
+  entityLabel?: string; // human-readable entity name for display
 }
 
 export async function runPollCycle(): Promise<void> {
@@ -29,6 +32,18 @@ export async function runPollCycle(): Promise<void> {
     return;
   }
 
+  // Build a userId → tier map so services can gate pro metrics
+  const userIds = [...new Set(integrations.map((i) => i.user_id))];
+  const { data: subscriptions } = await supabase
+    .from("subscriptions")
+    .select("user_id, tier")
+    .in("user_id", userIds);
+
+  const tierMap = new Map<string, string>();
+  for (const sub of subscriptions ?? []) {
+    tierMap.set(sub.user_id, sub.tier);
+  }
+
   console.log(`[pollCycle] Polling ${integrations.length} integration(s)...`);
 
   const results = await Promise.allSettled(
@@ -38,18 +53,22 @@ export async function runPollCycle(): Promise<void> {
         ...rawIntegration,
         meta: rawIntegration.meta as Record<string, unknown> | null,
       };
+      const tier = tierMap.get(integration.user_id) ?? "free";
       try {
         let metrics: UsageMetric[] = [];
 
         switch (integration.service) {
           case "github":
-            metrics = await fetchGitHubUsage(integration);
+            metrics = await fetchGitHubUsage(integration, tier);
             break;
           case "vercel":
-            metrics = await fetchVercelUsage(integration);
+            metrics = await fetchVercelUsage(integration, tier);
             break;
           case "supabase":
-            metrics = await fetchSupabaseUsage(integration);
+            metrics = await fetchSupabaseUsage(integration, tier);
+            break;
+          case "railway":
+            metrics = await fetchRailwayUsage(integration, tier);
             break;
           default:
             console.warn(`[pollCycle] Unknown service: ${integration.service}`);
@@ -67,6 +86,8 @@ export async function runPollCycle(): Promise<void> {
                 current_value: m.currentValue,
                 limit_value: m.limitValue,
                 percent_used: m.percentUsed,
+                entity_id: m.entityId ?? null,
+                entity_label: m.entityLabel ?? null,
               }))
             );
 
@@ -83,8 +104,9 @@ export async function runPollCycle(): Promise<void> {
             .update({ last_synced_at: new Date().toISOString(), status: "connected" })
             .eq("id", integration.id);
 
-          // Check thresholds and fire alerts if needed
-          await checkThresholds(integration.user_id, integration.id, metrics);
+          // Check thresholds only on aggregate (non-entity) metrics to avoid alert spam
+          const aggregateMetrics = metrics.filter((m) => !m.entityId);
+          await checkThresholds(integration.user_id, integration.id, aggregateMetrics);
         } else {
           // Service connected successfully but returned no data (e.g. plan doesn't expose billing API).
           // Mark as "unsupported" so the dashboard can show a clear message instead of an error.

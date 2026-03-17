@@ -34,6 +34,16 @@ const services = [
       </svg>
     ),
   },
+  {
+    name: "Railway",
+    description: "Memory usage · CPU across services",
+    accent: "group-hover:border-violet-500/30",
+    logo: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 text-violet-400">
+        <path d="M.395 8.395C1.925 3.532 6.36.042 11.587 0h.042c3.75 0 7.1 1.56 9.5 4.073L17.5 7.33c-1.567-1.742-3.84-2.838-6.37-2.838-3.856 0-7.1 2.556-8.122 6.077L.395 8.395zm23.21 7.21C22.075 20.468 17.64 23.958 12.413 24h-.042c-3.75 0-7.1-1.56-9.5-4.073l3.629-3.257c1.567 1.742 3.84 2.838 6.37 2.838 3.856 0 7.1-2.556 8.122-6.077l2.613 2.174zM14.75 12c0 1.519-1.231 2.75-2.75 2.75S9.25 13.519 9.25 12 10.481 9.25 12 9.25 14.75 10.481 14.75 12z" />
+      </svg>
+    ),
+  },
 ];
 
 export function ServicesSection() {
@@ -62,7 +72,7 @@ export function ServicesSection() {
         </motion.div>
 
         <motion.div
-          className="grid md:grid-cols-3 gap-4"
+          className="grid md:grid-cols-4 gap-4"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } }}

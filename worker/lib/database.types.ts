@@ -6,7 +6,8 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export type ServiceType = "github" | "vercel" | "supabase";
+export type ServiceType = "github" | "vercel" | "supabase" | "railway";
+export type IntegrationStatus = "connected" | "error" | "disconnected" | "unsupported";
 export type IntegrationStatus = "connected" | "error" | "disconnected";
 export type ChannelType = "email" | "slack" | "discord" | "push";
 
@@ -57,6 +58,8 @@ export type Database = {
           current_value: number;
           limit_value: number;
           percent_used: number;
+          entity_id: string | null;
+          entity_label: string | null;
           recorded_at: string;
         };
         Insert: {
@@ -66,6 +69,8 @@ export type Database = {
           current_value: number;
           limit_value: number;
           percent_used: number;
+          entity_id?: string | null;
+          entity_label?: string | null;
           recorded_at?: string;
         };
         Update: {
@@ -75,6 +80,8 @@ export type Database = {
           current_value?: number;
           limit_value?: number;
           percent_used?: number;
+          entity_id?: string | null;
+          entity_label?: string | null;
           recorded_at?: string;
         };
         Relationships: [
@@ -138,6 +145,33 @@ export type Database = {
           config?: Json;
           enabled?: boolean;
           created_at?: string;
+        };
+        Relationships: [];
+      };
+      subscriptions: {
+        Row: {
+          id: string;
+          user_id: string;
+          tier: "free" | "pro" | "team";
+          status: "active" | "canceled" | "past_due";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          tier?: "free" | "pro" | "team";
+          status?: "active" | "canceled" | "past_due";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          tier?: "free" | "pro" | "team";
+          status?: "active" | "canceled" | "past_due";
+          created_at?: string;
+          updated_at?: string;
         };
         Relationships: [];
       };

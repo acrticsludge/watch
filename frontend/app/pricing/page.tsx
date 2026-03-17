@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { LandingNav } from "@/components/landing/LandingNav";
-import { PricingSection } from "@/components/landing/PricingSection";
-import { LandingFooter } from "@/components/landing/LandingFooter";
+import { LandingNav } from "@/app/components/landing/LandingNav";
+import { PricingSection } from "@/app/components/landing/PricingSection";
+import { LandingFooter } from "@/app/components/landing/LandingFooter";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -30,7 +30,8 @@ export default async function PricingPage() {
             Simple, transparent pricing
           </h1>
           <p className="text-zinc-500 text-base max-w-md mx-auto">
-            Start free. Upgrade when you need more accounts, faster polling, or team features.
+            Start free. Upgrade when you need more accounts, faster polling, or
+            team features.
           </p>
         </div>
         <PricingSection />

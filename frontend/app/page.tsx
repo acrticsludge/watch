@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { LandingNav } from "@/components/landing/LandingNav";
-import { Hero } from "@/components/landing/Hero";
-import { ProblemSection } from "@/components/landing/ProblemSection";
-import { HowItWorks } from "@/components/landing/HowItWorks";
-import { ServicesSection } from "@/components/landing/ServicesSection";
-import { DemoWidget } from "@/components/landing/DemoWidget";
-import { AlertChannelsSection } from "@/components/landing/AlertChannelsSection";
-import { PricingSection } from "@/components/landing/PricingSection";
-import { LandingFooter } from "@/components/landing/LandingFooter";
+import { LandingNav } from "@/app/components/landing/LandingNav";
+import { Hero } from "@/app/components/landing/Hero";
+import { ProblemSection } from "@/app/components/landing/ProblemSection";
+import { HowItWorks } from "@/app/components/landing/HowItWorks";
+import { ServicesSection } from "@/app/components/landing/ServicesSection";
+import { DemoWidget } from "@/app/components/landing/DemoWidget";
+import { AlertChannelsSection } from "@/app/components/landing/AlertChannelsSection";
+import { PricingSection } from "@/app/components/landing/PricingSection";
+import { LandingFooter } from "@/app/components/landing/LandingFooter";
 import { createClient } from "@/lib/supabase/server";
 
 const APP_URL =
@@ -86,7 +86,8 @@ export default async function LandingPage() {
                 See it in action
               </h2>
               <p className="text-zinc-500 text-base max-w-xl mx-auto">
-                This is what your dashboard looks like. No signup needed to explore.
+                This is what your dashboard looks like. No signup needed to
+                explore.
               </p>
             </div>
             <DemoWidget />
