@@ -58,6 +58,13 @@ export function relativeTime(dateStr: string): string {
   return `${diffDay}d ago`;
 }
 
+export const FREE_METRICS: Record<string, string[]> = {
+  github: ["actions_minutes"],
+  vercel: ["bandwidth_gb", "build_minutes", "function_invocations"],
+  supabase: ["db_size_mb", "storage_mb", "monthly_active_users"],
+  railway: ["memory_usage_mb", "cpu_percent"],
+};
+
 export const SERVICE_LABELS: Record<string, string> = {
   github: "GitHub Actions",
   vercel: "Vercel",

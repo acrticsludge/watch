@@ -4,10 +4,12 @@ import { GroupedUsageCard } from "@/app/components/dashboard/GroupedUsageCard";
 import { DashboardRefresher } from "./DashboardRefresher";
 import { Button } from "@/app/components/ui/button";
 import Link from "next/link";
+import { FREE_METRICS } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
 interface LatestSnapshot {
+  integration_id: string;
   metric_name: string;
   current_value: number;
   limit_value: number;
@@ -20,11 +22,21 @@ interface LatestSnapshot {
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  const { data: integrations } = await supabase
-    .from("integrations")
-    .select("id, service, account_label, status, last_synced_at")
-    .neq("status", "disconnected")
-    .order("created_at", { ascending: true });
+  const [{ data: integrations }, { data: subscription }] = await Promise.all([
+    supabase
+      .from("integrations")
+      .select("id, service, account_label, status, last_synced_at")
+      .neq("status", "disconnected")
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("subscriptions")
+      .select("tier")
+      .eq("status", "active")
+      .maybeSingle(),
+  ]);
+
+  const tier = subscription?.tier ?? "free";
+  const isFree = tier === "free";
 
   if (!integrations || integrations.length === 0) {
     return (
@@ -88,9 +100,18 @@ export default async function DashboardPage() {
     }
   }
 
+  const integrationServiceMap = new Map(
+    (integrations ?? []).map((i) => [i.id, i.service]),
+  );
+
   const allSnapshots = Array.from(latestMap.values());
-  // Status counts based on aggregate (non-entity) snapshots only
-  const aggregateSnapshots = allSnapshots.filter((s) => !s.entity_id);
+  // Status counts: aggregate (non-entity) snapshots only, filtered by tier
+  const aggregateSnapshots = allSnapshots.filter((s) => {
+    if (s.entity_id) return false;
+    if (!isFree) return true;
+    const service = integrationServiceMap.get(s.integration_id);
+    return (FREE_METRICS[service ?? ""] ?? []).includes(s.metric_name);
+  });
   const criticalCount = aggregateSnapshots.filter((s) => s.percent_used >= 80).length;
   const warningCount = aggregateSnapshots.filter(
     (s) => s.percent_used >= 60 && s.percent_used < 80,
@@ -150,15 +171,20 @@ export default async function DashboardPage() {
       {/* Cards grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {integrations.map((integration) => {
+          const freeMetrics = FREE_METRICS[integration.service] ?? [];
+
           const integrationSnapshots = Array.from(latestMap.entries())
             .filter(([key]) => key.startsWith(`${integration.id}::`))
             .map(([, v]) => v)
-            .filter((s) => !s.entity_id);
+            .filter((s) => !s.entity_id)
+            .filter((s) => !isFree || freeMetrics.includes(s.metric_name));
 
-          const entitySnapshots = Array.from(latestMap.entries())
-            .filter(([key]) => key.startsWith(`${integration.id}::`))
-            .map(([, v]) => v)
-            .filter((s) => !!s.entity_id);
+          const entitySnapshots = isFree
+            ? []
+            : Array.from(latestMap.entries())
+                .filter(([key]) => key.startsWith(`${integration.id}::`))
+                .map(([, v]) => v)
+                .filter((s) => !!s.entity_id);
 
           if (
             integration.status === "unsupported" ||
