@@ -6,7 +6,7 @@ import { encrypt } from "@/lib/encryption";
 import { checkIntegrationLimit, TierLimitError } from "@/lib/tiers";
 
 const CreateSchema = z.object({
-  service: z.enum(["github", "vercel", "supabase"]),
+  service: z.enum(["github", "vercel", "supabase", "railway"]),
   account_label: z.string().min(1).max(80),
   api_key: z.string().min(1),
   "meta.project_ref": z.string().optional(),

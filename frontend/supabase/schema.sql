@@ -48,10 +48,38 @@ create index if not exists usage_snapshots_entity_idx on usage_snapshots(integra
 -- ALTER TABLE integrations DROP CONSTRAINT IF EXISTS integrations_service_check;
 -- ALTER TABLE integrations ADD CONSTRAINT integrations_service_check
 --   CHECK (service IN ('github', 'vercel', 'supabase', 'railway'));
+-- ALTER TABLE integrations DROP CONSTRAINT IF EXISTS integrations_status_check;
+-- ALTER TABLE integrations ADD CONSTRAINT integrations_status_check
+--   CHECK (status IN ('connected', 'error', 'disconnected', 'unsupported'));
 -- ALTER TABLE usage_snapshots ADD COLUMN IF NOT EXISTS entity_id text;
 -- ALTER TABLE usage_snapshots ADD COLUMN IF NOT EXISTS entity_label text;
 -- CREATE INDEX IF NOT EXISTS usage_snapshots_entity_idx
 --   ON usage_snapshots(integration_id, metric_name, entity_id);
+-- CREATE TABLE IF NOT EXISTS subscriptions (
+--   id uuid primary key default uuid_generate_v4(),
+--   user_id uuid not null references auth.users(id) on delete cascade,
+--   tier text not null default 'free' check (tier in ('free', 'pro', 'team')),
+--   status text not null default 'active' check (status in ('active', 'canceled', 'past_due')),
+--   created_at timestamptz not null default now(),
+--   updated_at timestamptz not null default now(),
+--   unique (user_id)
+-- );
+-- CREATE INDEX IF NOT EXISTS subscriptions_user_id_idx ON subscriptions(user_id);
+
+-- ============================================================
+-- subscriptions
+-- ============================================================
+create table if not exists subscriptions (
+  id          uuid primary key default uuid_generate_v4(),
+  user_id     uuid not null references auth.users(id) on delete cascade,
+  tier        text not null default 'free' check (tier in ('free', 'pro', 'team')),
+  status      text not null default 'active' check (status in ('active', 'canceled', 'past_due')),
+  created_at  timestamptz not null default now(),
+  updated_at  timestamptz not null default now(),
+  unique (user_id)
+);
+
+create index if not exists subscriptions_user_id_idx on subscriptions(user_id);
 
 -- ============================================================
 -- alert_configs

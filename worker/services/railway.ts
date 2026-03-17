@@ -252,26 +252,22 @@ export async function fetchRailwayUsage(
     const projectMemoryMB = Math.round(agg.totalMemoryGB * 1024 * 100) / 100;
     const projectCpuPct = Math.round(agg.totalCpuFraction * 100 * 100) / 100;
 
-    if (projectMemoryMB > 0) {
-      metrics.push({
-        metricName: "memory_usage_mb",
-        currentValue: projectMemoryMB,
-        limitValue: projectMemoryLimitMB,
-        percentUsed: projectMemoryLimitMB > 0 ? Math.round((projectMemoryMB / projectMemoryLimitMB) * 10000) / 100 : 0,
-        entityId: project.id,
-        entityLabel: project.name,
-      });
-    }
-    if (projectCpuPct > 0) {
-      metrics.push({
-        metricName: "cpu_percent",
-        currentValue: projectCpuPct,
-        limitValue: projectCpuLimit,
-        percentUsed: projectCpuLimit > 0 ? Math.round((projectCpuPct / projectCpuLimit) * 10000) / 100 : 0,
-        entityId: project.id,
-        entityLabel: project.name,
-      });
-    }
+    metrics.push({
+      metricName: "memory_usage_mb",
+      currentValue: projectMemoryMB,
+      limitValue: projectMemoryLimitMB,
+      percentUsed: projectMemoryLimitMB > 0 ? Math.round((projectMemoryMB / projectMemoryLimitMB) * 10000) / 100 : 0,
+      entityId: project.id,
+      entityLabel: project.name,
+    });
+    metrics.push({
+      metricName: "cpu_percent",
+      currentValue: projectCpuPct,
+      limitValue: projectCpuLimit,
+      percentUsed: projectCpuLimit > 0 ? Math.round((projectCpuPct / projectCpuLimit) * 10000) / 100 : 0,
+      entityId: project.id,
+      entityLabel: project.name,
+    });
   }
 
   if (!isPro) return metrics;
@@ -326,68 +322,57 @@ export async function fetchRailwayUsage(
   for (const { project, serviceCount, agg } of projectData) {
     const projectMemoryLimitMB = MEMORY_LIMIT_MB_PER_SERVICE * Math.max(serviceCount, 1);
     const projectCpuLimit = CPU_LIMIT_PERCENT_PER_SERVICE * Math.max(serviceCount, 1);
-    const projectNetworkLimitMB = networkLimitMB;
     const projectDiskLimitMB = 1024 * Math.max(serviceCount, 1);
 
     const peakCpu = Math.round(agg.peakCpuFraction * 100 * 100) / 100;
-    if (peakCpu > 0) {
-      metrics.push({
-        metricName: "cpu_peak_percent",
-        currentValue: peakCpu,
-        limitValue: projectCpuLimit,
-        percentUsed: projectCpuLimit > 0 ? Math.round((peakCpu / projectCpuLimit) * 10000) / 100 : 0,
-        entityId: project.id,
-        entityLabel: project.name,
-      });
-    }
+    metrics.push({
+      metricName: "cpu_peak_percent",
+      currentValue: peakCpu,
+      limitValue: projectCpuLimit,
+      percentUsed: projectCpuLimit > 0 ? Math.round((peakCpu / projectCpuLimit) * 10000) / 100 : 0,
+      entityId: project.id,
+      entityLabel: project.name,
+    });
 
     const peakMem = Math.round(agg.peakMemoryGB * 1024 * 100) / 100;
-    if (peakMem > 0) {
-      metrics.push({
-        metricName: "memory_peak_mb",
-        currentValue: peakMem,
-        limitValue: projectMemoryLimitMB,
-        percentUsed: projectMemoryLimitMB > 0 ? Math.round((peakMem / projectMemoryLimitMB) * 10000) / 100 : 0,
-        entityId: project.id,
-        entityLabel: project.name,
-      });
-    }
+    metrics.push({
+      metricName: "memory_peak_mb",
+      currentValue: peakMem,
+      limitValue: projectMemoryLimitMB,
+      percentUsed: projectMemoryLimitMB > 0 ? Math.round((peakMem / projectMemoryLimitMB) * 10000) / 100 : 0,
+      entityId: project.id,
+      entityLabel: project.name,
+    });
 
     const txMB = Math.round(agg.totalNetworkTxMB * 100) / 100;
-    if (txMB > 0) {
-      metrics.push({
-        metricName: "network_tx_mb",
-        currentValue: txMB,
-        limitValue: projectNetworkLimitMB,
-        percentUsed: projectNetworkLimitMB > 0 ? Math.round((txMB / projectNetworkLimitMB) * 10000) / 100 : 0,
-        entityId: project.id,
-        entityLabel: project.name,
-      });
-    }
+    metrics.push({
+      metricName: "network_tx_mb",
+      currentValue: txMB,
+      limitValue: networkLimitMB,
+      percentUsed: networkLimitMB > 0 ? Math.round((txMB / networkLimitMB) * 10000) / 100 : 0,
+      entityId: project.id,
+      entityLabel: project.name,
+    });
 
     const rxMB = Math.round(agg.totalNetworkRxMB * 100) / 100;
-    if (rxMB > 0) {
-      metrics.push({
-        metricName: "network_rx_mb",
-        currentValue: rxMB,
-        limitValue: projectNetworkLimitMB,
-        percentUsed: projectNetworkLimitMB > 0 ? Math.round((rxMB / projectNetworkLimitMB) * 10000) / 100 : 0,
-        entityId: project.id,
-        entityLabel: project.name,
-      });
-    }
+    metrics.push({
+      metricName: "network_rx_mb",
+      currentValue: rxMB,
+      limitValue: networkLimitMB,
+      percentUsed: networkLimitMB > 0 ? Math.round((rxMB / networkLimitMB) * 10000) / 100 : 0,
+      entityId: project.id,
+      entityLabel: project.name,
+    });
 
     const diskMB = Math.round(agg.totalDiskGB * 1024 * 100) / 100;
-    if (diskMB > 0) {
-      metrics.push({
-        metricName: "disk_usage_mb",
-        currentValue: diskMB,
-        limitValue: projectDiskLimitMB,
-        percentUsed: projectDiskLimitMB > 0 ? Math.round((diskMB / projectDiskLimitMB) * 10000) / 100 : 0,
-        entityId: project.id,
-        entityLabel: project.name,
-      });
-    }
+    metrics.push({
+      metricName: "disk_usage_mb",
+      currentValue: diskMB,
+      limitValue: projectDiskLimitMB,
+      percentUsed: projectDiskLimitMB > 0 ? Math.round((diskMB / projectDiskLimitMB) * 10000) / 100 : 0,
+      entityId: project.id,
+      entityLabel: project.name,
+    });
   }
 
   return metrics;
