@@ -148,7 +148,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Cards grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
         {integrations.map((integration) => {
           const integrationSnapshots = Array.from(latestMap.entries())
             .filter(([key]) => key.startsWith(`${integration.id}::`))

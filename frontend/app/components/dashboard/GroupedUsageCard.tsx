@@ -85,12 +85,16 @@ export function GroupedUsageCard({
 
   return (
     <motion.div
+      layout
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      transition={{
+        layout: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+        default: { duration: 0.4, ease: "easeOut" },
+      }}
       onHoverStart={() => setExpanded(true)}
       onHoverEnd={() => setExpanded(false)}
-      className="bg-[#111] border border-white/6 rounded-xl p-5 hover:border-white/10 hover:shadow-lg hover:shadow-black/30 transition-[border-color,box-shadow] duration-300 cursor-default"
+      className="bg-[#111] border border-white/6 rounded-xl p-5 hover:border-white/10 hover:shadow-lg hover:shadow-black/30 transition-[border-color,box-shadow] duration-300 cursor-default overflow-hidden"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
