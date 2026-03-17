@@ -134,8 +134,7 @@ export function Hero() {
               Actions minutes ran out. Nobody knew.
             </p>
             <p className="text-base text-zinc-400 leading-relaxed mb-10">
-              Stackwatch monitors your GitHub Actions, Vercel, and Supabase
-              usage and alerts you{" "}
+              Stackwatch monitors your Tech Stack usage and alerts you{" "}
               <span className="text-white font-medium">before</span> it becomes
               an incident.
             </p>

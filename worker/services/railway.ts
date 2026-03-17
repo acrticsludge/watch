@@ -65,7 +65,7 @@ const PROJECTS_QUERY = `
 `;
 
 const PROJECT_USAGE_QUERY = `
-  query ProjectUsage($projectId: String!, $startDate: DateTime!, $endDate: DateTime!) {
+  query ProjectUsage($projectId: String!, $startDate: String!, $endDate: String!) {
     usageForProject(projectId: $projectId, startDate: $startDate, endDate: $endDate) {
       ... on AggregatedUsage {
         measurements {
@@ -120,26 +120,17 @@ export async function fetchRailwayUsage(
 
   const isPro = tier === "pro" || tier === "team";
 
-  let projectsData: { projects: { edges: { node: ProjectNode }[] } };
-  try {
-    projectsData = await railwayQuery<{
-      projects: { edges: { node: ProjectNode }[] };
-    }>(token, PROJECTS_QUERY);
-    console.log(`[railway] raw projects response:`, JSON.stringify(projectsData));
-  } catch (err) {
-    console.error(`[railway] projects query failed:`, err instanceof Error ? err.message : String(err));
-    throw err;
-  }
+  const projectsData = await railwayQuery<{
+    projects: { edges: { node: ProjectNode }[] };
+  }>(token, PROJECTS_QUERY);
 
   const projects = projectsData.projects.edges.map((e) => e.node);
-  console.log(`[railway] Found ${projects.length} project(s) for integration ${integration.id}`);
   if (projects.length === 0) return [];
 
   const totalServiceCount = projects.reduce(
     (sum, p) => sum + p.services.edges.length,
     0
   );
-  console.log(`[railway] Total service count: ${totalServiceCount}`);
   if (totalServiceCount === 0) return [];
 
   const now = new Date();

@@ -27,7 +27,7 @@ const plans = [
     features: [
       "5 accounts per service",
       "All services",
-      "Email + Slack + Discord alerts",
+      "Email + Slack + Discord alerts + Browser Push",
       "5-minute polling",
       "30-day alert history",
       "Usage history charts",
@@ -44,7 +44,7 @@ const plans = [
     features: [
       "Unlimited accounts",
       "All services",
-      "All alert channels + Browser push",
+      "Multiple email, Slack and discord support",
       "1-minute polling",
       "90-day alert history",
       "Team dashboard",
@@ -61,7 +61,11 @@ export function PricingSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="pricing" className="py-24 bg-[#0a0a0a] border-t border-white/4" ref={ref}>
+    <section
+      id="pricing"
+      className="py-24 bg-[#0a0a0a] border-t border-white/4"
+      ref={ref}
+    >
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
           className="text-center mb-14"
@@ -84,12 +88,19 @@ export function PricingSection() {
           className="grid md:grid-cols-3 gap-4 items-start"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
-          variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } }}
+          variants={{
+            visible: {
+              transition: { staggerChildren: 0.1, delayChildren: 0.1 },
+            },
+          }}
         >
           {plans.map((p) => (
             <motion.div
               key={p.name}
-              variants={{ hidden: { opacity: 0, y: 24 }, visible: { opacity: 1, y: 0 } }}
+              variants={{
+                hidden: { opacity: 0, y: 24 },
+                visible: { opacity: 1, y: 0 },
+              }}
               transition={{ duration: 0.5, ease: "easeOut" }}
               className={`relative rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${
                 p.highlight
@@ -114,7 +125,9 @@ export function PricingSection() {
                   {p.name}
                 </p>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-3xl font-bold text-white">{p.price}</span>
+                  <span className="text-3xl font-bold text-white">
+                    {p.price}
+                  </span>
                   {p.period && (
                     <span className="text-sm text-zinc-600">{p.period}</span>
                   )}
@@ -139,9 +152,16 @@ export function PricingSection() {
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2.5}
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
-                    <span className={`text-sm ${p.highlight ? "text-zinc-300" : "text-zinc-500"}`}>
+                    <span
+                      className={`text-sm ${p.highlight ? "text-zinc-300" : "text-zinc-500"}`}
+                    >
                       {f}
                     </span>
                   </li>
