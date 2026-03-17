@@ -82,9 +82,9 @@ const PROJECTS_QUERY = `
 
 const PROJECT_USAGE_QUERY = `
   query ProjectUsage($projectId: String!, $startDate: String!, $endDate: String!) {
-    usageForProject(projectId: $projectId, startDate: $startDate, endDate: $endDate) {
+    usage(projectId: $projectId, startDate: $startDate, endDate: $endDate) {
       ... on AggregatedUsage {
-        measurements {
+        measurement {
           type
           tags { serviceId }
           avgValue
@@ -136,10 +136,10 @@ export async function fetchRailwayUsage(
 
   const isPro = tier === "pro" || tier === "team";
 
-  // DEBUG: discover available query fields
-  const schemaData = await railwayQuery<{ __schema: { queryType: { fields: { name: string }[] } } }>(token, INTROSPECT_QUERY);
-  const usageFields = schemaData.__schema.queryType.fields.map((f) => f.name).filter((n) => /usage|metric|bill|cost/i.test(n));
-  console.log(`[railway] usage-related query fields:`, usageFields.join(", ") || "(none found)");
+  // DEBUG: discover usage field args
+  const schemaData = await railwayQuery<{ __schema: { queryType: { fields: { name: string; args: { name: string; type: { name: string | null; kind: string; ofType: { name: string } | null } }[] }[] } } }>(token, INTROSPECT_QUERY);
+  const usageField = schemaData.__schema.queryType.fields.find((f) => f.name === "usage");
+  console.log(`[railway] usage field args:`, JSON.stringify(usageField?.args));
 
   const projectsData = await railwayQuery<{
     projects: { edges: { node: ProjectNode }[] };
@@ -191,10 +191,10 @@ export async function fetchRailwayUsage(
 
     try {
       const usageData = await railwayQuery<{
-        usageForProject: { measurements?: Measurement[] };
+        usage: { measurement?: Measurement[] };
       }>(token, PROJECT_USAGE_QUERY, { projectId: project.id, startDate, endDate });
 
-      const measurements = usageData.usageForProject.measurements ?? [];
+      const measurements = usageData.usage.measurement ?? [];
       for (const m of measurements) {
         const avg = m.avgValue ?? 0;
         const max = m.maxValue ?? avg;
