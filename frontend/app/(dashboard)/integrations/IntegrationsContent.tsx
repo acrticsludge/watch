@@ -28,6 +28,7 @@ interface Integration {
 
 interface IntegrationsContentProps {
   integrations: Integration[];
+  tier: string;
 }
 
 const SERVICES = [
@@ -130,7 +131,9 @@ const SERVICES = [
 
 export function IntegrationsContent({
   integrations,
+  tier,
 }: IntegrationsContentProps) {
+  const maxPerService = tier === "pro" || tier === "team" ? Infinity : 1;
   const router = useRouter();
   const { toast } = useToast();
   const [openDialog, setOpenDialog] = useState<string | null>(null);
@@ -233,7 +236,7 @@ export function IntegrationsContent({
     <div className="space-y-4">
       {SERVICES.map((svc) => {
         const connected = integrations.filter((i) => i.service === svc.id);
-        const atLimit = connected.length >= 1;
+        const atLimit = connected.length >= maxPerService;
 
         return (
           <div
@@ -268,11 +271,10 @@ export function IntegrationsContent({
               </Button>
             </div>
 
-            {atLimit && (
+            {atLimit && tier === "free" && (
               <p className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-md px-3 py-2 mb-4 flex items-center gap-1.5">
-                <AlertCircle className="h-3.5 w-3.5 flex-shrink-0" />
-                Free plan allows 1 account per service. Remove the existing one
-                to add a different account.
+                <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                Free plan allows 1 account per service. Upgrade to Pro to add multiple accounts.
               </p>
             )}
 

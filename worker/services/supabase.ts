@@ -192,7 +192,7 @@ export async function fetchSupabaseUsage(
         pg_total_relation_size(relid)::bigint AS total_bytes
       FROM pg_stat_user_tables
       ORDER BY total_bytes DESC
-      LIMIT 20`
+      LIMIT 5`
     );
     for (const row of tableRows) {
       const bytes = Number(row.total_bytes ?? 0);

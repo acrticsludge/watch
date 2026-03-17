@@ -32,6 +32,16 @@ create policy "usage_snapshots: service role can insert"
   with check (true);
 
 -- ============================================================
+-- subscriptions
+-- ============================================================
+alter table subscriptions enable row level security;
+
+create policy "subscriptions: users own their rows"
+  on subscriptions for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+-- ============================================================
 -- alert_configs
 -- ============================================================
 alter table alert_configs enable row level security;

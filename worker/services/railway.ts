@@ -222,8 +222,9 @@ export async function fetchRailwayUsage(
     }
   }
 
-  if (!anyUsageFetched) return [];
-
+  // If the usage API returned no measurements (e.g. all services are sleeping/idle),
+  // still emit zero-value metrics so the integration stays "connected" rather than
+  // being marked "unsupported".
   const metrics: UsageMetric[] = [];
   const memoryLimitMB = MEMORY_LIMIT_MB_PER_SERVICE * totalServiceCount;
   const cpuLimit = CPU_LIMIT_PERCENT_PER_SERVICE * totalServiceCount;
