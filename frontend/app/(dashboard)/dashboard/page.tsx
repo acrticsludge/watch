@@ -147,8 +147,8 @@ export default async function DashboardPage() {
         <div className="flex-1 h-px bg-white/[0.05]" />
       </div>
 
-      {/* Cards grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+      {/* Cards masonry */}
+      <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
         {integrations.map((integration) => {
           const integrationSnapshots = Array.from(latestMap.entries())
             .filter(([key]) => key.startsWith(`${integration.id}::`))
@@ -172,72 +172,72 @@ export default async function DashboardPage() {
             if (isUnsupported) borderClass = "border-amber-500/20";
 
             return (
-              <div
-                key={integration.id}
-                className={`bg-[#111] border rounded-xl p-5 ${borderClass}`}
-              >
-                <div className="flex items-center gap-2.5 mb-3">
-                  {isError || isUnsupported ? (
-                    <>
-                      <div
-                        className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${isError ? "bg-red-500/10" : "bg-amber-500/10"}`}
-                      >
-                        <svg
-                          className={`h-4 w-4 ${isError ? "text-red-400" : "text-amber-400"}`}
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
+              <div key={integration.id} className="break-inside-avoid mb-4">
+                <div className={`bg-[#111] border rounded-xl p-5 ${borderClass}`}>
+                  <div className="flex items-center gap-2.5 mb-3">
+                    {isError || isUnsupported ? (
+                      <>
+                        <div
+                          className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${isError ? "bg-red-500/10" : "bg-amber-500/10"}`}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-zinc-200">
-                          {integration.account_label}
-                        </p>
-                        <p className="text-xs text-zinc-600 capitalize">
-                          {integration.service}
-                        </p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="h-8 w-8 rounded-lg bg-white/5 animate-pulse" />
-                      <div className="space-y-1.5">
-                        <div className="h-3 w-24 bg-white/5 rounded animate-pulse" />
-                        <div className="h-2.5 w-16 bg-white/4 rounded animate-pulse" />
-                      </div>
-                    </>
-                  )}
+                          <svg
+                            className={`h-4 w-4 ${isError ? "text-red-400" : "text-amber-400"}`}
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-zinc-200">
+                            {integration.account_label}
+                          </p>
+                          <p className="text-xs text-zinc-600 capitalize">
+                            {integration.service}
+                          </p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="h-8 w-8 rounded-lg bg-white/5 animate-pulse" />
+                        <div className="space-y-1.5">
+                          <div className="h-3 w-24 bg-white/5 rounded animate-pulse" />
+                          <div className="h-2.5 w-16 bg-white/4 rounded animate-pulse" />
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <p
+                    className={`text-sm ${isError ? "text-red-400" : isUnsupported ? "text-amber-400/80" : "text-zinc-600"}`}
+                  >
+                    {isError
+                      ? "Sync failed — check your API key in Integrations."
+                      : isUnsupported
+                        ? "Billing API not available for your current plan."
+                        : "Waiting for first sync..."}
+                  </p>
                 </div>
-                <p
-                  className={`text-sm ${isError ? "text-red-400" : isUnsupported ? "text-amber-400/80" : "text-zinc-600"}`}
-                >
-                  {isError
-                    ? "Sync failed — check your API key in Integrations."
-                    : isUnsupported
-                      ? "Billing API not available for your current plan."
-                      : "Waiting for first sync..."}
-                </p>
               </div>
             );
           }
 
           return (
-            <GroupedUsageCard
-              key={integration.id}
-              service={integration.service}
-              accountLabel={integration.account_label}
-              snapshots={integrationSnapshots}
-              entitySnapshots={entitySnapshots}
-              lastSyncedAt={integration.last_synced_at}
-              status={integration.status}
-            />
+            <div key={integration.id} className="break-inside-avoid mb-4">
+              <GroupedUsageCard
+                service={integration.service}
+                accountLabel={integration.account_label}
+                snapshots={integrationSnapshots}
+                entitySnapshots={entitySnapshots}
+                lastSyncedAt={integration.last_synced_at}
+                status={integration.status}
+              />
+            </div>
           );
         })}
       </div>

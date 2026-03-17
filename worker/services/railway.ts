@@ -120,9 +120,16 @@ export async function fetchRailwayUsage(
 
   const isPro = tier === "pro" || tier === "team";
 
-  const projectsData = await railwayQuery<{
-    projects: { edges: { node: ProjectNode }[] };
-  }>(token, PROJECTS_QUERY);
+  let projectsData: { projects: { edges: { node: ProjectNode }[] } };
+  try {
+    projectsData = await railwayQuery<{
+      projects: { edges: { node: ProjectNode }[] };
+    }>(token, PROJECTS_QUERY);
+    console.log(`[railway] raw projects response:`, JSON.stringify(projectsData));
+  } catch (err) {
+    console.error(`[railway] projects query failed:`, err instanceof Error ? err.message : String(err));
+    throw err;
+  }
 
   const projects = projectsData.projects.edges.map((e) => e.node);
   console.log(`[railway] Found ${projects.length} project(s) for integration ${integration.id}`);
