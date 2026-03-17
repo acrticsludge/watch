@@ -54,6 +54,18 @@ function getBarColor(pct: number) {
   return "bg-blue-500";
 }
 
+function estimateDaysUntilLimit(current: number, limit: number): number | null {
+  const now = new Date();
+  const dayOfMonth = now.getDate();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const daysRemaining = daysInMonth - dayOfMonth;
+  if (dayOfMonth === 0 || current <= 0) return null;
+  const dailyRate = current / dayOfMonth;
+  const daysLeft = (limit - current) / dailyRate;
+  if (daysLeft < daysRemaining) return Math.max(0, Math.round(daysLeft));
+  return null;
+}
+
 function getDotColor(pct: number) {
   if (pct >= 80) return "bg-red-500";
   if (pct >= 60) return "bg-amber-500";
@@ -146,9 +158,19 @@ export function DemoWidget() {
                     <span className="text-[10px] text-zinc-600">
                       {m.current.toLocaleString()} / {m.limit.toLocaleString()} {m.unit}
                     </span>
-                    <span className={`text-[11px] font-semibold ${getPctColor(pct)}`}>
-                      {pct}%
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {(() => {
+                        const d = estimateDaysUntilLimit(m.current, m.limit);
+                        return d !== null ? (
+                          <span className={`text-[10px] tabular-nums ${pct >= 80 ? "text-red-500" : "text-amber-500"}`}>
+                            ~{d === 0 ? "today" : `${d}d`}
+                          </span>
+                        ) : null;
+                      })()}
+                      <span className={`text-[11px] font-semibold ${getPctColor(pct)}`}>
+                        {pct}%
+                      </span>
+                    </div>
                   </div>
                 </motion.div>
               );

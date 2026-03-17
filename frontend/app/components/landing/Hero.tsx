@@ -33,6 +33,18 @@ const SUPABASE_ICON = (
   </svg>
 );
 
+function estimateDaysUntilLimit(current: number, limit: number): number | null {
+  const now = new Date();
+  const dayOfMonth = now.getDate();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const daysRemaining = daysInMonth - dayOfMonth;
+  if (dayOfMonth === 0 || current <= 0) return null;
+  const dailyRate = current / dayOfMonth;
+  const daysLeft = (limit - current) / dailyRate;
+  if (daysLeft < daysRemaining) return Math.max(0, Math.round(daysLeft));
+  return null;
+}
+
 interface MiniCardProps {
   icon: React.ReactNode;
   service: string;
@@ -64,6 +76,7 @@ function MiniUsageCard({
         : "text-green-400";
   const dotColor =
     pct >= 80 ? "bg-red-500" : pct >= 60 ? "bg-amber-500" : "bg-green-500";
+  const daysLeft = estimateDaysUntilLimit(current, limit);
 
   return (
     <div className="bg-[#111] border border-white/[0.07] rounded-xl p-4">
@@ -94,9 +107,16 @@ function MiniUsageCard({
         <span className="text-[10px] text-zinc-600 tabular-nums">
           {current.toLocaleString()} / {limit.toLocaleString()} {unit}
         </span>
-        <span className={`text-[11px] font-semibold tabular-nums ${pctColor}`}>
-          {pct}%
-        </span>
+        <div className="flex items-center gap-2">
+          {daysLeft !== null && (
+            <span className={`text-[10px] tabular-nums ${pct >= 80 ? "text-red-500" : "text-amber-500"}`}>
+              ~{daysLeft === 0 ? "today" : `${daysLeft}d`}
+            </span>
+          )}
+          <span className={`text-[11px] font-semibold tabular-nums ${pctColor}`}>
+            {pct}%
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -121,7 +141,7 @@ export function Hero() {
           <div className="max-w-xl">
             <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.18em] mb-8 flex items-center gap-2">
               <span className="h-px w-5 bg-zinc-700 inline-block" />
-              Usage monitoring for dev teams
+              Stop hitting limits by surprise
             </p>
 
             <h1 className="text-[3.25rem] md:text-[3.75rem] font-bold text-white tracking-tight leading-[1.06] mb-5">
@@ -134,9 +154,10 @@ export function Hero() {
               Actions minutes ran out. Nobody knew.
             </p>
             <p className="text-base text-zinc-400 leading-relaxed mb-10">
-              Stackwatch monitors your Tech Stack usage and alerts you{" "}
-              <span className="text-white font-medium">before</span> it becomes
-              an incident.
+              Stackwatch watches your GitHub, Vercel, and Supabase limits —
+              and alerts you{" "}
+              <span className="text-white font-medium">before</span> they cut
+              you off.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -179,7 +200,7 @@ export function Hero() {
               </div>
               <div className="min-w-0">
                 <p className="text-xs font-medium text-zinc-200">
-                  GitHub Actions · 94%
+                  GitHub Actions · 94% · <span className="text-red-400">~2 days left</span>
                 </p>
                 <p className="text-[11px] text-zinc-500 mt-0.5 truncate">
                   Alert sent via email · 2h ago

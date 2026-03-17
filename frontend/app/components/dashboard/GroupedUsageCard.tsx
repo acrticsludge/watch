@@ -53,6 +53,18 @@ const SERVICE_ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
+function estimateDaysUntilLimit(current: number, limit: number): number | null {
+  const now = new Date();
+  const dayOfMonth = now.getDate();
+  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const daysRemaining = daysInMonth - dayOfMonth;
+  if (dayOfMonth === 0 || current <= 0) return null;
+  const dailyRate = current / dayOfMonth;
+  const daysLeft = (limit - current) / dailyRate;
+  if (daysLeft < daysRemaining) return Math.max(0, Math.round(daysLeft));
+  return null;
+}
+
 function getBadgeVariant(pct: number): "success" | "warning" | "danger" {
   if (pct >= 80) return "danger";
   if (pct >= 60) return "warning";
@@ -143,10 +155,20 @@ function UsageDetailModal({
                     transition={{ duration: 0.5, ease: "easeOut" }}
                   />
                 </div>
-                <span className="text-xs text-zinc-600">
-                  {snap.current_value.toLocaleString()} /{" "}
-                  {snap.limit_value.toLocaleString()} {unit}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-zinc-600">
+                    {snap.current_value.toLocaleString()} /{" "}
+                    {snap.limit_value.toLocaleString()} {unit}
+                  </span>
+                  {(() => {
+                    const d = estimateDaysUntilLimit(snap.current_value, snap.limit_value);
+                    return d !== null ? (
+                      <span className={`text-xs tabular-nums ${pct >= 80 ? "text-red-500" : "text-amber-500"}`}>
+                        · ~{d === 0 ? "hits limit today" : `${d} days until limit`}
+                      </span>
+                    ) : null;
+                  })()}
+                </div>
                 {subRows.length > 0 && (
                   <div className="mt-2 space-y-1 pl-3 border-l border-white/6">
                     {subRows.map((e) => (
@@ -245,22 +267,30 @@ export function GroupedUsageCard({
 
         {/* Compact bars (top 3 by usage) */}
         <div className="flex-1 space-y-2 mb-3">
-          {visible.map((snap) => (
-            <div key={snap.metric_name} className="flex items-center gap-2">
-              <span className="text-xs text-zinc-600 w-32 shrink-0 truncate">
-                {METRIC_LABELS[snap.metric_name] ?? snap.metric_name}
-              </span>
-              <div className="flex-1 h-1 rounded-full bg-white/6 overflow-hidden">
-                <div
-                  className={`h-full rounded-full ${getBarClass(snap.percent_used)}`}
-                  style={{ width: `${Math.min(snap.percent_used, 100)}%` }}
-                />
+          {visible.map((snap) => {
+            const daysLeft = estimateDaysUntilLimit(snap.current_value, snap.limit_value);
+            return (
+              <div key={snap.metric_name} className="flex items-center gap-2">
+                <span className="text-xs text-zinc-600 w-32 shrink-0 truncate">
+                  {METRIC_LABELS[snap.metric_name] ?? snap.metric_name}
+                </span>
+                <div className="flex-1 h-1 rounded-full bg-white/6 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full ${getBarClass(snap.percent_used)}`}
+                    style={{ width: `${Math.min(snap.percent_used, 100)}%` }}
+                  />
+                </div>
+                {daysLeft !== null && (
+                  <span className={`text-[10px] shrink-0 tabular-nums ${snap.percent_used >= 80 ? "text-red-500" : "text-amber-500"}`}>
+                    ~{daysLeft === 0 ? "today" : `${daysLeft}d`}
+                  </span>
+                )}
+                <span className="text-xs text-zinc-500 w-7 text-right shrink-0">
+                  {Math.round(snap.percent_used)}%
+                </span>
               </div>
-              <span className="text-xs text-zinc-500 w-7 text-right shrink-0">
-                {Math.round(snap.percent_used)}%
-              </span>
-            </div>
-          ))}
+            );
+          })}
           {hiddenCount > 0 && (
             <p className="text-[11px] text-zinc-600">
               +{hiddenCount} more · click for details

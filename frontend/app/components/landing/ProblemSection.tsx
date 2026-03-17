@@ -6,17 +6,6 @@ import { motion, useInView } from "framer-motion";
 const problems = [
   {
     icon: (
-      <svg className="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-      </svg>
-    ),
-    iconBg: "bg-amber-500/10 border-amber-500/20",
-    title: "5 different dashboards",
-    description:
-      "Switching between GitHub, Vercel, and Supabase every time you want to check if you're close to a limit.",
-  },
-  {
-    icon: (
       <svg className="h-4 w-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.072 16.5c-.77.833.192 2.5 1.732 2.5z" />
       </svg>
@@ -24,7 +13,18 @@ const problems = [
     iconBg: "bg-red-500/10 border-red-500/20",
     title: "You find out when it breaks",
     description:
-      "Actions stop running. Deploys fail. Users can't sign up. And you had no idea it was coming.",
+      "Actions quota runs out mid-sprint. Vercel bandwidth cuts off your users. Supabase row limit silently fails writes. Always at the worst time.",
+  },
+  {
+    icon: (
+      <svg className="h-4 w-4 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+      </svg>
+    ),
+    iconBg: "bg-amber-500/10 border-amber-500/20",
+    title: "5 dashboards, zero alerts",
+    description:
+      "GitHub, Vercel, Supabase, Railway — each has its own usage page. None of them ping you before the limit hits.",
   },
   {
     icon: (
@@ -33,9 +33,9 @@ const problems = [
       </svg>
     ),
     iconBg: "bg-white/[0.05] border-white/[0.08]",
-    title: "Manual checking is a chore",
+    title: "Manual checking gets forgotten",
     description:
-      "Checking usage before every major push is tedious and easy to forget. There has to be a better way.",
+      "You check once, feel fine, and forget. Three weeks later usage has spiked and you're already over.",
   },
 ];
 
@@ -49,7 +49,7 @@ export function ProblemSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-24 bg-[#0a0a0a] border-t border-white/[0.04]" ref={ref}>
+    <section className="py-24 bg-[#0a0a0a] border-t border-white/4" ref={ref}>
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
           className="text-center mb-14"
@@ -80,7 +80,7 @@ export function ProblemSection() {
               key={p.title}
               variants={itemVariants}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className="group bg-[#111] rounded-xl border border-white/[0.06] p-6 hover:border-white/[0.12] hover:-translate-y-1 transition-all duration-300 cursor-default"
+              className="group bg-[#111] rounded-xl border border-white/6 p-6 hover:border-white/12 hover:-translate-y-1 transition-all duration-300 cursor-default"
             >
               <div
                 className={`h-8 w-8 rounded-lg border flex items-center justify-center mb-4 ${p.iconBg}`}
