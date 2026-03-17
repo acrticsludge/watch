@@ -59,6 +59,14 @@ const INTROSPECT_QUERY = `
   }
 `;
 
+const INTROSPECT_ENUM_QUERY = `
+  {
+    __type(name: "MetricMeasurement") {
+      enumValues { name }
+    }
+  }
+`;
+
 const PROJECTS_QUERY = `
   query {
     projects {
@@ -86,12 +94,11 @@ const PROJECT_USAGE_QUERY = `
       projectId: $projectId
       startDate: $startDate
       endDate: $endDate
-      measurements: [CPU, MEMORY_USAGE_GB, NETWORK_TX_BYTES, NETWORK_RX_BYTES, DISK_USAGE_BYTES]
+      measurements: [MEMORY_USAGE_GB, NETWORK_TX_GB, NETWORK_RX_GB, DISK_USAGE_GB]
     ) {
       ... on AggregatedUsage {
         measurement
-        avgValue
-        maxValue
+        value
         tags { serviceId }
       }
     }
@@ -112,8 +119,7 @@ interface ProjectNode {
 interface Measurement {
   measurement: string;
   tags: { serviceId: string };
-  avgValue: number;
-  maxValue: number;
+  value: number;
 }
 
 interface ProjectAgg {
@@ -139,10 +145,12 @@ export async function fetchRailwayUsage(
 
   const isPro = tier === "pro" || tier === "team";
 
-  // DEBUG: discover usage field args
+  // DEBUG: discover usage field args + MetricMeasurement enum values
   const schemaData = await railwayQuery<{ __schema: { queryType: { fields: { name: string; args: { name: string; type: { name: string | null; kind: string; ofType: { name: string } | null } }[] }[] } } }>(token, INTROSPECT_QUERY);
   const usageField = schemaData.__schema.queryType.fields.find((f) => f.name === "usage");
   console.log(`[railway] usage field args:`, JSON.stringify(usageField?.args));
+  const enumData = await railwayQuery<{ __type: { enumValues: { name: string }[] } }>(token, INTROSPECT_ENUM_QUERY);
+  console.log(`[railway] MetricMeasurement enum values:`, JSON.stringify(enumData.__type?.enumValues?.map((v) => v.name)));
 
   const projectsData = await railwayQuery<{
     projects: { edges: { node: ProjectNode }[] };
@@ -199,30 +207,24 @@ export async function fetchRailwayUsage(
 
       const measurements = usageData.usage ?? [];
       for (const m of measurements) {
-        const avg = m.avgValue ?? 0;
-        const max = m.maxValue ?? avg;
+        const val = m.value ?? 0;
 
         switch (m.measurement) {
           case "MEMORY_USAGE_GB":
-            agg.totalMemoryGB += avg;
-            agg.peakMemoryGB = Math.max(agg.peakMemoryGB, max);
+            agg.totalMemoryGB += val;
+            agg.peakMemoryGB = Math.max(agg.peakMemoryGB, val);
             anyUsageFetched = true;
             break;
-          case "CPU":
-            agg.totalCpuFraction += avg;
-            agg.peakCpuFraction = Math.max(agg.peakCpuFraction, max);
+          case "NETWORK_TX_GB":
+            agg.totalNetworkTxMB += val * 1024;
             anyUsageFetched = true;
             break;
-          case "NETWORK_TX_BYTES":
-            agg.totalNetworkTxMB += avg / (1024 * 1024);
+          case "NETWORK_RX_GB":
+            agg.totalNetworkRxMB += val * 1024;
             anyUsageFetched = true;
             break;
-          case "NETWORK_RX_BYTES":
-            agg.totalNetworkRxMB += avg / (1024 * 1024);
-            anyUsageFetched = true;
-            break;
-          case "DISK_USAGE_BYTES":
-            agg.totalDiskGB += avg / (1024 * 1024 * 1024);
+          case "DISK_USAGE_GB":
+            agg.totalDiskGB += val;
             anyUsageFetched = true;
             break;
         }
