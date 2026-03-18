@@ -7,14 +7,14 @@ export const metadata: Metadata = { title: "Settings" };
 export default async function SettingsPage() {
   const supabase = await createClient();
 
+  const { data: { session } } = await supabase.auth.getSession();
+
   const [
-    { data: user },
     { data: integrations },
     { data: alertConfigs },
     { data: alertChannels },
     { data: subscription },
   ] = await Promise.all([
-    supabase.auth.getUser(),
     supabase
       .from("integrations")
       .select("id, service, account_label")
@@ -26,14 +26,13 @@ export default async function SettingsPage() {
 
   // Auto-provision email channel for users who signed up before this was added
   let finalAlertChannels = alertChannels ?? [];
-  const userObj = user?.user;
-  if (userObj) {
+  if (session?.user) {
     const hasEmail = finalAlertChannels.some((c) => c.type === "email");
     if (!hasEmail) {
       await supabase.from("alert_channels").insert({
-        user_id: userObj.id,
+        user_id: session.user.id,
         type: "email",
-        config: { email: userObj.email },
+        config: { email: session.user.email },
         enabled: true,
       });
       const { data: refreshed } = await supabase
@@ -50,7 +49,7 @@ export default async function SettingsPage() {
         <p className="text-zinc-500 text-sm mt-1">Configure alert thresholds and notification channels.</p>
       </div>
       <SettingsContent
-        userEmail={user.user?.email ?? ""}
+        userEmail={session?.user?.email ?? ""}
         integrations={integrations ?? []}
         alertConfigs={alertConfigs ?? []}
         alertChannels={finalAlertChannels}

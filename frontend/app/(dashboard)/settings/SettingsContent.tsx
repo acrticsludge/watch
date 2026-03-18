@@ -149,6 +149,10 @@ export function SettingsContent({
     discordChannel?.enabled ?? false,
   );
 
+  const pushChannel = alertChannels.find((c) => c.type === "push");
+  const [pushEnabled, setPushEnabled] = useState(pushChannel?.enabled ?? false);
+  const [pushSaving, setPushSaving] = useState(false);
+
   const [newPassword, setNewPassword] = useState("");
   const [pwSaving, setPwSaving] = useState(false);
 
@@ -225,6 +229,52 @@ export function SettingsContent({
     } else {
       toast({ title: `${type} notifications updated` });
       router.refresh();
+    }
+  }
+
+  async function savePushChannel(enable: boolean) {
+    setPushSaving(true);
+    try {
+      if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
+        toast({ title: "Browser push not supported", variant: "destructive" });
+        return;
+      }
+
+      let pushSub: PushSubscription | null = null;
+
+      if (enable) {
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          toast({ title: "Notification permission denied", variant: "destructive" });
+          setPushEnabled(false);
+          return;
+        }
+
+        const reg = await navigator.serviceWorker.register("/sw.js");
+        await navigator.serviceWorker.ready;
+
+        pushSub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+        });
+      }
+
+      const res = await fetch("/api/push/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subscription: pushSub?.toJSON() ?? null, enabled: enable }),
+      });
+
+      if (!res.ok) {
+        toast({ title: "Failed to save push settings", variant: "destructive" });
+        setPushEnabled(!enable);
+      } else {
+        toast({ title: enable ? "Browser push enabled" : "Browser push disabled" });
+        setPushEnabled(enable);
+        router.refresh();
+      }
+    } finally {
+      setPushSaving(false);
     }
   }
 
@@ -427,6 +477,47 @@ export function SettingsContent({
                   Save
                 </Button>
               </div>
+            )}
+          </div>
+
+          {/* Browser Push */}
+          <div
+            className={`bg-[#111] border rounded-xl p-6 ${!isPro ? "border-white/[0.06] opacity-60" : "border-white/[0.06]"}`}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <h3 className="font-semibold text-white text-sm">Browser Push</h3>
+                {!isPro && (
+                  <span className="text-[10px] font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">
+                    Pro
+                  </span>
+                )}
+              </div>
+              <Switch
+                checked={pushEnabled}
+                onCheckedChange={(checked) => {
+                  if (isPro) savePushChannel(checked);
+                }}
+                disabled={!isPro || pushSaving}
+              />
+            </div>
+            {!isPro ? (
+              <p className="text-sm text-zinc-600">
+                Browser push notifications are available on the{" "}
+                <a
+                  href="/pricing"
+                  className="text-zinc-400 hover:text-white underline underline-offset-2 transition-colors"
+                >
+                  Pro plan
+                </a>
+                .
+              </p>
+            ) : (
+              <p className="text-sm text-zinc-600">
+                {pushEnabled
+                  ? "You'll receive push alerts in this browser."
+                  : "Toggle on to receive real-time push alerts in this browser."}
+              </p>
             )}
           </div>
 

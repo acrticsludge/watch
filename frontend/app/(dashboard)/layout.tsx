@@ -10,16 +10,17 @@ export default async function DashboardLayout({
 }) {
   const supabase = await createClient();
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  if (!user) {
+  if (!session) {
     redirect("/login");
   }
 
   const { data: subscription } = await supabase
     .from("subscriptions")
     .select("tier")
+    .eq("user_id", session.user.id)
     .eq("status", "active")
     .maybeSingle();
 
@@ -27,7 +28,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      <Sidebar email={user.email} tier={tier} />
+      <Sidebar email={session.user.email} tier={tier} />
       {/* Offset for sidebar on desktop, bottom nav on mobile */}
       <main className="md:ml-56 pb-20 md:pb-0">
         <div className="max-w-5xl mx-auto px-5 md:px-8 py-8 md:py-10">

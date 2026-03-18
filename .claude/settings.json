@@ -23,7 +23,9 @@
       "Bash(node -e \"const { Webhooks } = require\\(''@dodopayments/nextjs''\\); const w = new Webhooks\\(''whsec_test''\\); console.log\\(Object.getOwnPropertyNames\\(Object.getPrototypeOf\\(w\\)\\)\\)\")",
       "Bash(node -e \"const { Webhooks } = require\\(''@dodopayments/nextjs''\\); console.log\\(Webhooks.toString\\(\\).slice\\(0, 300\\)\\)\")",
       "Bash(node -e \"const { Webhook } = require\\(''standardwebhooks''\\); const w = new Webhook\\(''dGVzdA==''\\); console.log\\(Object.getOwnPropertyNames\\(Object.getPrototypeOf\\(w\\)\\)\\)\")",
-      "Bash(xargs grep:*)"
+      "Bash(xargs grep:*)",
+      "Bash(node -e \"const wp = require\\(''web-push''\\); const keys = wp.generateVAPIDKeys\\(\\); console.log\\(''Public:'', keys.publicKey\\); console.log\\(''Private:'', keys.privateKey\\);\")",
+      "Bash(\"c:/Anubhav/Web Dev Projects/Watch/watch/frontend/.env.local\")"
     ]
   }
 }
