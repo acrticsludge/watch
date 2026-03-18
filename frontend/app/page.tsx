@@ -7,6 +7,8 @@ import { ServicesSection } from "@/app/components/landing/ServicesSection";
 import { DemoWidget } from "@/app/components/landing/DemoWidget";
 import { AlertChannelsSection } from "@/app/components/landing/AlertChannelsSection";
 import { PricingSection } from "@/app/components/landing/PricingSection";
+import { CTASection } from "@/app/components/landing/CTASection";
+import { FAQSection } from "@/app/components/landing/FAQSection";
 import { LandingFooter } from "@/app/components/landing/LandingFooter";
 import { createClient } from "@/lib/supabase/server";
 
@@ -106,7 +108,9 @@ export default async function LandingPage() {
         </section>
 
         <AlertChannelsSection />
+        <CTASection />
         <PricingSection userEmail={user?.email} isPro={isPro} />
+        <FAQSection />
       </main>
       <LandingFooter />
     </div>

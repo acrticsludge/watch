@@ -38,6 +38,61 @@ function ManagePortalButton() {
   );
 }
 
+function CancelSubscriptionButton({ onCancelled }: { onCancelled: () => void }) {
+  const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  async function handleCancel() {
+    setLoading(true);
+    const res = await fetch("/api/billing/cancel", { method: "POST" });
+    setLoading(false);
+    if (!res.ok) {
+      toast({ title: "Failed to cancel subscription", variant: "destructive" });
+      return;
+    }
+    toast({ title: "Subscription cancelled", description: "You'll keep Pro access until the end of your billing period." });
+    setConfirm(false);
+    onCancelled();
+  }
+
+  if (!confirm) {
+    return (
+      <button
+        onClick={() => setConfirm(true)}
+        className="text-sm text-zinc-600 hover:text-red-400 transition-colors underline underline-offset-2"
+      >
+        Cancel subscription
+      </button>
+    );
+  }
+
+  return (
+    <div className="mt-2 rounded-lg border border-red-500/20 bg-red-500/5 p-4">
+      <p className="text-sm text-zinc-300 mb-1 font-medium">Cancel your Pro subscription?</p>
+      <p className="text-xs text-zinc-500 mb-4">
+        Your subscription won't renew. You'll keep Pro access until the end of your current billing period.
+      </p>
+      <div className="flex gap-2">
+        <button
+          onClick={handleCancel}
+          disabled={loading}
+          className="inline-flex items-center justify-center rounded-md bg-red-500/80 hover:bg-red-500 px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:opacity-50"
+        >
+          {loading ? "Cancelling..." : "Yes, cancel"}
+        </button>
+        <button
+          onClick={() => setConfirm(false)}
+          disabled={loading}
+          className="inline-flex items-center justify-center rounded-md bg-white/6 hover:bg-white/10 px-3 py-1.5 text-sm font-medium text-zinc-400 hover:text-white transition-colors disabled:opacity-50"
+        >
+          Keep plan
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function UpgradeButton() {
   const [loading, setLoading] = useState(false);
   async function startCheckout() {
@@ -615,7 +670,13 @@ export function SettingsContent({
               <UpgradeButton />
             </div>
           ) : (
-            <ManagePortalButton />
+            <div className="space-y-5">
+              <ManagePortalButton />
+              <div className="border-t border-white/6 pt-5">
+                <p className="text-xs text-zinc-600 mb-3">Danger zone</p>
+                <CancelSubscriptionButton onCancelled={() => router.refresh()} />
+              </div>
+            </div>
           )}
         </div>
       </TabsContent>

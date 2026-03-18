@@ -29,7 +29,11 @@ export function HowItWorks() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="how-it-works" className="py-24 bg-[#0a0a0a] border-t border-white/[0.04]" ref={ref}>
+    <section
+      id="how-it-works"
+      className="py-24 bg-[#0a0a0a] border-t border-white/[0.04]"
+      ref={ref}
+    >
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
           className="text-center mb-14"
@@ -43,7 +47,9 @@ export function HowItWorks() {
           <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">
             Up and running in 2 minutes
           </h2>
-          <p className="text-zinc-500 text-base">No complex setup. No agents to install.</p>
+          <p className="text-zinc-500 text-base">
+            Quick and simple setup without the hassle.
+          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-10">
@@ -53,7 +59,11 @@ export function HowItWorks() {
               className="relative"
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 + i * 0.12 }}
+              transition={{
+                duration: 0.5,
+                ease: "easeOut",
+                delay: 0.1 + i * 0.12,
+              }}
             >
               {/* Connector line */}
               {i < steps.length - 1 && (
@@ -66,8 +76,12 @@ export function HowItWorks() {
                 <div className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 font-mono text-xs mb-5">
                   {s.step}
                 </div>
-                <h3 className="font-semibold text-white mb-2 text-sm">{s.title}</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed">{s.description}</p>
+                <h3 className="font-semibold text-white mb-2 text-sm">
+                  {s.title}
+                </h3>
+                <p className="text-zinc-500 text-sm leading-relaxed">
+                  {s.description}
+                </p>
               </div>
             </motion.div>
           ))}
