@@ -97,7 +97,7 @@ export function PricingSection({
         </motion.div>
 
         <motion.div
-          className="grid md:grid-cols-3 gap-4 items-start"
+          className="grid md:grid-cols-3 gap-4 items-start overflow-visible"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={{
@@ -114,10 +114,10 @@ export function PricingSection({
                 visible: { opacity: 1, y: 0 },
               }}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className={`relative rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${
+              className={`relative rounded-xl transition-all duration-300 hover:-translate-y-1 ${
                 p.highlight
-                  ? "bg-[#0d1628] border border-blue-500/30 shadow-xl shadow-blue-500/10"
-                  : "bg-[#111] border border-white/6 hover:border-white/10"
+                  ? "bg-[#0d1628] border border-blue-500/30 shadow-xl shadow-blue-500/10 p-6 pt-10"
+                  : "bg-[#111] border border-white/6 hover:border-white/10 p-6"
               }`}
             >
               {p.highlight && (

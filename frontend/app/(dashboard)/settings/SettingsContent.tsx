@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Tabs,
   TabsContent,
@@ -135,6 +135,8 @@ export function SettingsContent({
 }: SettingsContentProps) {
   const isPro = tier === "pro" || tier === "team";
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const defaultTab = searchParams.get("tab") ?? "alerts";
   const { toast } = useToast();
 
   const [thresholds, setThresholds] = useState<
@@ -324,7 +326,7 @@ export function SettingsContent({
   }
 
   return (
-    <Tabs defaultValue="alerts">
+    <Tabs defaultValue={defaultTab}>
       <TabsList className="mb-6 bg-white/[0.04] border border-white/[0.06]">
         <TabsTrigger
           value="alerts"
