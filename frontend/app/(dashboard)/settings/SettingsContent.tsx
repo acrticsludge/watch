@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Tabs,
   TabsContent,
@@ -86,6 +86,7 @@ interface SettingsContentProps {
   alertConfigs: AlertConfig[];
   alertChannels: AlertChannel[];
   tier: string;
+  defaultTab?: string;
 }
 
 const DEFAULT_METRICS: Record<string, string[]> = {
@@ -132,11 +133,10 @@ export function SettingsContent({
   alertConfigs,
   alertChannels,
   tier,
+  defaultTab = "alerts",
 }: SettingsContentProps) {
   const isPro = tier === "pro" || tier === "team";
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const defaultTab = searchParams.get("tab") ?? "alerts";
   const { toast } = useToast();
 
   const [thresholds, setThresholds] = useState<

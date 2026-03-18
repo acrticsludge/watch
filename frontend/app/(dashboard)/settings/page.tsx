@@ -4,7 +4,12 @@ import { SettingsContent } from "./SettingsContent";
 
 export const metadata: Metadata = { title: "Settings" };
 
-export default async function SettingsPage() {
+export default async function SettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
+  const { tab } = await searchParams;
   const supabase = await createClient();
 
   const { data: { session } } = await supabase.auth.getSession();
@@ -54,6 +59,7 @@ export default async function SettingsPage() {
         alertConfigs={alertConfigs ?? []}
         alertChannels={finalAlertChannels}
         tier={subscription?.tier ?? "free"}
+        defaultTab={tab ?? "alerts"}
       />
     </div>
   );

@@ -121,8 +121,8 @@ export function PricingSection({
               }`}
             >
               {p.highlight && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="inline-flex items-center text-[10px] font-semibold text-blue-300 bg-blue-500/20 border border-blue-500/30 rounded-full px-2.5 py-0.5 uppercase tracking-wider">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                  <span className="inline-flex items-center text-[10px] font-semibold text-blue-300 bg-[#0d1628] border border-blue-500/40 rounded-full px-2.5 py-0.5 uppercase tracking-wider whitespace-nowrap">
                     Most popular
                   </span>
                 </div>
