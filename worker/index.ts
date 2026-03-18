@@ -12,12 +12,12 @@ runPollCycle().catch((err) =>
   console.error("[worker] Startup poll failed:", err)
 );
 
-// Poll every 15 minutes
-cron.schedule("*/15 * * * *", () => {
+// Run every 5 minutes — pollCycle skips free-tier integrations synced < 15 min ago
+cron.schedule("*/5 * * * *", () => {
   console.log(`[worker] Poll cycle starting at ${new Date().toISOString()}`);
   runPollCycle().catch((err) =>
     console.error("[worker] Poll cycle error:", err)
   );
 });
 
-console.log("[worker] Scheduler started. Polling every 15 minutes.");
+console.log("[worker] Scheduler started. Pro: 5-min polling, Free: 15-min polling.");

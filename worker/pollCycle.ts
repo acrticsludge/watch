@@ -19,7 +19,7 @@ export async function runPollCycle(): Promise<void> {
 
   const { data: integrations, error } = await supabase
     .from("integrations")
-    .select("id, user_id, service, account_label, api_key, meta")
+    .select("id, user_id, service, account_label, api_key, meta, last_synced_at")
     .neq("status", "disconnected");
 
   if (error) {
@@ -44,10 +44,26 @@ export async function runPollCycle(): Promise<void> {
     tierMap.set(sub.user_id, sub.tier);
   }
 
-  console.log(`[pollCycle] Polling ${integrations.length} integration(s)...`);
+  const FREE_POLL_INTERVAL_MS = 15 * 60 * 1000;
+  const PRO_POLL_INTERVAL_MS = 5 * 60 * 1000;
+
+  // Filter out integrations that were synced too recently for their tier
+  const now = Date.now();
+  const dueIntegrations = integrations.filter((i) => {
+    const tier = tierMap.get(i.user_id) ?? "free";
+    const interval = tier === "free" ? FREE_POLL_INTERVAL_MS : PRO_POLL_INTERVAL_MS;
+    if (!i.last_synced_at) return true;
+    return now - new Date(i.last_synced_at).getTime() >= interval;
+  });
+
+  console.log(
+    `[pollCycle] ${dueIntegrations.length}/${integrations.length} integration(s) due for polling.`
+  );
+
+  if (dueIntegrations.length === 0) return;
 
   const results = await Promise.allSettled(
-    integrations.map(async (rawIntegration) => {
+    dueIntegrations.map(async (rawIntegration) => {
       // Cast meta from Json to the expected object type
       const integration = {
         ...rawIntegration,
