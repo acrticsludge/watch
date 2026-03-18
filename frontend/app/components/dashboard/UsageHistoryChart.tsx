@@ -82,7 +82,7 @@ export function UsageHistoryChart({ metricName, snapshots }: UsageHistoryChartPr
               fontSize: 12,
               color: "#d4d4d8",
             }}
-            formatter={(value: number) => [`${value}%`, "Usage"]}
+            formatter={(value) => [`${value}%`, "Usage"]}
             labelStyle={{ color: "#71717a" }}
           />
           <ReferenceLine y={80} stroke="rgba(239,68,68,0.3)" strokeDasharray="3 3" />
