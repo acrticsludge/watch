@@ -2,17 +2,29 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { METRIC_LABELS, SERVICE_LABELS, relativeTime } from "@/lib/utils";
 import { Badge } from "@/app/components/ui/badge";
+import { TIER_LIMITS } from "@/lib/tiers";
 
 export const metadata: Metadata = { title: "Alert History" };
 
 export default async function AlertsPage() {
   const supabase = await createClient();
 
+  const { data: subscription } = await supabase
+    .from("subscriptions")
+    .select("tier")
+    .eq("status", "active")
+    .maybeSingle();
+
+  const tier = (subscription?.tier as keyof typeof TIER_LIMITS) ?? "free";
+  const historyDays = TIER_LIMITS[tier]?.historyDays ?? TIER_LIMITS.free.historyDays;
+  const since = new Date(Date.now() - historyDays * 24 * 60 * 60 * 1000).toISOString();
+
   const { data: historyRaw } = await supabase
     .from("alert_history")
     .select("id, metric_name, percent_used, channel, sent_at, integration_id")
+    .gte("sent_at", since)
     .order("sent_at", { ascending: false })
-    .limit(100);
+    .limit(200);
 
   const integrationIds = [
     ...new Set((historyRaw ?? []).map((h) => h.integration_id)),
@@ -41,10 +53,18 @@ export default async function AlertsPage() {
           </h1>
           <p className="text-zinc-500 text-sm mt-1">
             {history.length > 0
-              ? `${history.length} alert${history.length !== 1 ? "s" : ""} recorded`
-              : "A log of all alerts that have been sent"}
+              ? `${history.length} alert${history.length !== 1 ? "s" : ""} in the last ${historyDays} days`
+              : `A log of alerts from the last ${historyDays} days`}
           </p>
         </div>
+        {tier === "free" && (
+          <a
+            href="/settings?tab=billing"
+            className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
+          >
+            7-day history · <span className="underline underline-offset-2">Upgrade for 30 days</span>
+          </a>
+        )}
       </div>
 
       {!history || history.length === 0 ? (

@@ -17,6 +17,23 @@ import { useToast } from "@/app/components/ui/use-toast";
 import { createClient } from "@/lib/supabase/browser";
 import { METRIC_LABELS, SERVICE_LABELS } from "@/lib/utils";
 
+function ManagePortalButton() {
+  async function openPortal() {
+    const res = await fetch("/api/billing/portal");
+    if (!res.ok) return;
+    const { url } = await res.json();
+    if (url) window.location.href = url;
+  }
+  return (
+    <button
+      onClick={openPortal}
+      className="inline-flex items-center justify-center rounded-md bg-white/6 hover:bg-white/10 px-4 py-2.5 text-sm font-medium text-zinc-300 hover:text-white transition-colors"
+    >
+      Manage subscription
+    </button>
+  );
+}
+
 interface AlertConfig {
   id: string;
   integration_id: string;
@@ -252,6 +269,12 @@ export function SettingsContent({
         >
           Account
         </TabsTrigger>
+        <TabsTrigger
+          value="billing"
+          className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500"
+        >
+          Billing
+        </TabsTrigger>
       </TabsList>
 
       {/* ── Alert Thresholds ── */}
@@ -458,6 +481,29 @@ export function SettingsContent({
               </div>
             )}
           </div>
+        </div>
+      </TabsContent>
+
+      {/* ── Billing ── */}
+      <TabsContent value="billing">
+        <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6 max-w-lg">
+          <h3 className="font-semibold text-white mb-1 text-sm">Current plan</h3>
+          <p className="text-zinc-500 text-sm mb-5 capitalize">{tier}</p>
+          {!isPro ? (
+            <div>
+              <p className="text-zinc-400 text-sm mb-4">
+                Upgrade to Pro for multiple accounts, Slack &amp; Discord alerts, 5-minute polling, and 30-day history.
+              </p>
+              <a
+                href={`${process.env.NEXT_PUBLIC_DODO_PRO_CHECKOUT_URL ?? "/pricing"}${process.env.NEXT_PUBLIC_DODO_PRO_CHECKOUT_URL?.includes("?") ? "&" : "?"}email=${encodeURIComponent(userEmail)}`}
+                className="inline-flex items-center justify-center rounded-md bg-blue-500 hover:bg-blue-400 px-4 py-2.5 text-sm font-medium text-white transition-colors shadow-lg shadow-blue-500/20"
+              >
+                Upgrade to Pro — $10/mo
+              </a>
+            </div>
+          ) : (
+            <ManagePortalButton />
+          )}
         </div>
       </TabsContent>
 

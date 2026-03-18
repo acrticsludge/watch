@@ -257,12 +257,14 @@ export default async function DashboardPage() {
           return (
             <GroupedUsageCard
               key={integration.id}
+              integrationId={integration.id}
               service={integration.service}
               accountLabel={integration.account_label}
               snapshots={integrationSnapshots}
               entitySnapshots={entitySnapshots}
               lastSyncedAt={integration.last_synced_at}
               status={integration.status}
+              isPro={!isFree}
             />
           );
         })}

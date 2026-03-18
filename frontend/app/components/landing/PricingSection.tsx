@@ -3,62 +3,66 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
-const plans = [
-  {
-    name: "Free",
-    price: "$0",
-    description: "For solo devs getting started",
-    features: [
-      "1 account per service",
-      "4 services (GitHub, Vercel, Supabase, Railway)",
-      "Email alerts",
-      "15-minute polling",
-      "7-day alert history",
-    ],
-    cta: "Get started free",
-    href: "/signup",
-    highlight: false,
-  },
-  {
-    name: "Pro",
-    price: "$10",
-    period: "/month",
-    description: "For individuals with multiple projects",
-    features: [
-      "5 accounts per service",
-      "All services",
-      "Email + Slack + Discord alerts + Browser Push",
-      "5-minute polling",
-      "30-day alert history",
-      "Usage history charts",
-    ],
-    cta: "Coming soon",
-    href: null,
-    highlight: true,
-    comingSoon: true,
-  },
-  {
-    name: "Team",
-    price: "$30",
-    period: "/month",
-    description: "For teams sharing infrastructure",
-    features: [
-      "Unlimited accounts",
-      "All services",
-      "Multiple email, Slack and discord support",
-      "1-minute polling",
-      "90-day alert history",
-      "Team dashboard",
-      "Shared alert configs",
-    ],
-    cta: "Coming soon",
-    href: null,
-    highlight: false,
-    comingSoon: true,
-  },
-];
+function proCheckoutUrl(email?: string) {
+  const base = process.env.NEXT_PUBLIC_DODO_PRO_CHECKOUT_URL ?? "/pricing";
+  if (!email) return base;
+  return `${base}${base.includes("?") ? "&" : "?"}email=${encodeURIComponent(email)}`;
+}
 
-export function PricingSection() {
+export function PricingSection({ userEmail }: { userEmail?: string }) {
+  const plans = [
+    {
+      name: "Free",
+      price: "$0",
+      description: "For solo devs getting started",
+      features: [
+        "1 account per service",
+        "4 services (GitHub, Vercel, Supabase, Railway)",
+        "Email alerts",
+        "15-minute polling",
+        "7-day alert history",
+      ],
+      cta: "Get started free",
+      href: "/signup",
+      highlight: false,
+    },
+    {
+      name: "Pro",
+      price: "$10",
+      period: "/month",
+      description: "For individuals with multiple projects",
+      features: [
+        "5 accounts per service",
+        "All services",
+        "Email + Slack + Discord alerts + Browser Push",
+        "5-minute polling",
+        "30-day alert history",
+        "Usage history charts",
+      ],
+      cta: "Get Pro",
+      href: proCheckoutUrl(userEmail),
+      highlight: true,
+    },
+    {
+      name: "Team",
+      price: "$30",
+      period: "/month",
+      description: "For teams sharing infrastructure",
+      features: [
+        "Unlimited accounts",
+        "All services",
+        "Multiple email, Slack and discord support",
+        "1-minute polling",
+        "90-day alert history",
+        "Team dashboard",
+        "Shared alert configs",
+      ],
+      cta: "Coming soon",
+      href: null,
+      highlight: false,
+      comingSoon: true,
+    },
+  ];
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -113,7 +117,7 @@ export function PricingSection() {
               {p.highlight && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <span className="inline-flex items-center text-[10px] font-semibold text-blue-300 bg-blue-500/20 border border-blue-500/30 rounded-full px-2.5 py-0.5 uppercase tracking-wider">
-                    Coming soon
+                    Most popular
                   </span>
                 </div>
               )}

@@ -10,7 +10,19 @@
       "Bash(grep -E '\\\\.\\(ts|tsx|json\\)$')",
       "Bash(find \"c:\\\\Anubhav\\\\Web Dev Projects\\\\Watch\\\\watch/app/\\(auth\\)\" -type f)",
       "Bash(find \"c:\\\\Anubhav\\\\Web Dev Projects\\\\Watch\\\\watch/app/\\(dashboard\\)\" -type f)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:docs.dodopayments.com)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(node -e \"const d = require\\(''@dodopayments/nextjs''\\); console.log\\(Object.keys\\(d\\)\\)\")",
+      "Bash(node -e \"const { Webhooks } = require\\(''@dodopayments/nextjs''\\); console.log\\(typeof Webhooks\\); const w = new Webhooks\\(''test''\\); console.log\\(Object.getOwnPropertyNames\\(Object.getPrototypeOf\\(w\\)\\)\\)\")",
+      "Bash(node -e \"const d = require\\(''''@dodopayments/nextjs''''\\); console.log\\(JSON.stringify\\(d, null, 2\\)\\)\")",
+      "Bash(node -e \"const { Webhook } = require\\(''dodopayments/webhooks''\\); console.log\\(typeof Webhook\\)\")",
+      "Bash(node -e \"const d = require\\(''''dodopayments''''\\); console.log\\(Object.keys\\(d\\)\\)\")",
+      "Bash(node -e \"const d = require\\(''dodopayments''\\); console.log\\(Object.keys\\(d\\)\\)\")",
+      "Bash(node -e \"const { Webhooks } = require\\(''@dodopayments/nextjs''\\); console.log\\(typeof Webhooks\\); console.log\\(Object.keys\\(Webhooks\\)\\)\")",
+      "Bash(node -e \"const { Webhooks } = require\\(''@dodopayments/nextjs''\\); const w = new Webhooks\\(''whsec_test''\\); console.log\\(Object.getOwnPropertyNames\\(Object.getPrototypeOf\\(w\\)\\)\\)\")",
+      "Bash(node -e \"const { Webhooks } = require\\(''@dodopayments/nextjs''\\); console.log\\(Webhooks.toString\\(\\).slice\\(0, 300\\)\\)\")",
+      "Bash(node -e \"const { Webhook } = require\\(''standardwebhooks''\\); const w = new Webhook\\(''dGVzdA==''\\); console.log\\(Object.getOwnPropertyNames\\(Object.getPrototypeOf\\(w\\)\\)\\)\")"
     ]
   }
 }

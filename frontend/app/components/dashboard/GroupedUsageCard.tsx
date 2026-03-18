@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, ChevronDown } from "lucide-react";
 import {
   METRIC_LABELS,
   METRIC_UNITS,
@@ -10,6 +10,7 @@ import {
   relativeTime,
 } from "@/lib/utils";
 import { Badge } from "@/app/components/ui/badge";
+import { UsageHistoryChart } from "./UsageHistoryChart";
 
 interface Snapshot {
   metric_name: string;
@@ -20,13 +21,22 @@ interface Snapshot {
   entity_label?: string | null;
 }
 
+interface HistoryEntry {
+  recorded_at: string;
+  percent_used: number;
+  current_value: number;
+  limit_value: number;
+}
+
 interface GroupedUsageCardProps {
+  integrationId: string;
   service: string;
   accountLabel: string;
   snapshots: Snapshot[];
   entitySnapshots?: Snapshot[];
   lastSyncedAt: string | null;
   status: string;
+  isPro?: boolean;
 }
 
 const SERVICE_ICONS: Record<string, React.ReactNode> = {
@@ -77,13 +87,127 @@ function getBarClass(pct: number) {
   return "bg-blue-500";
 }
 
+function MetricRow({
+  snap,
+  entitySnapshots,
+  integrationId,
+  isPro,
+}: {
+  snap: Snapshot;
+  entitySnapshots: Snapshot[];
+  integrationId: string;
+  isPro: boolean;
+}) {
+  const [showChart, setShowChart] = useState(false);
+  const [history, setHistory] = useState<HistoryEntry[] | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const pct = Math.round(snap.percent_used);
+  const unit = METRIC_UNITS[snap.metric_name] ?? "";
+  const subRows = entitySnapshots.filter((e) => e.metric_name === snap.metric_name);
+
+  async function toggleChart() {
+    if (showChart) { setShowChart(false); return; }
+    setShowChart(true);
+    if (history !== null) return;
+    setLoading(true);
+    try {
+      const res = await fetch(
+        `/api/usage/history?integration_id=${integrationId}&metric=${snap.metric_name}`,
+      );
+      if (res.ok) setHistory(await res.json());
+      else setHistory([]);
+    } catch {
+      setHistory([]);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div key={snap.metric_name}>
+      <div className="flex items-center justify-between mb-1.5">
+        <span className="text-xs text-zinc-500">
+          {METRIC_LABELS[snap.metric_name] ?? snap.metric_name}
+        </span>
+        <div className="flex items-center gap-2">
+          {isPro && (
+            <button
+              onClick={toggleChart}
+              className="flex items-center gap-0.5 text-[10px] text-zinc-600 hover:text-zinc-400 transition-colors"
+            >
+              History
+              <ChevronDown
+                className={`h-3 w-3 transition-transform ${showChart ? "rotate-180" : ""}`}
+              />
+            </button>
+          )}
+          <Badge variant={getBadgeVariant(pct)} className="text-[10px] py-0 px-1.5">
+            {pct}%
+          </Badge>
+        </div>
+      </div>
+      <div className="h-1.5 w-full rounded-full bg-white/6 mb-1.5 overflow-hidden">
+        <motion.div
+          className={`h-full rounded-full ${getBarClass(pct)}`}
+          initial={{ width: 0 }}
+          animate={{ width: `${Math.min(pct, 100)}%` }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        />
+      </div>
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-zinc-600">
+          {snap.current_value.toLocaleString()} /{" "}
+          {snap.limit_value.toLocaleString()} {unit}
+        </span>
+        {(() => {
+          const d = estimateDaysUntilLimit(snap.current_value, snap.limit_value);
+          return d !== null ? (
+            <span className={`text-xs tabular-nums ${pct >= 80 ? "text-red-500" : "text-amber-500"}`}>
+              · ~{d === 0 ? "hits limit today" : `${d} days until limit`}
+            </span>
+          ) : null;
+        })()}
+      </div>
+      {subRows.length > 0 && (
+        <div className="mt-2 space-y-1 pl-3 border-l border-white/6">
+          {subRows.map((e) => (
+            <div key={e.entity_id} className="flex items-center justify-between">
+              <span className="text-[11px] text-zinc-600 truncate max-w-40">
+                {e.entity_label ?? e.entity_id}
+              </span>
+              <span className="text-[11px] text-zinc-600 shrink-0 ml-2">
+                {e.current_value.toLocaleString()} {unit}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+      {showChart && (
+        <div className="mt-3 p-3 bg-white/3 rounded-lg border border-white/6">
+          {loading ? (
+            <p className="text-zinc-600 text-xs text-center py-4">Loading...</p>
+          ) : (
+            <UsageHistoryChart
+              metricName={snap.metric_name}
+              snapshots={history ?? []}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function UsageDetailModal({
+  integrationId,
   service,
   accountLabel,
   snapshots,
   entitySnapshots = [],
   lastSyncedAt,
   status,
+  isPro = false,
   onClose,
 }: GroupedUsageCardProps & { onClose: () => void }) {
   return (
@@ -128,67 +252,15 @@ function UsageDetailModal({
 
         {/* Metrics — scrollable */}
         <div className="overflow-y-auto flex-1 px-6 space-y-4">
-          {snapshots.map((snap) => {
-            const pct = Math.round(snap.percent_used);
-            const unit = METRIC_UNITS[snap.metric_name] ?? "";
-            const subRows = entitySnapshots.filter(
-              (e) => e.metric_name === snap.metric_name,
-            );
-            return (
-              <div key={snap.metric_name}>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs text-zinc-500">
-                    {METRIC_LABELS[snap.metric_name] ?? snap.metric_name}
-                  </span>
-                  <Badge
-                    variant={getBadgeVariant(pct)}
-                    className="text-[10px] py-0 px-1.5"
-                  >
-                    {pct}%
-                  </Badge>
-                </div>
-                <div className="h-1.5 w-full rounded-full bg-white/6 mb-1.5 overflow-hidden">
-                  <motion.div
-                    className={`h-full rounded-full ${getBarClass(pct)}`}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${Math.min(pct, 100)}%` }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-zinc-600">
-                    {snap.current_value.toLocaleString()} /{" "}
-                    {snap.limit_value.toLocaleString()} {unit}
-                  </span>
-                  {(() => {
-                    const d = estimateDaysUntilLimit(snap.current_value, snap.limit_value);
-                    return d !== null ? (
-                      <span className={`text-xs tabular-nums ${pct >= 80 ? "text-red-500" : "text-amber-500"}`}>
-                        · ~{d === 0 ? "hits limit today" : `${d} days until limit`}
-                      </span>
-                    ) : null;
-                  })()}
-                </div>
-                {subRows.length > 0 && (
-                  <div className="mt-2 space-y-1 pl-3 border-l border-white/6">
-                    {subRows.map((e) => (
-                      <div
-                        key={e.entity_id}
-                        className="flex items-center justify-between"
-                      >
-                        <span className="text-[11px] text-zinc-600 truncate max-w-40">
-                          {e.entity_label ?? e.entity_id}
-                        </span>
-                        <span className="text-[11px] text-zinc-600 shrink-0 ml-2">
-                          {e.current_value.toLocaleString()} {unit}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+          {snapshots.map((snap) => (
+            <MetricRow
+              key={snap.metric_name}
+              snap={snap}
+              entitySnapshots={entitySnapshots}
+              integrationId={integrationId}
+              isPro={isPro}
+            />
+          ))}
         </div>
 
         {/* Footer */}
@@ -227,12 +299,14 @@ function UsageDetailModal({
 const MAX_VISIBLE = 3;
 
 export function GroupedUsageCard({
+  integrationId,
   service,
   accountLabel,
   snapshots,
   entitySnapshots = [],
   lastSyncedAt,
   status,
+  isPro = false,
 }: GroupedUsageCardProps) {
   const [open, setOpen] = useState(false);
   const worstPct = Math.round(Math.max(...snapshots.map((s) => s.percent_used)));
@@ -331,12 +405,14 @@ export function GroupedUsageCard({
       <AnimatePresence>
         {open && (
           <UsageDetailModal
+            integrationId={integrationId}
             service={service}
             accountLabel={accountLabel}
             snapshots={snapshots}
             entitySnapshots={entitySnapshots}
             lastSyncedAt={lastSyncedAt}
             status={status}
+            isPro={isPro}
             onClose={() => setOpen(false)}
           />
         )}

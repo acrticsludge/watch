@@ -1,10 +1,25 @@
 import type { ServiceType, ChannelType } from "@/lib/database.types";
 
-export const FREE_TIER_LIMITS = {
-  integrationsPerService: 1,
-  historyDays: 7,
-  alertChannels: ["email"] as ChannelType[],
+export const TIER_LIMITS = {
+  free: {
+    integrationsPerService: 1,
+    historyDays: 7,
+    alertChannels: ["email"] as ChannelType[],
+  },
+  pro: {
+    integrationsPerService: 5,
+    historyDays: 30,
+    alertChannels: ["email", "slack", "discord", "push"] as ChannelType[],
+  },
+  team: {
+    integrationsPerService: 999,
+    historyDays: 90,
+    alertChannels: ["email", "slack", "discord", "push"] as ChannelType[],
+  },
 };
+
+// Keep for backwards compat
+export const FREE_TIER_LIMITS = TIER_LIMITS.free;
 
 export class TierLimitError extends Error {
   code = "TIER_LIMIT_EXCEEDED" as const;
@@ -17,11 +32,28 @@ export class TierLimitError extends Error {
   }
 }
 
+async function getUserTier(
+  supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
+  userId: string,
+): Promise<keyof typeof TIER_LIMITS> {
+  const { data } = await supabase
+    .from("subscriptions")
+    .select("tier")
+    .eq("user_id", userId)
+    .eq("status", "active")
+    .maybeSingle();
+  const t = data?.tier as keyof typeof TIER_LIMITS | undefined;
+  return t && t in TIER_LIMITS ? t : "free";
+}
+
 export async function checkIntegrationLimit(
   supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
   userId: string,
-  service: ServiceType
+  service: ServiceType,
 ): Promise<void> {
+  const tier = await getUserTier(supabase, userId);
+  const limit = TIER_LIMITS[tier].integrationsPerService;
+
   const { count } = await supabase
     .from("integrations")
     .select("id", { count: "exact", head: true })
@@ -29,9 +61,9 @@ export async function checkIntegrationLimit(
     .eq("service", service)
     .neq("status", "disconnected");
 
-  if ((count ?? 0) >= FREE_TIER_LIMITS.integrationsPerService) {
+  if ((count ?? 0) >= limit) {
     throw new TierLimitError(
-      `Free plan allows ${FREE_TIER_LIMITS.integrationsPerService} ${service} account. Remove the existing one or upgrade to add more.`
+      `${tier === "free" ? "Free" : "Pro"} plan allows ${limit} ${service} account${limit !== 1 ? "s" : ""}. Remove an existing one or upgrade to add more.`,
     );
   }
 }
@@ -39,11 +71,14 @@ export async function checkIntegrationLimit(
 export async function checkAlertChannelLimit(
   supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
   userId: string,
-  channelType: ChannelType
+  channelType: ChannelType,
 ): Promise<void> {
-  if (!FREE_TIER_LIMITS.alertChannels.includes(channelType)) {
+  const tier = await getUserTier(supabase, userId);
+  const allowed = TIER_LIMITS[tier].alertChannels;
+
+  if (!allowed.includes(channelType)) {
     throw new TierLimitError(
-      `${channelType} notifications are not available on the free plan. Upgrade to access Slack, Discord, and push notifications.`
+      `${channelType} notifications are not available on the free plan. Upgrade to Pro to access Slack, Discord, and push notifications.`,
     );
   }
 

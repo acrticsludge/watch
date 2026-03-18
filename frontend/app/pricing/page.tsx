@@ -34,7 +34,7 @@ export default async function PricingPage() {
             team features.
           </p>
         </div>
-        <PricingSection />
+        <PricingSection userEmail={user?.email} />
       </main>
       <LandingFooter />
     </div>
