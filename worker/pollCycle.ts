@@ -44,8 +44,8 @@ export async function runPollCycle(): Promise<void> {
     tierMap.set(sub.user_id, sub.tier);
   }
 
-  const FREE_POLL_INTERVAL_MS = 15 * 60 * 1000;
-  const PRO_POLL_INTERVAL_MS = 5 * 60 * 1000;
+  const FREE_POLL_INTERVAL_MS = 14.5 * 60 * 1000;
+  const PRO_POLL_INTERVAL_MS = 4.5 * 60 * 1000;
 
   // Filter out integrations that were synced too recently for their tier
   const now = Date.now();
