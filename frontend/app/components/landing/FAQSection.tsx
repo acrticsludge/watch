@@ -97,7 +97,7 @@ export function FAQSection() {
           <p className="text-sm text-zinc-600 mb-4">
             Still have questions?{" "}
             <a
-              href="mailto:support@pulsemonitor.dev"
+              href="mailto:anubhavrai100@gmail.com"
               className="text-zinc-400 underline underline-offset-2 hover:text-white transition-colors"
             >
               Send us a note

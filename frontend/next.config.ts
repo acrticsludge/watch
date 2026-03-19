@@ -8,9 +8,6 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  experimental: {
-    cacheComponents: true,
-  },
   serverExternalPackages: ["crypto"],
   images: {
     remotePatterns: [
