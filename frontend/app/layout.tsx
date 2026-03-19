@@ -1,4 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/app/components/ui/toaster";
@@ -20,10 +25,6 @@ export const metadata: Metadata = {
     template: "%s | Stackwatch",
   },
   description: DEFAULT_DESCRIPTION,
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-  },
   alternates: {
     canonical: "/",
   },

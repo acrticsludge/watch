@@ -29,7 +29,51 @@ interface LatestSnapshot {
   recorded_at: string;
 }
 
-export default async function DashboardPage() {
+// Non-async shell — no uncached data access at page level
+export default function DashboardPage() {
+  return (
+    <div>
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">
+            Dashboard
+          </h1>
+          {/* Dynamic subtitle streams in with DashboardBody */}
+          <Suspense
+            fallback={
+              <div className="h-4 w-32 bg-white/5 rounded animate-pulse mt-1" />
+            }
+          >
+            <DashboardSubtitle />
+          </Suspense>
+        </div>
+        <DashboardRefresher />
+      </div>
+
+      <Suspense fallback={<UsageSkeleton />}>
+        <DashboardBody />
+      </Suspense>
+    </div>
+  );
+}
+
+async function DashboardSubtitle() {
+  const supabase = await createClient();
+  const { data: integrations } = await supabase
+    .from("integrations")
+    .select("id")
+    .neq("status", "disconnected");
+
+  const count = integrations?.length ?? 0;
+  if (count === 0) return null;
+  return (
+    <p className="text-zinc-500 text-sm mt-1">
+      {count} service{count !== 1 ? "s" : ""} connected
+    </p>
+  );
+}
+
+async function DashboardBody() {
   const supabase = await createClient();
 
   const { data: integrations } = await supabase
@@ -40,68 +84,40 @@ export default async function DashboardPage() {
 
   if (!integrations || integrations.length === 0) {
     return (
-      <div className="min-h-[60vh] flex flex-col">
-        <div className="mb-10">
-          <h1 className="text-2xl font-bold text-white tracking-tight">
-            Dashboard
-          </h1>
-          <p className="text-zinc-500 text-sm mt-1">
-            Monitor your dev stack usage in real time
-          </p>
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="h-16 w-16 rounded-2xl bg-white/4 border border-white/6 flex items-center justify-center mb-5">
+          <svg
+            className="h-8 w-8 text-zinc-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            />
+          </svg>
         </div>
-
-        <div className="flex-1 flex flex-col items-center justify-center py-16 text-center">
-          <div className="h-16 w-16 rounded-2xl bg-white/4 border border-white/6 flex items-center justify-center mb-5">
-            <svg
-              className="h-8 w-8 text-zinc-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-              />
-            </svg>
-          </div>
-          <h2 className="text-base font-semibold text-white mb-2">
-            No services connected yet
-          </h2>
-          <p className="text-zinc-500 text-sm max-w-xs mb-6 leading-relaxed">
-            Connect GitHub Actions, Vercel, or Supabase to start monitoring your
-            usage and get alerted before you hit limits.
-          </p>
-          <Button asChild size="sm">
-            <Link href="/integrations">Connect a service</Link>
-          </Button>
-        </div>
+        <h2 className="text-base font-semibold text-white mb-2">
+          No services connected yet
+        </h2>
+        <p className="text-zinc-500 text-sm max-w-xs mb-6 leading-relaxed">
+          Connect GitHub Actions, Vercel, or Supabase to start monitoring your
+          usage and get alerted before you hit limits.
+        </p>
+        <Button asChild size="sm">
+          <Link href="/integrations">Connect a service</Link>
+        </Button>
       </div>
     );
   }
 
   return (
-    <div>
-      {/* Page header — renders immediately from the fast integrations query */}
-      <div className="flex items-start justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">
-            Dashboard
-          </h1>
-          <p className="text-zinc-500 text-sm mt-1">
-            {integrations.length} service{integrations.length !== 1 ? "s" : ""}{" "}
-            connected
-          </p>
-        </div>
-        <DashboardRefresher />
-      </div>
-
-      {/* Status + cards stream in once snapshot query resolves */}
-      <Suspense fallback={<UsageSkeleton />}>
-        <UsageContent integrations={integrations} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<UsageSkeleton />}>
+      <UsageContent integrations={integrations} />
+    </Suspense>
   );
 }
 
