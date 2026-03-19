@@ -1,11 +1,30 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { getSession, getSubscription } from "@/lib/queries/user";
 import { SettingsContent } from "./SettingsContent";
 
 export const metadata: Metadata = { title: "Settings" };
 
-export default async function SettingsPage({
+export default function SettingsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-white tracking-tight">Settings</h1>
+        <p className="text-zinc-500 text-sm mt-1">Configure alert thresholds and notification channels.</p>
+      </div>
+      <Suspense fallback={<SettingsSkeleton />}>
+        <SettingsData searchParams={searchParams} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function SettingsData({
   searchParams,
 }: {
   searchParams: Promise<{ tab?: string }>;
@@ -44,19 +63,35 @@ export default async function SettingsPage({
   }
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Settings</h1>
-        <p className="text-zinc-500 text-sm mt-1">Configure alert thresholds and notification channels.</p>
+    <SettingsContent
+      userEmail={session?.user?.email ?? ""}
+      integrations={integrations ?? []}
+      alertConfigs={alertConfigs ?? []}
+      alertChannels={finalAlertChannels}
+      tier={subscription?.tier ?? "free"}
+      defaultTab={tab ?? "alerts"}
+    />
+  );
+}
+
+function SettingsSkeleton() {
+  return (
+    <div className="space-y-6">
+      {/* Tab bar skeleton */}
+      <div className="flex gap-1 border-b border-white/6 pb-0">
+        {[80, 60, 80, 60].map((w, i) => (
+          <div key={i} className={`h-9 w-${w} bg-white/5 rounded-t-lg animate-pulse`} />
+        ))}
       </div>
-      <SettingsContent
-        userEmail={session?.user?.email ?? ""}
-        integrations={integrations ?? []}
-        alertConfigs={alertConfigs ?? []}
-        alertChannels={finalAlertChannels}
-        tier={subscription?.tier ?? "free"}
-        defaultTab={tab ?? "alerts"}
-      />
+      {/* Content skeleton */}
+      <div className="space-y-4">
+        {[0, 1, 2].map((i) => (
+          <div
+            key={i}
+            className="bg-[#111] border border-white/6 rounded-xl p-5 h-24 animate-pulse"
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -1,11 +1,26 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { getSubscription } from "@/lib/queries/user";
 import { IntegrationsContent } from "./IntegrationsContent";
 
 export const metadata: Metadata = { title: "Integrations" };
 
-export default async function IntegrationsPage() {
+export default function IntegrationsPage() {
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-white tracking-tight">Integrations</h1>
+        <p className="text-zinc-500 text-sm mt-1">Connect your services to start monitoring usage.</p>
+      </div>
+      <Suspense fallback={<IntegrationsSkeleton />}>
+        <IntegrationsData />
+      </Suspense>
+    </div>
+  );
+}
+
+async function IntegrationsData() {
   const supabase = await createClient();
 
   const [{ data: integrations }, subscription] = await Promise.all([
@@ -19,13 +34,18 @@ export default async function IntegrationsPage() {
 
   const tier = subscription?.tier ?? "free";
 
+  return <IntegrationsContent integrations={integrations ?? []} tier={tier} />;
+}
+
+function IntegrationsSkeleton() {
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Integrations</h1>
-        <p className="text-zinc-500 text-sm mt-1">Connect your services to start monitoring usage.</p>
-      </div>
-      <IntegrationsContent integrations={integrations ?? []} tier={tier} />
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          className="bg-[#111] border border-white/6 rounded-xl p-5 h-36 animate-pulse"
+        />
+      ))}
     </div>
   );
 }
