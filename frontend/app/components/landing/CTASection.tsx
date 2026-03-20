@@ -8,11 +8,11 @@ export function CTASection() {
           Free to start
         </p>
         <h2 className="text-2xl font-bold text-white tracking-tight mb-3">
-          Stop finding out the hard way.
+          Know before your users do.
         </h2>
         <p className="text-zinc-500 text-base mb-8 max-w-md mx-auto">
-          Connect GitHub, Vercel, Supabase, or Railway in under two minutes.
-          No credit card required.
+          Connect GitHub, Vercel, Supabase, or Railway in under two minutes and
+          get alerted before a limit becomes a production incident.
         </p>
         <div className="flex flex-wrap items-center justify-center gap-3">
           <Link

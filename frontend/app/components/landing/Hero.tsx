@@ -149,23 +149,23 @@ export function Hero() {
           <div className="max-w-xl">
             <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.18em] mb-8 flex items-center gap-2">
               <span className="h-px w-5 bg-zinc-700 inline-block" />
-              Usage monitoring for developers
+              Quota guardrail for SaaS teams in production
             </p>
 
             <h1 className="text-[3.25rem] md:text-[3.75rem] font-bold text-white tracking-tight leading-[1.06] mb-5">
-              Avoid Surprises
+              Stop Finding Out
               <br />
-              <span className="text-zinc-500">Never Miss a Limit Again.</span>
+              <span className="text-zinc-500">When Your Users Do.</span>
             </h1>
 
             <p className="text-base text-zinc-600 mb-2 leading-relaxed">
-              Actions minutes ran out. Nobody knew.
+              Actions quota hit. Builds stopped. Users noticed first.
             </p>
             <p className="text-base text-zinc-400 leading-relaxed mb-10">
-              Stackwatch watches your GitHub, Vercel, Railway and Supabase
-              limits — and alerts you{" "}
-              <span className="text-white font-medium">before</span> they cut
-              you off.
+              Stackwatch monitors your GitHub, Vercel, Railway and Supabase
+              limits — and alerts your team{" "}
+              <span className="text-white font-medium">before</span> a limit
+              becomes a production incident.
             </p>
 
             <div className="flex flex-wrap gap-3">

@@ -22,9 +22,9 @@ const problems = [
       </svg>
     ),
     iconBg: "bg-amber-500/10 border-amber-500/20",
-    title: "5 dashboards, zero alerts",
+    title: "5 dashboards, zero early warnings",
     description:
-      "GitHub, Vercel, Supabase, Railway — each has its own usage page. None of them ping you before the limit hits.",
+      "GitHub, Vercel, Supabase, Railway — each has its own usage page. None of them alert you before the limit hits your users.",
   },
   {
     icon: (
@@ -64,8 +64,8 @@ export function ProblemSection() {
             Sound familiar?
           </h2>
           <p className="text-zinc-500 text-base max-w-md mx-auto">
-            Small dev teams shouldn&apos;t have to babysit usage dashboards
-            across every service they rely on.
+            Early-stage SaaS teams in production can&apos;t afford to find out
+            about a limit when a user hits it.
           </p>
         </motion.div>
 

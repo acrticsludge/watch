@@ -18,9 +18,9 @@ const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
 
 export const metadata: Metadata = {
-  title: "Stackwatch — Monitor your dev stack limits",
+  title: "Stackwatch — Know before your users do",
   description:
-    "Get alerted before you hit limits on GitHub Actions, Vercel, and Supabase. One dashboard for real-time usage monitoring and alerts — so you never get surprised by a hard limit again.",
+    "Stackwatch is the quota guardrail for early-stage SaaS teams in production. Get alerted before GitHub Actions, Vercel, or Supabase limits become a production incident.",
   alternates: {
     canonical: APP_URL,
   },
