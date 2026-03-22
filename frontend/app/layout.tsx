@@ -9,6 +9,7 @@ import "./globals.css";
 import { Toaster } from "@/app/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
+import { FeedbackWidget } from "@/app/components/FeedbackWidget";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -68,6 +69,7 @@ export default function RootLayout({
         {children}
         <Toaster />
         <Analytics />
+        <FeedbackWidget />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-C7GBHPZLYJ"
           strategy="afterInteractive"

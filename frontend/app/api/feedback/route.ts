@@ -1,0 +1,41 @@
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+const FROM = "alerts@pulsemonitor.dev";
+const TO = process.env.FEEDBACK_EMAIL ?? "alerts@pulsemonitor.dev";
+
+export async function POST(req: Request) {
+  try {
+    const { signedup, reason, general } = await req.json();
+
+    const lines: string[] = [];
+    if (signedup === true) lines.push("<b>Signed up:</b> Yes");
+    if (signedup === false) lines.push("<b>Signed up:</b> No");
+    if (reason) lines.push(`<b>What stopped them:</b><br>${reason}`);
+    if (general) lines.push(`<b>Other thoughts:</b><br>${general}`);
+
+    if (lines.length === 0) {
+      return NextResponse.json({ ok: true }); // nothing to send
+    }
+
+    await resend.emails.send({
+      from: FROM,
+      to: TO,
+      subject: `[Stackwatch] New feedback`,
+      html: `
+        <div style="font-family:sans-serif;max-width:480px;padding:24px">
+          <h2 style="margin:0 0 16px;font-size:18px">New visitor feedback</h2>
+          <div style="font-size:14px;line-height:1.8;color:#374151">
+            ${lines.join("<br><br>")}
+          </div>
+          <p style="margin-top:24px;font-size:12px;color:#9ca3af">Sent from the Stackwatch feedback widget</p>
+        </div>`,
+    });
+
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error("feedback route error", err);
+    return NextResponse.json({ ok: false }, { status: 500 });
+  }
+}
