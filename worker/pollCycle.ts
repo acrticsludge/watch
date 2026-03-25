@@ -149,4 +149,23 @@ export async function runPollCycle(): Promise<void> {
   console.log(
     `[pollCycle] Done. ${results.length - failed} succeeded, ${failed} failed.`
   );
+
+  // ── Prune old snapshots ────────────────────────────────────────────────────
+  // Hard cutoff: delete anything older than 30 days (pro/team limit)
+  const hardCutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  await supabase.from("usage_snapshots").delete().lt("recorded_at", hardCutoff);
+
+  // Free tier: enforce 7-day limit
+  const freeIntegrationIds = integrations
+    .filter((i) => (tierMap.get(i.user_id) ?? "free") === "free")
+    .map((i) => i.id);
+
+  if (freeIntegrationIds.length > 0) {
+    const freeCutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+    await supabase
+      .from("usage_snapshots")
+      .delete()
+      .in("integration_id", freeIntegrationIds)
+      .lt("recorded_at", freeCutoff);
+  }
 }
