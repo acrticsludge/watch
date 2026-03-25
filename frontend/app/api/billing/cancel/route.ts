@@ -32,21 +32,24 @@ export async function POST() {
     await dodo.subscriptions.update(subscription.dodo_subscription_id, {
       cancel_at_next_billing_date: true,
     });
-
-    // Mark locally so the UI can show "access until [date]" immediately.
-    // The webhook fires at period end and handles the actual tier downgrade.
-    const serviceClient = createServiceClient();
-    await serviceClient
-      .from("subscriptions")
-      .update({ cancel_at_period_end: true, updated_at: new Date().toISOString() })
-      .eq("user_id", user.id);
-
-    return NextResponse.json({ success: true });
   } catch (err) {
-    console.error("[cancel] failed:", err);
-    return NextResponse.json(
-      { error: "Failed to cancel subscription" },
-      { status: 500 },
-    );
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[cancel] dodo API failed:", message);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
+
+  // Mark locally so the UI can show "access until [date]" immediately.
+  // The webhook fires at period end and handles the actual tier downgrade.
+  const serviceClient = createServiceClient();
+  const { error: dbErr } = await serviceClient
+    .from("subscriptions")
+    .update({ cancel_at_period_end: true, updated_at: new Date().toISOString() })
+    .eq("user_id", user.id);
+
+  if (dbErr) {
+    console.error("[cancel] local DB update failed:", dbErr);
+    // Dodo is already cancelled — don't fail the request, just log it.
+  }
+
+  return NextResponse.json({ success: true });
 }

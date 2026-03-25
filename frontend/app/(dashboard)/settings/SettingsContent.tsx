@@ -54,7 +54,12 @@ function CancelSubscriptionButton({
     const res = await fetch("/api/billing/cancel", { method: "POST" });
     setLoading(false);
     if (!res.ok) {
-      toast({ title: isTrialing ? "Failed to cancel trial" : "Failed to cancel subscription", variant: "destructive" });
+      const body = await res.json().catch(() => ({}));
+      toast({
+        title: isTrialing ? "Failed to cancel trial" : "Failed to cancel subscription",
+        description: body.error ?? undefined,
+        variant: "destructive",
+      });
       return;
     }
     toast({
