@@ -16,6 +16,7 @@ interface Integration {
   account_label: string;
   status: string;
   last_synced_at: string | null;
+  sort_order: number;
 }
 
 interface LatestSnapshot {
@@ -78,9 +79,9 @@ async function DashboardBody() {
 
   const { data: integrations } = await supabase
     .from("integrations")
-    .select("id, service, account_label, status, last_synced_at")
+    .select("id, service, account_label, status, last_synced_at, sort_order")
     .neq("status", "disconnected")
-    .order("created_at", { ascending: true });
+    .order("sort_order", { ascending: true });
 
   if (!integrations || integrations.length === 0) {
     return (
@@ -123,7 +124,7 @@ async function DashboardBody() {
 
 async function UsageContent({ integrations }: { integrations: Integration[] }) {
   const supabase = await createClient();
-  const integrationIds = integrations.map((i) => i.id);
+  const integrationIds = activeIntegrations.map((i) => i.id);
 
   // subscription is served from cache (shared with layout — zero extra DB hit)
   const [subscription, { data: snapshots }] = await Promise.all([
@@ -140,6 +141,18 @@ async function UsageContent({ integrations }: { integrations: Integration[] }) {
   const tier = subscription?.tier ?? "free";
   const isFree = tier === "free";
 
+  // On free tier, keep only the primary account (sort_order 0) per service
+  const activeIntegrations = isFree
+    ? (() => {
+        const seen = new Set<string>();
+        return integrations.filter((i) => {
+          if (seen.has(i.service)) return false;
+          seen.add(i.service);
+          return true;
+        });
+      })()
+    : integrations;
+
   // Key includes entity_id so per-entity snapshots get their own latest entry
   const latestMap = new Map<string, LatestSnapshot>();
   for (const s of snapshots ?? []) {
@@ -150,7 +163,7 @@ async function UsageContent({ integrations }: { integrations: Integration[] }) {
   }
 
   const integrationServiceMap = new Map(
-    integrations.map((i) => [i.id, i.service]),
+    activeIntegrations.map((i) => [i.id, i.service]),
   );
 
   const allSnapshots = Array.from(latestMap.values());
@@ -206,7 +219,7 @@ async function UsageContent({ integrations }: { integrations: Integration[] }) {
 
       {/* Cards grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {integrations.map((integration) => {
+        {activeIntegrations.map((integration) => {
           const freeMetrics = FREE_METRICS[integration.service] ?? [];
 
           const integrationSnapshots = Array.from(latestMap.entries())

@@ -24,6 +24,7 @@ export type Database = {
           created_at: string;
           last_synced_at: string | null;
           meta: Json | null;
+          sort_order: number;
         };
         Insert: {
           id?: string;
@@ -35,6 +36,7 @@ export type Database = {
           created_at?: string;
           last_synced_at?: string | null;
           meta?: Json | null;
+          sort_order?: number;
         };
         Update: {
           id?: string;
@@ -46,6 +48,7 @@ export type Database = {
           created_at?: string;
           last_synced_at?: string | null;
           meta?: Json | null;
+          sort_order?: number;
         };
         Relationships: [];
       };

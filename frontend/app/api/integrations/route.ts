@@ -67,6 +67,14 @@ export async function POST(request: Request) {
 
   const meta = projectRef ? { project_ref: projectRef } : null;
 
+  // Set sort_order to the current count so new accounts go to the end
+  const { count: existingCount } = await supabase
+    .from("integrations")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("service", service)
+    .neq("status", "disconnected");
+
   const serviceClient = createServiceClient();
   const { data, error } = await serviceClient
     .from("integrations")
@@ -77,6 +85,7 @@ export async function POST(request: Request) {
       api_key: encryptedKey,
       status: "connected",
       meta,
+      sort_order: existingCount ?? 0,
     })
     .select("id, service, account_label, status, created_at")
     .single();

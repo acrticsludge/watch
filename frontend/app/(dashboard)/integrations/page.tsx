@@ -26,9 +26,9 @@ async function IntegrationsData() {
   const [{ data: integrations }, subscription] = await Promise.all([
     supabase
       .from("integrations")
-      .select("id, service, account_label, status, created_at, last_synced_at, meta")
+      .select("id, service, account_label, status, created_at, last_synced_at, meta, sort_order")
       .neq("status", "disconnected")
-      .order("created_at", { ascending: true }),
+      .order("sort_order", { ascending: true }),
     getSubscription(),
   ]);
 

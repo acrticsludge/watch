@@ -14,7 +14,7 @@ import {
   DialogFooter,
 } from "@/app/components/ui/dialog";
 import { useToast } from "@/app/components/ui/use-toast";
-import { Plus, Trash2, AlertCircle, Pencil } from "lucide-react";
+import { Plus, Trash2, AlertCircle, Pencil, ArrowUpCircle } from "lucide-react";
 
 interface Integration {
   id: string;
@@ -24,6 +24,7 @@ interface Integration {
   created_at: string;
   last_synced_at: string | null;
   meta?: unknown;
+  sort_order: number;
 }
 
 interface IntegrationsContentProps {
@@ -143,6 +144,7 @@ export function IntegrationsContent({
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingIntegration, setEditingIntegration] =
     useState<Integration | null>(null);
+  const [promotingId, setPromotingId] = useState<string | null>(null);
 
   function openConnect(serviceId: string) {
     setFormData({});
@@ -210,6 +212,21 @@ export function IntegrationsContent({
       router.refresh();
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handlePromote(id: string) {
+    setPromotingId(id);
+    try {
+      const res = await fetch(`/api/integrations/${id}/promote`, { method: "POST" });
+      if (!res.ok) {
+        toast({ title: "Error", description: "Failed to update primary account.", variant: "destructive" });
+        return;
+      }
+      toast({ title: "Primary account updated" });
+      router.refresh();
+    } finally {
+      setPromotingId(null);
     }
   }
 
@@ -282,57 +299,91 @@ export function IntegrationsContent({
               <p className="text-sm text-zinc-700">No accounts connected.</p>
             ) : (
               <div className="space-y-2">
-                {connected.map((intg) => (
-                  <div
-                    key={intg.id}
-                    className="flex items-center justify-between bg-white/[0.03] border border-white/[0.06] rounded-lg px-4 py-3"
-                  >
-                    <div>
-                      <p className="text-sm font-medium text-zinc-200">
-                        {intg.account_label}
-                      </p>
-                      <p className="text-xs text-zinc-600">
-                        {intg.last_synced_at
-                          ? `Last synced ${new Date(intg.last_synced_at).toLocaleString()}`
-                          : "Never synced"}
-                      </p>
+                {connected.map((intg, idx) => {
+                  const isBlocked = tier === "free" && idx > 0;
+                  return (
+                    <div
+                      key={intg.id}
+                      className={`flex items-center justify-between border rounded-lg px-4 py-3 transition-opacity ${
+                        isBlocked
+                          ? "bg-white/1 border-white/4 opacity-60"
+                          : "bg-white/3 border-white/6"
+                      }`}
+                    >
+                      <div className="min-w-0 flex-1 mr-3">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <p className={`text-sm font-medium truncate ${isBlocked ? "text-zinc-500" : "text-zinc-200"}`}>
+                            {intg.account_label}
+                          </p>
+                          {idx === 0 && connected.length > 1 && (
+                            <span className="shrink-0 text-[10px] font-medium text-blue-400 bg-blue-500/10 border border-blue-500/20 rounded px-1.5 py-0.5">
+                              Primary
+                            </span>
+                          )}
+                        </div>
+                        {isBlocked ? (
+                          <p className="text-xs text-amber-500/70">
+                            Paused — free plan limit. Make primary to activate, or upgrade to Pro.
+                          </p>
+                        ) : (
+                          <p className="text-xs text-zinc-600">
+                            {intg.last_synced_at
+                              ? `Last synced ${new Date(intg.last_synced_at).toLocaleString()}`
+                              : "Never synced"}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {isBlocked ? (
+                          <>
+                            <Badge variant="warning">paused</Badge>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 text-xs text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 gap-1.5 px-2.5"
+                              onClick={() => handlePromote(intg.id)}
+                              disabled={promotingId === intg.id}
+                            >
+                              <ArrowUpCircle className="h-3.5 w-3.5" />
+                              {promotingId === intg.id ? "Updating..." : "Make primary"}
+                            </Button>
+                          </>
+                        ) : (
+                          <Badge
+                            variant={
+                              intg.status === "connected"
+                                ? "success"
+                                : intg.status === "error"
+                                  ? "danger"
+                                  : intg.status === "unsupported"
+                                    ? "warning"
+                                    : "secondary"
+                            }
+                          >
+                            {intg.status === "unsupported" ? "plan limit" : intg.status}
+                          </Badge>
+                        )}
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-zinc-600 hover:text-zinc-200 hover:bg-white/6"
+                          onClick={() => openEdit(intg)}
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8 text-zinc-600 hover:text-red-400 hover:bg-red-500/10"
+                          onClick={() => handleDelete(intg.id)}
+                          disabled={deletingId === intg.id}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Badge
-                        variant={
-                          intg.status === "connected"
-                            ? "success"
-                            : intg.status === "error"
-                              ? "danger"
-                              : intg.status === "unsupported"
-                                ? "warning"
-                                : "secondary"
-                        }
-                      >
-                        {intg.status === "unsupported"
-                          ? "plan limit"
-                          : intg.status}
-                      </Badge>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-zinc-600 hover:text-zinc-200 hover:bg-white/6"
-                        onClick={() => openEdit(intg)}
-                      >
-                        <Pencil className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-zinc-600 hover:text-red-400 hover:bg-red-500/10"
-                        onClick={() => handleDelete(intg.id)}
-                        disabled={deletingId === intg.id}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
