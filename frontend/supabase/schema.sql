@@ -73,7 +73,7 @@ create table if not exists subscriptions (
   id          uuid primary key default uuid_generate_v4(),
   user_id     uuid not null references auth.users(id) on delete cascade,
   tier        text not null default 'free' check (tier in ('free', 'pro', 'team')),
-  status      text not null default 'active' check (status in ('active', 'canceled', 'past_due')),
+  status      text not null default 'active' check (status in ('active', 'trialing', 'canceled', 'past_due')),
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now(),
   unique (user_id)

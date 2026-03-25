@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
         ? new Date(Date.now() + trialPeriodDays * 24 * 60 * 60 * 1000).toISOString()
         : null;
 
-      await supabase.from("subscriptions").upsert(
+      const { error: upsertErr } = await supabase.from("subscriptions").upsert(
         {
           user_id: userId,
           tier: "pro",
@@ -82,6 +82,10 @@ export async function POST(req: NextRequest) {
         },
         { onConflict: "user_id" },
       );
+      if (upsertErr) {
+        console.error("[dodo webhook] subscription.active upsert failed:", upsertErr);
+        return NextResponse.json({ error: upsertErr.message }, { status: 500 });
+      }
       break;
     }
 
@@ -93,7 +97,7 @@ export async function POST(req: NextRequest) {
         status === "active" && isTrial ? "trialing"
         : status === "active" ? "active"
         : status === "on_hold" || status === "failed" ? "past_due"
-        : "cancelled";
+        : "canceled";
       await supabase
         .from("subscriptions")
         .update({
@@ -135,7 +139,7 @@ export async function POST(req: NextRequest) {
       await supabase
         .from("subscriptions")
         .update({
-          status: "cancelled",
+          status: "canceled",
           tier: "free",
           updated_at: new Date().toISOString(),
         })

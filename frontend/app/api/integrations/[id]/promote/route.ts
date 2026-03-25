@@ -40,16 +40,20 @@ export async function POST(
 
   // Swap: current primary gets target's old sort_order, target gets 0
   if (currentPrimary) {
-    await serviceClient
+    const { error: swapErr } = await serviceClient
       .from("integrations")
       .update({ sort_order: target.sort_order })
       .eq("id", currentPrimary.id);
+    if (swapErr)
+      return NextResponse.json({ error: swapErr.message }, { status: 500 });
   }
 
-  await serviceClient
+  const { error: promoteErr } = await serviceClient
     .from("integrations")
     .update({ sort_order: 0 })
     .eq("id", id);
+  if (promoteErr)
+    return NextResponse.json({ error: promoteErr.message }, { status: 500 });
 
   return NextResponse.json({ success: true });
 }
