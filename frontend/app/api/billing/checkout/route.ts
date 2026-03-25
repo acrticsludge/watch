@@ -14,6 +14,15 @@ export async function POST() {
   }
 
   try {
+    // Only grant a trial to users who have never had a subscription
+    const { data: existingSub } = await supabase
+      .from("subscriptions")
+      .select("status")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    const trialDays = existingSub ? 0 : 14;
+
     const session = await dodo.checkoutSessions.create({
       product_cart: [
         { product_id: process.env.DODO_PRO_PRODUCT_ID!, quantity: 1 },
@@ -21,6 +30,9 @@ export async function POST() {
       customer: { email: user.email! },
       metadata: { user_id: user.id },
       return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?tab=billing`,
+      ...(trialDays > 0 && {
+        subscription_data: { trial_period_days: trialDays },
+      }),
     });
 
     return NextResponse.json({ url: session.checkout_url });

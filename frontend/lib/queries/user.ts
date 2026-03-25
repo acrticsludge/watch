@@ -24,8 +24,8 @@ export const getSubscription = cache(async () => {
   const supabase = await createClient();
   const { data } = await supabase
     .from("subscriptions")
-    .select("tier")
-    .eq("status", "active")
+    .select("tier, status, trial_ends_at")
+    .in("status", ["active", "trialing"])
     .maybeSingle();
   return data;
 });

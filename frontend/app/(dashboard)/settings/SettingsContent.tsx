@@ -38,7 +38,13 @@ function ManagePortalButton() {
   );
 }
 
-function CancelSubscriptionButton({ onCancelled }: { onCancelled: () => void }) {
+function CancelSubscriptionButton({
+  onCancelled,
+  isTrialing = false,
+}: {
+  onCancelled: () => void;
+  isTrialing?: boolean;
+}) {
   const [confirm, setConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -48,10 +54,15 @@ function CancelSubscriptionButton({ onCancelled }: { onCancelled: () => void }) 
     const res = await fetch("/api/billing/cancel", { method: "POST" });
     setLoading(false);
     if (!res.ok) {
-      toast({ title: "Failed to cancel subscription", variant: "destructive" });
+      toast({ title: isTrialing ? "Failed to cancel trial" : "Failed to cancel subscription", variant: "destructive" });
       return;
     }
-    toast({ title: "Subscription cancelled", description: "You'll keep Pro access until the end of your billing period." });
+    toast({
+      title: isTrialing ? "Trial cancelled" : "Subscription cancelled",
+      description: isTrialing
+        ? "Your trial has been cancelled. No charge was made."
+        : "You'll keep Pro access until the end of your billing period.",
+    });
     setConfirm(false);
     onCancelled();
   }
@@ -62,16 +73,20 @@ function CancelSubscriptionButton({ onCancelled }: { onCancelled: () => void }) 
         onClick={() => setConfirm(true)}
         className="text-sm text-zinc-600 hover:text-red-400 transition-colors underline underline-offset-2"
       >
-        Cancel subscription
+        {isTrialing ? "Cancel trial" : "Cancel subscription"}
       </button>
     );
   }
 
   return (
     <div className="mt-2 rounded-lg border border-red-500/20 bg-red-500/5 p-4">
-      <p className="text-sm text-zinc-300 mb-1 font-medium">Cancel your Pro subscription?</p>
+      <p className="text-sm text-zinc-300 mb-1 font-medium">
+        {isTrialing ? "Cancel your free trial?" : "Cancel your Pro subscription?"}
+      </p>
       <p className="text-xs text-zinc-500 mb-4">
-        Your subscription won't renew. You'll keep Pro access until the end of your current billing period.
+        {isTrialing
+          ? "You'll be moved to the Free plan immediately. No charge will be made."
+          : "Your subscription won't renew. You'll keep Pro access until the end of your current billing period."}
       </p>
       <div className="flex gap-2">
         <button
@@ -79,14 +94,14 @@ function CancelSubscriptionButton({ onCancelled }: { onCancelled: () => void }) 
           disabled={loading}
           className="inline-flex items-center justify-center rounded-md bg-red-500/80 hover:bg-red-500 px-3 py-1.5 text-sm font-medium text-white transition-colors disabled:opacity-50"
         >
-          {loading ? "Cancelling..." : "Yes, cancel"}
+          {loading ? "Cancelling..." : isTrialing ? "Yes, cancel trial" : "Yes, cancel"}
         </button>
         <button
           onClick={() => setConfirm(false)}
           disabled={loading}
           className="inline-flex items-center justify-center rounded-md bg-white/6 hover:bg-white/10 px-3 py-1.5 text-sm font-medium text-zinc-400 hover:text-white transition-colors disabled:opacity-50"
         >
-          Keep plan
+          {isTrialing ? "Keep trial" : "Keep plan"}
         </button>
       </div>
     </div>
@@ -109,7 +124,7 @@ function UpgradeButton() {
       disabled={loading}
       className="inline-flex items-center justify-center rounded-md bg-blue-500 hover:bg-blue-400 px-4 py-2.5 text-sm font-medium text-white transition-colors shadow-lg shadow-blue-500/20 disabled:opacity-50"
     >
-      {loading ? "Loading..." : "Upgrade to Pro — $10/mo"}
+      {loading ? "Loading..." : "Start free 14-day trial"}
     </button>
   );
 }
@@ -141,6 +156,8 @@ interface SettingsContentProps {
   alertConfigs: AlertConfig[];
   alertChannels: AlertChannel[];
   tier: string;
+  subscriptionStatus?: string | null;
+  trialEndsAt?: string | null;
   defaultTab?: string;
 }
 
@@ -188,9 +205,12 @@ export function SettingsContent({
   alertConfigs,
   alertChannels,
   tier,
+  subscriptionStatus,
+  trialEndsAt,
   defaultTab = "alerts",
 }: SettingsContentProps) {
   const isPro = tier === "pro" || tier === "team";
+  const isTrialing = subscriptionStatus === "trialing";
   const router = useRouter();
   const { toast } = useToast();
 
@@ -661,8 +681,32 @@ export function SettingsContent({
       <TabsContent value="billing">
         <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6 max-w-lg">
           <h3 className="font-semibold text-white mb-1 text-sm">Current plan</h3>
-          <p className="text-zinc-500 text-sm mb-5 capitalize">{tier}</p>
-          {!isPro ? (
+
+          {isTrialing ? (
+            <div className="mb-5">
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="text-sm font-medium text-white capitalize">{tier}</span>
+                <span className="text-[10px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-full px-2 py-0.5 uppercase tracking-wide">
+                  Free trial
+                </span>
+              </div>
+              {trialEndsAt && (
+                <p className="text-zinc-500 text-xs">
+                  Trial ends{" "}
+                  {new Date(trialEndsAt).toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
+                  . You&apos;ll be charged $10/mo after unless you cancel.
+                </p>
+              )}
+            </div>
+          ) : (
+            <p className="text-zinc-500 text-sm mb-5 capitalize">{tier}</p>
+          )}
+
+          {!isPro && !isTrialing ? (
             <div>
               <p className="text-zinc-400 text-sm mb-4">
                 Upgrade to Pro for multiple accounts, Slack &amp; Discord alerts, 5-minute polling, and 30-day history.
@@ -671,10 +715,10 @@ export function SettingsContent({
             </div>
           ) : (
             <div className="space-y-5">
-              <ManagePortalButton />
-              <div className="border-t border-white/6 pt-5">
-                <p className="text-xs text-zinc-600 mb-3">Danger zone</p>
-                <CancelSubscriptionButton onCancelled={() => router.refresh()} />
+              {!isTrialing && <ManagePortalButton />}
+              <div className={isTrialing ? "" : "border-t border-white/6 pt-5"}>
+                {!isTrialing && <p className="text-xs text-zinc-600 mb-3">Danger zone</p>}
+                <CancelSubscriptionButton isTrialing={isTrialing} onCancelled={() => router.refresh()} />
               </div>
             </div>
           )}

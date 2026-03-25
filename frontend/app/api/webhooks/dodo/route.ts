@@ -58,13 +58,21 @@ export async function POST(req: NextRequest) {
   }
 
   switch (type) {
-    case "subscription.created":
     case "subscription.active": {
+      // Fires on both initial subscription creation AND trial-to-paid conversion.
+      // status === "pending" means a trial just started; "active" means paid/converted.
+      const dodoStatus = data.status as string | undefined;
+      const isPending = dodoStatus === "pending";
+      const trialEndsAt = isPending
+        ? new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString()
+        : null;
+
       await supabase.from("subscriptions").upsert(
         {
           user_id: userId,
           tier: "pro",
-          status: "active",
+          status: isPending ? "trialing" : "active",
+          trial_ends_at: trialEndsAt,
           dodo_subscription_id: dodoSubscriptionId,
           dodo_customer_id: dodoCustomerId,
           dodo_product_id: productId,
@@ -77,10 +85,15 @@ export async function POST(req: NextRequest) {
 
     case "subscription.updated": {
       const status = data.status as string;
+      const mappedStatus =
+        status === "active" ? "active"
+        : status === "pending" ? "trialing"
+        : status === "on_hold" || status === "failed" ? "past_due"
+        : "cancelled";
       await supabase
         .from("subscriptions")
         .update({
-          status: status === "active" ? "active" : "cancelled",
+          status: mappedStatus,
           updated_at: new Date().toISOString(),
         })
         .eq("dodo_subscription_id", dodoSubscriptionId);

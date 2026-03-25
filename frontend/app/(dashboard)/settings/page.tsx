@@ -69,6 +69,8 @@ async function SettingsData({
       alertConfigs={alertConfigs ?? []}
       alertChannels={finalAlertChannels}
       tier={subscription?.tier ?? "free"}
+      subscriptionStatus={subscription?.status ?? null}
+      trialEndsAt={subscription?.trial_ends_at ?? null}
       defaultTab={tab ?? "alerts"}
     />
   );

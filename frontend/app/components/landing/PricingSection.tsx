@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 const PROMO_CODE = "ST62D62ISFG";
 
@@ -83,12 +84,6 @@ function PromoReveal() {
   );
 }
 
-function proCheckoutUrl(email?: string) {
-  const base = process.env.NEXT_PUBLIC_DODO_PRO_CHECKOUT_URL ?? "/pricing";
-  if (!email) return base;
-  return `${base}${base.includes("?") ? "&" : "?"}email=${encodeURIComponent(email)}`;
-}
-
 export function PricingSection({
   userEmail,
   isPro,
@@ -96,6 +91,22 @@ export function PricingSection({
   userEmail?: string;
   isPro?: boolean;
 }) {
+  const router = useRouter();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  async function handleProCheckout() {
+    if (!userEmail) {
+      router.push("/signup");
+      return;
+    }
+    setCheckoutLoading(true);
+    const res = await fetch("/api/billing/checkout", { method: "POST" });
+    setCheckoutLoading(false);
+    if (!res.ok) return;
+    const { url } = await res.json();
+    if (url) window.location.href = url;
+  }
+
   const plans = [
     {
       name: "Free",
@@ -125,8 +136,8 @@ export function PricingSection({
         "30-day alert history",
         "Usage history charts",
       ],
-      cta: "Get Pro",
-      href: proCheckoutUrl(userEmail),
+      cta: "Start free trial",
+      href: null,
       highlight: true,
     },
     {
@@ -172,7 +183,7 @@ export function PricingSection({
             Simple, transparent pricing
           </h2>
           <p className="text-zinc-500 text-base mb-3">
-            Start free. Upgrade when you need more.
+            Start free. Pro comes with a 14-day free trial.
           </p>
           <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -228,6 +239,11 @@ export function PricingSection({
                     <span className="text-sm text-zinc-600">{p.period}</span>
                   )}
                 </div>
+                {p.highlight && (
+                  <p className="text-xs text-emerald-400 mt-1 font-medium">
+                    14-day free trial included
+                  </p>
+                )}
                 <p
                   className={`text-sm mt-1.5 ${
                     p.highlight ? "text-zinc-400" : "text-zinc-600"
@@ -276,14 +292,18 @@ export function PricingSection({
                 >
                   {p.highlight && isPro ? "Current plan" : p.cta}
                 </div>
+              ) : p.highlight ? (
+                <button
+                  onClick={handleProCheckout}
+                  disabled={checkoutLoading}
+                  className="flex w-full items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium transition-all bg-blue-500 hover:bg-blue-400 text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 disabled:opacity-50"
+                >
+                  {checkoutLoading ? "Loading..." : p.cta}
+                </button>
               ) : (
                 <a
                   href={p.href!}
-                  className={`flex w-full items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium transition-all ${
-                    p.highlight
-                      ? "bg-blue-500 hover:bg-blue-400 text-white shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30"
-                      : "bg-white/6 hover:bg-white/10 text-zinc-300 hover:text-white"
-                  }`}
+                  className="flex w-full items-center justify-center rounded-md px-4 py-2.5 text-sm font-medium transition-all bg-white/6 hover:bg-white/10 text-zinc-300 hover:text-white"
                 >
                   {p.cta}
                 </a>
