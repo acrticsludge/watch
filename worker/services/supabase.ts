@@ -188,26 +188,23 @@ export async function fetchSupabaseUsage(
       projectRef,
       token,
       `SELECT
-        schemaname || '.' || relname AS table_name,
+        relname AS table_name,
         pg_total_relation_size(relid)::bigint AS total_bytes
       FROM pg_stat_user_tables
-      ORDER BY total_bytes DESC
-      LIMIT 5`
+      WHERE schemaname = 'public'
+      ORDER BY total_bytes DESC`
     );
     for (const row of tableRows) {
       const bytes = Number(row.total_bytes ?? 0);
-      if (bytes > 0) {
-        const tableMb = Math.round((bytes / (1024 * 1024)) * 100) / 100;
-        const tableName = String(row.table_name ?? "unknown");
-        metrics.push({
-          metricName: "db_size_mb",
-          currentValue: tableMb,
-          limitValue: FREE_TIER_LIMITS.db_size_mb,
-          percentUsed: Math.round((tableMb / FREE_TIER_LIMITS.db_size_mb) * 10000) / 100,
-          entityId: tableName,
-          entityLabel: tableName,
-        });
-      }
+      const tableName = String(row.table_name ?? "unknown");
+      metrics.push({
+        metricName: "db_size_mb",
+        currentValue: Math.round((bytes / (1024 * 1024)) * 100) / 100,
+        limitValue: FREE_TIER_LIMITS.db_size_mb,
+        percentUsed: Math.round((bytes / (1024 * 1024 * FREE_TIER_LIMITS.db_size_mb)) * 10000) / 100,
+        entityId: tableName,
+        entityLabel: tableName,
+      });
     }
   } catch (err) {
     console.warn(`[supabase] Could not fetch table sizes for '${projectRef}':`, err instanceof Error ? err.message : String(err));

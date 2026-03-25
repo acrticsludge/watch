@@ -21,10 +21,13 @@ export async function POST() {
     .in("status", ["active", "trialing"])
     .maybeSingle();
 
-  if (!subscription?.dodo_subscription_id) {
+  if (!subscription) {
+    return NextResponse.json({ error: "No active subscription found" }, { status: 404 });
+  }
+  if (!subscription.dodo_subscription_id) {
     return NextResponse.json(
-      { error: "No active subscription found" },
-      { status: 404 },
+      { error: "Subscription has no payment provider ID — please go through checkout to start a real subscription." },
+      { status: 422 },
     );
   }
 
