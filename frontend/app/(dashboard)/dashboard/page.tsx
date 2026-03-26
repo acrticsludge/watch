@@ -39,14 +39,6 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold text-white tracking-tight">
             Dashboard
           </h1>
-          {/* Dynamic subtitle streams in with DashboardBody */}
-          <Suspense
-            fallback={
-              <div className="h-4 w-32 bg-white/5 rounded animate-pulse mt-1" />
-            }
-          >
-            <DashboardSubtitle />
-          </Suspense>
         </div>
         <DashboardRefresher />
       </div>
@@ -55,22 +47,6 @@ export default function DashboardPage() {
         <DashboardBody />
       </Suspense>
     </div>
-  );
-}
-
-async function DashboardSubtitle() {
-  const supabase = await createClient();
-  const { data: integrations } = await supabase
-    .from("integrations")
-    .select("id")
-    .neq("status", "disconnected");
-
-  const count = integrations?.length ?? 0;
-  if (count === 0) return null;
-  return (
-    <p className="text-zinc-500 text-sm mt-1">
-      {count} service{count !== 1 ? "s" : ""} connected
-    </p>
   );
 }
 

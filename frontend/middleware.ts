@@ -28,10 +28,12 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Refresh the session — IMPORTANT: do not remove this
+  // Use getSession (cookie-only, no network call) for routing — data is still
+  // protected by RLS. getUser() (server-verified) is called inside page components.
   const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    data: { session },
+  } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
 
   const pathname = request.nextUrl.pathname;
   const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));

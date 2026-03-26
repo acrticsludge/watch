@@ -40,7 +40,7 @@ async function getUserTier(
     .from("subscriptions")
     .select("tier")
     .eq("user_id", userId)
-    .eq("status", "active")
+    .in("status", ["active", "trialing"])
     .maybeSingle();
   const t = data?.tier as keyof typeof TIER_LIMITS | undefined;
   return t && t in TIER_LIMITS ? t : "free";
