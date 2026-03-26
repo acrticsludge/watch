@@ -5,6 +5,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "alerts@pulsemonitor.dev";
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
+const WIKI_BASE = "https://github.com/acrticsludge/Stackwatch/wiki";
+const WIKI_URLS: Record<string, string> = {
+  github: `${WIKI_BASE}/Connecting-GitHub-Actions`,
+  vercel: `${WIKI_BASE}/Connecting-Vercel`,
+  supabase: `${WIKI_BASE}/Connecting-Supabase`,
+  railway: `${WIKI_BASE}/Connecting-Railway`,
+};
 
 // ── Activation nudge ───────────────────────────────────────────────────────
 // Sent ~24 hours after signup if the user has not connected any integration.
@@ -30,7 +37,7 @@ export async function sendFirstSyncEmail(
     from: FROM,
     to,
     subject: `Your ${label} usage data is in`,
-    html: firstSyncHtml(label, APP_URL),
+    html: firstSyncHtml(label, WIKI_URLS[service] ?? WIKI_BASE, APP_URL),
   });
 }
 
@@ -80,7 +87,7 @@ function activationNudgeHtml(appUrl: string): string {
   return base("#d97706", "Finish setting up Stackwatch", "Your account is ready — services are not connected yet", body, appUrl);
 }
 
-function firstSyncHtml(serviceLabel: string, appUrl: string): string {
+function firstSyncHtml(serviceLabel: string, wikiUrl: string, appUrl: string): string {
   const body = `
     <p style="margin:0 0 20px;color:#374151;font-size:15px;line-height:1.6;">
       Your first <strong>${serviceLabel}</strong> usage snapshot is now on your dashboard. Stackwatch will keep polling and alert you if usage crosses your threshold.
@@ -88,6 +95,9 @@ function firstSyncHtml(serviceLabel: string, appUrl: string): string {
     <p style="margin:0 0 24px;color:#374151;font-size:15px;line-height:1.6;">
       Alerts fire at <strong>80%</strong> by default. You can adjust the threshold per metric in Settings.
     </p>
-    ${btn(`${appUrl}/dashboard`, "#2563eb", "View your dashboard →")}`;
+    ${btn(`${appUrl}/dashboard`, "#2563eb", "View your dashboard →")}
+    <p style="margin:20px 0 0;color:#6b7280;font-size:13px;">
+      Need help? See the <a href="${wikiUrl}" style="color:#2563eb;">${serviceLabel} setup guide</a>.
+    </p>`;
   return base("#2563eb", "Your first usage data is in", `${serviceLabel} is syncing successfully`, body, appUrl);
 }

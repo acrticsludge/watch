@@ -5,6 +5,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "alerts@pulsemonitor.dev";
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
+const WIKI_BASE = "https://github.com/acrticsludge/Stackwatch/wiki";
+const WIKI_URLS: Record<string, string> = {
+  github: `${WIKI_BASE}/Connecting-GitHub-Actions`,
+  vercel: `${WIKI_BASE}/Connecting-Vercel`,
+  supabase: `${WIKI_BASE}/Connecting-Supabase`,
+  railway: `${WIKI_BASE}/Connecting-Railway`,
+};
 
 // ── Welcome ────────────────────────────────────────────────────────────────
 // Sent once when a new user completes auth (OAuth callback or email confirm).
@@ -30,7 +37,7 @@ export async function sendFirstIntegrationEmail(
     from: FROM,
     to,
     subject: `${label} is now being monitored`,
-    html: firstIntegrationHtml(label, APP_URL),
+    html: firstIntegrationHtml(label, WIKI_URLS[service] ?? WIKI_BASE, APP_URL),
   });
 }
 
@@ -77,11 +84,18 @@ function welcomeHtml(appUrl: string): string {
       ${row("2. Set your threshold", "Default is 80% — change it in Settings")}
       ${row("3. Get alerted", "Email alerts are on by default. Add Slack or Discord in Settings")}
     </table>
-    ${btn(`${appUrl}/integrations`, "#2563eb", "Connect your first service →")}`;
+    ${btn(`${appUrl}/integrations`, "#2563eb", "Connect your first service →")}
+    <p style="margin:20px 0 0;color:#6b7280;font-size:13px;">
+      Not sure where to find your API tokens? See the setup guides:
+      <a href="${WIKI_BASE}/Connecting-GitHub-Actions" style="color:#2563eb;">GitHub Actions</a>,
+      <a href="${WIKI_BASE}/Connecting-Vercel" style="color:#2563eb;">Vercel</a>,
+      <a href="${WIKI_BASE}/Connecting-Supabase" style="color:#2563eb;">Supabase</a>,
+      <a href="${WIKI_BASE}/Connecting-Railway" style="color:#2563eb;">Railway</a>
+    </p>`;
   return base("#2563eb", "Welcome to Stackwatch", "Usage monitoring for dev teams", body, appUrl);
 }
 
-function firstIntegrationHtml(serviceLabel: string, appUrl: string): string {
+function firstIntegrationHtml(serviceLabel: string, wikiUrl: string, appUrl: string): string {
   const body = `
     <p style="margin:0 0 20px;color:#374151;font-size:15px;line-height:1.6;">
       Your first usage data will appear on the dashboard after the next sync. Polling runs automatically — no action needed.
@@ -91,6 +105,9 @@ function firstIntegrationHtml(serviceLabel: string, appUrl: string): string {
       ${row("Alert threshold", "80% — adjust in Settings")}
       ${row("Alert channels", "Email enabled · add Slack/Discord in Settings")}
     </table>
-    ${btn(`${appUrl}/dashboard`, "#059669", "View dashboard →")}`;
+    ${btn(`${appUrl}/dashboard`, "#059669", "View dashboard →")}
+    <p style="margin:20px 0 0;color:#6b7280;font-size:13px;">
+      Need help? See the <a href="${wikiUrl}" style="color:#2563eb;">${serviceLabel} setup guide</a>.
+    </p>`;
   return base("#059669", `${serviceLabel} is now connected`, "Stackwatch is now monitoring your usage", body, appUrl);
 }
