@@ -15,8 +15,11 @@ const CreateSchema = z.object({
 
 export async function GET() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { data, error } = await supabase
     .from("integrations")
@@ -24,14 +27,18 @@ export async function GET() {
     .neq("status", "disconnected")
     .order("created_at", { ascending: true });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error)
+    return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
 
 export async function POST(request: Request) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   let body: unknown;
   try {
@@ -44,11 +51,15 @@ export async function POST(request: Request) {
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.issues[0]?.message ?? "Invalid input" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
-  const { service, account_label, "meta.project_ref": projectRef } = parsed.data;
+  const {
+    service,
+    account_label,
+    "meta.project_ref": projectRef,
+  } = parsed.data;
   const rawApiKey = parsed.data.api_key;
 
   try {
@@ -57,7 +68,7 @@ export async function POST(request: Request) {
     if (err instanceof TierLimitError) {
       return NextResponse.json(
         { error: err.message, upgradeUrl: err.upgradeUrl },
-        { status: 403 }
+        { status: 403 },
       );
     }
     throw err;
@@ -91,7 +102,8 @@ export async function POST(request: Request) {
     .select("id, service, account_label, status, created_at")
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error)
+    return NextResponse.json({ error: error.message }, { status: 500 });
 
   // Fire first-integration onboarding email if this is the user's first ever integration.
   // Non-blocking: failure here must not affect the API response.

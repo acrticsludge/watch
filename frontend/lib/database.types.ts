@@ -236,6 +236,27 @@ export type Database = {
           }
         ];
       };
+      onboarding_emails: {
+        Row: {
+          id: string;
+          user_id: string;
+          type: string;
+          sent_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          type: string;
+          sent_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          type?: string;
+          sent_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;

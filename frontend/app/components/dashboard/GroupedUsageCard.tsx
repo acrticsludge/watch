@@ -357,36 +357,33 @@ export function GroupedUsageCard({
         {/* Compact bars (top 3 by usage) */}
         <div className="flex-1 space-y-2.5 mb-3">
           {visible.map((snap) => {
+            const pct = Math.round(snap.percent_used);
             const proj = getProjection(snap.current_value, snap.limit_value);
             return (
-              <div key={snap.metric_name}>
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs text-zinc-600 w-32 shrink-0 truncate">
-                    {METRIC_LABELS[snap.metric_name] ?? snap.metric_name}
-                  </span>
-                  <div className="flex-1 h-1 rounded-full bg-white/6 overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${getBarClass(snap.percent_used)}`}
-                      style={{ width: `${Math.min(snap.percent_used, 100)}%` }}
-                    />
-                  </div>
-                  <span className="text-xs text-zinc-500 w-7 text-right shrink-0 tabular-nums">
-                    {Math.round(snap.percent_used)}%
-                  </span>
+              <div key={snap.metric_name} className="flex items-center gap-2">
+                <span className="text-xs text-zinc-600 w-32 shrink-0 truncate">
+                  {METRIC_LABELS[snap.metric_name] ?? snap.metric_name}
+                </span>
+                <div className="flex-1 h-1 rounded-full bg-white/6 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full ${getBarClass(snap.percent_used)}`}
+                    style={{ width: `${Math.min(snap.percent_used, 100)}%` }}
+                  />
                 </div>
-                {proj && (
-                  <div className="pl-34">
-                    {proj.type === "will-exceed" ? (
-                      <span className={`text-[10px] tabular-nums font-medium ${snap.percent_used >= 80 ? "text-red-400" : "text-amber-400"}`}>
-                        {proj.daysLeft === 0 ? "Hits limit today" : `Limit in ~${proj.daysLeft}d`}
+                <div className="flex items-center gap-1 shrink-0 justify-end">
+                  <span className="text-xs text-zinc-500 tabular-nums">{pct}%</span>
+                  {proj && (
+                    proj.type === "will-exceed" ? (
+                      <span className={`text-[9px] tabular-nums font-medium ${pct >= 80 ? "text-red-400" : "text-amber-400"}`}>
+                        · {proj.daysLeft === 0 ? "today" : `~${proj.daysLeft}d`}
                       </span>
                     ) : (
-                      <span className="text-[10px] text-zinc-600 tabular-nums">
-                        ~{proj.projectedPct}% by month end
+                      <span className="text-[9px] text-zinc-600 tabular-nums">
+                        · ~{proj.projectedPct}%
                       </span>
-                    )}
-                  </div>
-                )}
+                    )
+                  )}
+                </div>
               </div>
             );
           })}

@@ -8,7 +8,6 @@ export type Json =
 
 export type ServiceType = "github" | "vercel" | "supabase" | "railway";
 export type IntegrationStatus = "connected" | "error" | "disconnected" | "unsupported";
-export type IntegrationStatus = "connected" | "error" | "disconnected";
 export type ChannelType = "email" | "slack" | "discord" | "push";
 
 export type Database = {
@@ -212,6 +211,27 @@ export type Database = {
             referencedColumns: ["id"];
           }
         ];
+      };
+      onboarding_emails: {
+        Row: {
+          id: string;
+          user_id: string;
+          type: string;
+          sent_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          type: string;
+          sent_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          type?: string;
+          sent_at?: string;
+        };
+        Relationships: [];
       };
     };
     Views: {
