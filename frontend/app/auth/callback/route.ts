@@ -6,7 +6,9 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const redirectTo = searchParams.get("redirectTo") ?? "/dashboard";
+  const rawRedirect = searchParams.get("redirectTo") ?? "/dashboard";
+  // Only allow relative paths; reject protocol-relative URLs like //evil.com
+  const redirectTo = /^\/(?!\/)/.test(rawRedirect) ? rawRedirect : "/dashboard";
 
   if (code) {
     const supabase = await createClient();

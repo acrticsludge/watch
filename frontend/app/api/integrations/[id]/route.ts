@@ -5,13 +5,16 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { encrypt } from "@/lib/encryption";
 
 const UpdateSchema = z.object({
-  account_label: z.string().min(1).max(80).optional(),
-  api_key: z.string().min(1).optional(),
+  account_label: z.string().min(1).max(80).trim().optional(),
+  api_key: z.string().min(1).trim().optional(),
   status: z.enum(["connected", "error", "disconnected"]).optional(),
   "meta.project_ref": z.string().min(1).optional(),
   "meta.public_key": z.string().min(1).optional(),
-  "meta.project_id": z.string().min(1).optional(),
-  "meta.connection_string": z.string().min(1).optional(),
+  "meta.project_id": z.string().min(1).regex(/^[a-f0-9]{24}$/i, "Project ID must be a 24-character hex string").optional(),
+  "meta.connection_string": z.string().min(1).refine(
+    (cs) => cs.startsWith("mongodb+srv://") || cs.startsWith("mongodb://"),
+    "Connection string must start with mongodb+srv:// or mongodb://"
+  ).optional(),
 });
 
 export async function PATCH(

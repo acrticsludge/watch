@@ -14,8 +14,15 @@ Stackwatch connects to MongoDB Atlas via the Atlas Admin API to track storage an
 | **Active Connections** | Free + Pro | Current open connection count vs the connection limit for your cluster tier |
 | **Network In** (MB/h) | Pro only | Inbound network throughput (bytes/sec → MB/hour), compared against a 10 GB/day reference |
 | **Network Out** (MB/h) | Pro only | Outbound network throughput, same reference |
+| **CPU %** | Pro only (M2+) | Average system CPU utilisation across cluster nodes |
+| **Resident Memory** | Pro only (M2+) | RAM used by the `mongod` process across nodes |
+| **Avg Read Latency** | Pro only (M2+) | Average execution time for read operations (ms) |
+| **Avg Write Latency** | Pro only (M2+) | Average execution time for write operations (ms) |
+| **Disk Read IOPS** | Pro only (M2+) | Disk read operations per second |
+| **Disk Write IOPS** | Pro only (M2+) | Disk write operations per second |
+| **Replication Lag** | Pro only (M2+ replica sets) | How far the most-lagged secondary is behind the primary (seconds); only available when your cluster has at least one secondary node |
 
-> **M0 note:** M0/shared clusters do not expose process measurements via the Atlas Admin API. Without a connection string, Storage and Active Connections will show as 0/limit. Add a connection string (Step 4) to get real values.
+> **M0 note:** M0/shared clusters do not expose process measurements via the Atlas Admin API. Without a connection string, Storage and Active Connections will show as 0/limit, and the performance metrics above will not appear. Add a connection string (Step 4) to get real values.
 
 ### With connection string (optional)
 
@@ -25,6 +32,9 @@ Stackwatch connects to MongoDB Atlas via the Atlas Admin API to track storage an
 | **Active Connections** | Free + Pro | Real connection count from `serverStatus` |
 | **DB Size** per database | Pro only | Per-database storage breakdown, shown as an expandable accordion in the dashboard |
 | **Collection Size** per collection | Pro only | Per-collection storage, visible under each database in the accordion |
+| **Resident Memory** | Pro only | RAM used by `mongod`, from `serverStatus.mem.resident` — works on M0 too |
+| **Replication Lag** | Pro only | Max lag across secondaries, computed from `replSetGetStatus`; silently skipped on standalone nodes |
+| **Slow Queries** | Pro only | Count of active operations running longer than 1 second (`currentOp`); not available on M0 shared clusters |
 
 ### Atlas tier limits used
 
@@ -94,7 +104,12 @@ If you're on an M0/free-tier cluster, or you want per-database and per-collectio
 1. In Atlas, go to **Database Access** → **Add New Database User**
 2. Choose **Password** authentication
 3. Set a username (e.g. `stackwatch-monitor`) and a strong password
-4. Under **Built-In Role**, select **`clusterMonitor`** — this role grants access to all monitoring commands (`dbStats`, `collStats`, `serverStatus`, `listCollections`) with **zero read/write access to your data**
+4. Leave **Built-In Role** unselected. Instead, expand **Specific Privileges** and add one entry:
+   - **Privilege:** `clusterMonitor`
+   - **Database:** `admin`
+   - **Collection:** *(leave blank)*
+
+   > **Why not "Only read any database"?** That role only covers `dbStats`/`collStats`. `serverStatus`, `replSetGetStatus`, and `currentOp` (used for memory, replication lag, and slow queries) require `clusterMonitor` on the `admin` database. "Atlas admin" works but is far too permissive — never use it for monitoring.
 5. Click **Add User**
 
 ### Get your connection string
@@ -111,6 +126,8 @@ If you're on an M0/free-tier cluster, or you want per-database and per-collectio
 3. Click **Save changes**
 
 The next poll cycle will use the direct connection path. The "M0: add a connection string" warning in your dashboard will disappear once real data is returned.
+
+> **Dashboard tip:** Once data is returned, the MongoDB card shows your **cluster name** (the label you set in Step 3) above the database accordion. Per-database and per-collection sizes expand beneath it when a connection string is present.
 
 ---
 
@@ -133,9 +150,21 @@ The next poll cycle will use the direct connection path. The "M0: add a connecti
 - Follow Step 4 above to add a connection string and get real values
 
 ### Dashboard shows no data after adding connection string
-- Verify the DB user has the `clusterMonitor` built-in role (not a custom role)
+- Verify the DB user has `clusterMonitor` granted via **Specific Privileges** (Database: `admin`, Collection: blank). The Atlas built-in role dropdown only shows 3 options and `clusterMonitor` is not among them — it must be added as a specific privilege. "Only read any database" lacks `serverStatus`/`currentOp`; "Atlas admin" is overly permissive.
 - Check that the worker's IP is in the Atlas network access list (or set to `0.0.0.0/0`)
 - Confirm the connection string format is correct (use SRV format: `mongodb+srv://...`)
+
+### CPU, memory, latency, or IOPS metrics are missing
+- These require an **M2 or higher** cluster — M0 shared clusters do not expose process measurements via the Atlas Admin API
+- Confirm your Stackwatch account is on the **Pro** tier; these metrics are not collected on Free
+
+### Replication Lag is not showing
+- **Via Admin API:** your cluster must have at least one secondary node (replica set). Single-node clusters always report 0 lag and the metric is omitted
+- **Via direct connection:** same — standalone `mongod` nodes do not run `replSetGetStatus`; the metric is silently skipped
+
+### Slow Queries metric is missing
+- `slow_queries_count` is only available via a direct connection string (not the Admin API)
+- M0 shared clusters do not support the `currentOp` command — the metric will not appear on M0 even with a connection string
 
 ### IP allowlist errors
 - Both the Atlas Admin API and direct connections require the worker's IP to be allowed
@@ -147,7 +176,7 @@ The next poll cycle will use the direct connection path. The "M0: add a connecti
 
 - Your **Atlas Private Key** is encrypted with AES-256-GCM before being stored in the database
 - Your **Connection String** (if provided) is also encrypted with AES-256-GCM — only the encrypted value is stored, the plaintext is never persisted
-- The `clusterMonitor` role grants **zero read/write access to your collection data** — Stackwatch only runs monitoring commands (`dbStats`, `serverStatus`, etc.)
+- The `clusterMonitor` privilege (on the `admin` database) grants **zero read/write access to your collection data** — Stackwatch only runs monitoring commands (`dbStats`, `serverStatus`, `replSetGetStatus`, `currentOp`)
 - Stackwatch uses the Admin API key **read-only** — it never creates, modifies, or deletes any Atlas resource
 - Row-level security ensures your credentials are only accessible to your own account
 - To revoke access: delete the integration in Stackwatch, delete the API key in Atlas, and remove the DB user created in Step 4

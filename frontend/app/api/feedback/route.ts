@@ -1,19 +1,38 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import { z } from "zod";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "alerts@pulsemonitor.dev";
 const TO = process.env.FEEDBACK_EMAIL ?? "alerts@pulsemonitor.dev";
 
+const FeedbackSchema = z.object({
+  signedup: z.boolean().nullable().optional(),
+  reason:   z.string().max(2000).optional(),
+  general:  z.string().max(2000).optional(),
+});
+
+function escapeHtml(s: string) {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 export async function POST(req: Request) {
   try {
-    const { signedup, reason, general } = await req.json();
+    const body = await req.json().catch(() => null);
+    const parsed = FeedbackSchema.safeParse(body);
+    if (!parsed.success) return NextResponse.json({ ok: true }); // best-effort; don't leak errors
+    const { signedup, reason, general } = parsed.data;
 
     const lines: string[] = [];
     if (signedup === true) lines.push("<b>Signed up:</b> Yes");
     if (signedup === false) lines.push("<b>Signed up:</b> No");
-    if (reason) lines.push(`<b>What stopped them:</b><br>${reason}`);
-    if (general) lines.push(`<b>Other thoughts:</b><br>${general}`);
+    if (reason)  lines.push(`<b>What stopped them:</b><br>${escapeHtml(reason)}`);
+    if (general) lines.push(`<b>Other thoughts:</b><br>${escapeHtml(general)}`);
 
     if (lines.length === 0) {
       return NextResponse.json({ ok: true }); // nothing to send

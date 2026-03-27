@@ -106,6 +106,7 @@ export function FeedbackWidget() {
                   onChange={(e) => setReason(e.target.value)}
                   placeholder="Missing feature, pricing, unclear value…"
                   rows={3}
+                  maxLength={2000}
                   className="w-full bg-[#0d0d0d] border border-white/8 rounded-lg px-3 py-2 text-xs text-zinc-300 placeholder:text-zinc-700 resize-none outline-none focus:border-blue-500/40 transition-colors"
                 />
               </div>
@@ -119,6 +120,7 @@ export function FeedbackWidget() {
                 onChange={(e) => setGeneral(e.target.value)}
                 placeholder="What could be better, what you liked…"
                 rows={3}
+                maxLength={2000}
                 className="w-full bg-[#0d0d0d] border border-white/8 rounded-lg px-3 py-2 text-xs text-zinc-300 placeholder:text-zinc-700 resize-none outline-none focus:border-blue-500/40 transition-colors"
               />
             </div>

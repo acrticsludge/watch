@@ -8,8 +8,8 @@ import { sendFirstIntegrationEmail } from "@/lib/onboarding/emails";
 
 const CreateSchema = z.object({
   service: z.enum(["github", "vercel", "supabase", "railway", "mongodb"]),
-  account_label: z.string().min(1).max(80),
-  api_key: z.string().min(1),
+  account_label: z.string().min(1).max(80).trim(),
+  api_key: z.string().min(1).trim(),
   "meta.project_ref": z.string().optional(),
   "meta.public_key": z.string().optional(),
   "meta.project_id": z.string().optional(),
@@ -21,6 +21,15 @@ const CreateSchema = z.object({
     }
     if (!data["meta.project_id"]) {
       ctx.addIssue({ code: "custom", message: "Project ID is required", path: ["meta.project_id"] });
+    }
+    if (data["meta.project_id"] && !/^[a-f0-9]{24}$/i.test(data["meta.project_id"])) {
+      ctx.addIssue({ code: "custom", message: "Project ID must be a 24-character hex string", path: ["meta.project_id"] });
+    }
+    if (data["meta.connection_string"]) {
+      const cs = data["meta.connection_string"];
+      if (!cs.startsWith("mongodb+srv://") && !cs.startsWith("mongodb://")) {
+        ctx.addIssue({ code: "custom", message: "Connection string must start with mongodb+srv:// or mongodb://", path: ["meta.connection_string"] });
+      }
     }
   }
 });

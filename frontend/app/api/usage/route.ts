@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+
+const uuidSchema = z.string().uuid();
 
 export async function GET(request: Request) {
   const supabase = await createClient();
@@ -8,6 +11,9 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const integrationId = searchParams.get("integrationId");
+  if (integrationId && !uuidSchema.safeParse(integrationId).success) {
+    return NextResponse.json({ error: "Invalid integrationId" }, { status: 400 });
+  }
 
   let query = supabase
     .from("integrations")

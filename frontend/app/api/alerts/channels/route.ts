@@ -3,11 +3,18 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { checkAlertChannelLimit, TierLimitError } from "@/lib/tiers";
 
-const CreateSchema = z.object({
-  type: z.enum(["email", "slack", "discord", "push"]),
-  config: z.record(z.string(), z.unknown()),
-  enabled: z.boolean().default(true),
+const httpsWebhookConfig = z.object({
+  webhook_url: z.string().url().refine((u) => u.startsWith("https://"), {
+    message: "Webhook URL must use HTTPS",
+  }),
 });
+
+const CreateSchema = z.discriminatedUnion("type", [
+  z.object({ type: z.literal("slack"),   config: httpsWebhookConfig,                                             enabled: z.boolean().default(true) }),
+  z.object({ type: z.literal("discord"), config: httpsWebhookConfig,                                             enabled: z.boolean().default(true) }),
+  z.object({ type: z.literal("email"),   config: z.object({ email: z.string().email().optional() }),             enabled: z.boolean().default(true) }),
+  z.object({ type: z.literal("push"),    config: z.record(z.string(), z.unknown()),                              enabled: z.boolean().default(true) }),
+]);
 
 const UpdateSchema = z.object({
   enabled: z.boolean().optional(),

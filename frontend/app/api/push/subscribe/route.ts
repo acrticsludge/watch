@@ -1,5 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+
+const PushSubSchema = z.object({
+  endpoint: z.string().url(),
+  keys: z.object({
+    p256dh: z.string().min(1),
+    auth:   z.string().min(1),
+  }),
+  expirationTime: z.number().nullable().optional(),
+});
+
+const BodySchema = z.object({
+  subscription: PushSubSchema.nullable(),
+  enabled: z.boolean(),
+});
 
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
@@ -19,11 +34,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Pro feature" }, { status: 403 });
   }
 
-  const body = await req.json();
-  const { subscription: pushSub, enabled } = body as {
-    subscription: PushSubscriptionJSON | null;
-    enabled: boolean;
-  };
+  const parsed = BodySchema.safeParse(await req.json().catch(() => null));
+  if (!parsed.success)
+    return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+  const { subscription: pushSub, enabled } = parsed.data;
 
   if (!enabled || !pushSub) {
     // Disable — remove stored subscription
