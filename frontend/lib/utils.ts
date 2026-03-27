@@ -63,6 +63,7 @@ export const FREE_METRICS: Record<string, string[]> = {
   vercel: ["bandwidth_gb", "build_minutes", "function_invocations"],
   supabase: ["db_size_mb", "storage_mb", "monthly_active_users"],
   railway: ["memory_usage_mb", "cpu_percent"],
+  mongodb: ["storage_mb", "connections"],
 };
 
 export const SERVICE_LABELS: Record<string, string> = {
@@ -70,6 +71,7 @@ export const SERVICE_LABELS: Record<string, string> = {
   vercel: "Vercel",
   supabase: "Supabase",
   railway: "Railway",
+  mongodb: "MongoDB Atlas",
 };
 
 export const METRIC_LABELS: Record<string, string> = {
@@ -111,6 +113,11 @@ export const METRIC_LABELS: Record<string, string> = {
   network_tx_mb: "Network Egress",
   network_rx_mb: "Network Ingress",
   disk_usage_mb: "Disk Usage",
+  // MongoDB Atlas — free
+  connections: "Active Connections",
+  // MongoDB Atlas — pro
+  network_bytes_in_mb: "Network In",
+  network_bytes_out_mb: "Network Out",
 };
 
 export const METRIC_UNITS: Record<string, string> = {
@@ -152,4 +159,9 @@ export const METRIC_UNITS: Record<string, string> = {
   network_tx_mb: "MB",
   network_rx_mb: "MB",
   disk_usage_mb: "MB",
+  // MongoDB Atlas — free
+  connections: "",
+  // MongoDB Atlas — pro
+  network_bytes_in_mb: "MB",
+  network_bytes_out_mb: "MB",
 };

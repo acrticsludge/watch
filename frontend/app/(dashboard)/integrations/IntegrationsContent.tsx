@@ -134,6 +134,41 @@ const SERVICES = [
     ],
     helpText: "Create a token at railway.app/account/tokens",
   },
+  {
+    id: "mongodb",
+    name: "MongoDB Atlas",
+    description: "Track storage and connection usage across Atlas clusters.",
+    caveat: null,
+    wikiUrl: `${WIKI_BASE}/Connecting-MongoDB-Atlas`,
+    fields: [
+      {
+        key: "meta.public_key",
+        label: "Atlas Public Key",
+        type: "text",
+        placeholder: "e.g. abcdefgh",
+      },
+      {
+        key: "api_key",
+        label: "Atlas Private Key",
+        type: "password",
+        placeholder: "Your Atlas API private key",
+      },
+      {
+        key: "meta.project_id",
+        label: "Project ID",
+        type: "text",
+        placeholder: "e.g. 64a1b2c3d4e5f6a7b8c9d0e1",
+      },
+      {
+        key: "account_label",
+        label: "Account label",
+        type: "text",
+        placeholder: "e.g. prod-cluster",
+      },
+    ],
+    helpText:
+      "Atlas → Identity & Access → Applications → API Keys. Grant Project Read Only access. Find your Project ID in the Atlas URL.",
+  },
 ];
 
 export function IntegrationsContent({
@@ -147,14 +182,27 @@ export function IntegrationsContent({
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [editingIntegration, setEditingIntegration] =
     useState<Integration | null>(null);
   const [promotingId, setPromotingId] = useState<string | null>(null);
 
+  function validateFields(svc: (typeof SERVICES)[0], isEdit: boolean): Record<string, string> {
+    const errors: Record<string, string> = {};
+    for (const field of svc.fields) {
+      if (isEdit && field.type === "password") continue; // blank = keep existing
+      if (!formData[field.key]?.trim()) {
+        errors[field.key] = `${field.label} is required.`;
+      }
+    }
+    return errors;
+  }
+
   function openConnect(serviceId: string) {
     setFormData({});
     setError("");
+    setFieldErrors({});
     setOpenDialog(serviceId);
   }
 
@@ -168,13 +216,26 @@ export function IntegrationsContent({
       ...(meta?.project_ref
         ? { "meta.project_ref": String(meta.project_ref) }
         : {}),
+      ...(meta?.public_key
+        ? { "meta.public_key": String(meta.public_key) }
+        : {}),
+      ...(meta?.project_id
+        ? { "meta.project_id": String(meta.project_id) }
+        : {}),
     });
     setError("");
+    setFieldErrors({});
     setEditingIntegration(intg);
   }
 
   async function handleEdit() {
     if (!editingIntegration) return;
+    const svc = SERVICES.find((s) => s.id === editingIntegration.service)!;
+    const errors = validateFields(svc, true);
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
     setError("");
     setSubmitting(true);
     try {
@@ -197,6 +258,12 @@ export function IntegrationsContent({
   }
 
   async function handleConnect(serviceId: string) {
+    const svc = SERVICES.find((s) => s.id === serviceId)!;
+    const errors = validateFields(svc, false);
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
     setError("");
     setSubmitting(true);
     try {
@@ -437,14 +504,16 @@ export function IntegrationsContent({
                           : field.placeholder
                       }
                       value={formData[field.key] ?? ""}
-                      onChange={(e) =>
-                        setFormData((p) => ({
-                          ...p,
-                          [field.key]: e.target.value,
-                        }))
-                      }
+                      onChange={(e) => {
+                        setFormData((p) => ({ ...p, [field.key]: e.target.value }));
+                        if (fieldErrors[field.key]) setFieldErrors((p) => { const n = { ...p }; delete n[field.key]; return n; });
+                      }}
                       autoComplete="off"
+                      className={fieldErrors[field.key] ? "border-red-500/50 focus-visible:ring-red-500/30" : ""}
                     />
+                    {fieldErrors[field.key] && (
+                      <p className="text-xs text-red-400">{fieldErrors[field.key]}</p>
+                    )}
                   </div>
                 ))}
                 {svc?.helpText && (
@@ -503,14 +572,16 @@ export function IntegrationsContent({
                     type={field.type}
                     placeholder={field.placeholder}
                     value={formData[field.key] ?? ""}
-                    onChange={(e) =>
-                      setFormData((p) => ({
-                        ...p,
-                        [field.key]: e.target.value,
-                      }))
-                    }
+                    onChange={(e) => {
+                      setFormData((p) => ({ ...p, [field.key]: e.target.value }));
+                      if (fieldErrors[field.key]) setFieldErrors((p) => { const n = { ...p }; delete n[field.key]; return n; });
+                    }}
                     autoComplete="off"
+                    className={fieldErrors[field.key] ? "border-red-500/50 focus-visible:ring-red-500/30" : ""}
                   />
+                  {fieldErrors[field.key] && (
+                    <p className="text-xs text-red-400">{fieldErrors[field.key]}</p>
+                  )}
                 </div>
               ))}
               {svc.helpText && (

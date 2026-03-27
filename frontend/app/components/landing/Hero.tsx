@@ -37,8 +37,8 @@ export function Hero() {
             </p>
             <p className="text-base text-zinc-400 leading-relaxed mb-10">
               You&apos;re already wearing every hat. Stop spending hours a week
-              manually checking 4 different usage dashboards. Stackwatch watches
-              your GitHub, Vercel, Railway and Supabase limits 24/7, and puts
+              manually checking 5 different usage dashboards. Stackwatch watches
+              your GitHub, Vercel, Railway, Supabase and MongoDB Atlas limits 24/7, and puts
               you back{" "}
               <span className="text-white font-medium">in control</span> before
               anything reaches your users.

@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-export type ServiceType = "github" | "vercel" | "supabase" | "railway";
+export type ServiceType = "github" | "vercel" | "supabase" | "railway" | "mongodb";
 export type IntegrationStatus = "connected" | "error" | "disconnected" | "unsupported";
 export type ChannelType = "email" | "slack" | "discord" | "push";
 

@@ -45,6 +45,16 @@ const services = [
       </svg>
     ),
   },
+  {
+    name: "MongoDB Atlas",
+    description: "Monitor storage and connections per cluster. Get alerted before you hit Atlas free-tier limits and writes start failing.",
+    accent: "group-hover:border-green-700/40",
+    logo: (
+      <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 text-[#47A248]">
+        <path d="M17.193 9.555c-1.264-5.58-4.252-7.414-4.573-8.115-.28-.394-.53-.954-.735-1.44-.036.495-.055.685-.523 1.184-.723.566-4.438 3.682-4.74 10.02-.282 5.912 4.27 9.435 4.888 9.884l.07.05A73.49 73.49 0 0 1 11.91 24h.481c.114-1.032.284-2.056.51-3.07.417-.296.604-.463.85-.693a11.342 11.342 0 0 0 3.639-8.464c.01-.814-.109-1.622-.197-2.218z" />
+      </svg>
+    ),
+  },
 ];
 
 export function ServicesSection() {
@@ -73,7 +83,7 @@ export function ServicesSection() {
         </motion.div>
 
         <motion.div
-          className="grid md:grid-cols-4 gap-4"
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } }}
@@ -83,14 +93,14 @@ export function ServicesSection() {
               key={s.name}
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className={`group bg-[#111] rounded-xl border border-white/6 ${s.accent} p-6 flex items-center gap-4 hover:-translate-y-1 transition-all duration-300`}
+              className={`group bg-[#111] rounded-xl border border-white/6 ${s.accent} p-5 flex flex-col gap-3 hover:-translate-y-1 transition-all duration-300`}
             >
-              <div className="h-10 w-10 rounded-lg bg-white/5 border border-white/6 flex items-center justify-center shrink-0">
+              <div className="h-9 w-9 rounded-lg bg-white/5 border border-white/6 flex items-center justify-center shrink-0">
                 {s.logo}
               </div>
               <div>
                 <h3 className="font-semibold text-white text-sm">{s.name}</h3>
-                <p className="text-zinc-500 text-xs mt-0.5">{s.description}</p>
+                <p className="text-zinc-500 text-xs mt-1 leading-relaxed">{s.description}</p>
               </div>
             </motion.div>
           ))}

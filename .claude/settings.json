@@ -36,7 +36,10 @@
       "Read(//c/Anubhav/**)",
       "Bash(find frontend/app -name *auth* -o -name *callback*)",
       "Bash(find . -name *.sql -o -name schema*)",
-      "Bash(wc -l worker/services/*.ts frontend/app/api/*/*.ts)"
+      "Bash(wc -l worker/services/*.ts frontend/app/api/*/*.ts)",
+      "Bash(find frontend/app/integrations -type f -name *.ts -o -name *.tsx)",
+      "Bash(ls -la \"frontend/app/\\(dashboard\\)/\")",
+      "Bash(ls -la \"frontend/app/\\(dashboard\\)/integrations/\")"
     ]
   }
 }

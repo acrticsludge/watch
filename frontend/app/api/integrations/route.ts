@@ -7,10 +7,21 @@ import { checkIntegrationLimit, TierLimitError } from "@/lib/tiers";
 import { sendFirstIntegrationEmail } from "@/lib/onboarding/emails";
 
 const CreateSchema = z.object({
-  service: z.enum(["github", "vercel", "supabase", "railway"]),
+  service: z.enum(["github", "vercel", "supabase", "railway", "mongodb"]),
   account_label: z.string().min(1).max(80),
   api_key: z.string().min(1),
   "meta.project_ref": z.string().optional(),
+  "meta.public_key": z.string().optional(),
+  "meta.project_id": z.string().optional(),
+}).superRefine((data, ctx) => {
+  if (data.service === "mongodb") {
+    if (!data["meta.public_key"]) {
+      ctx.addIssue({ code: "custom", message: "Atlas Public Key is required", path: ["meta.public_key"] });
+    }
+    if (!data["meta.project_id"]) {
+      ctx.addIssue({ code: "custom", message: "Project ID is required", path: ["meta.project_id"] });
+    }
+  }
 });
 
 export async function GET() {
@@ -59,6 +70,8 @@ export async function POST(request: Request) {
     service,
     account_label,
     "meta.project_ref": projectRef,
+    "meta.public_key": publicKey,
+    "meta.project_id": projectId,
   } = parsed.data;
   const rawApiKey = parsed.data.api_key;
 
@@ -77,7 +90,14 @@ export async function POST(request: Request) {
   const encryptedKey = encrypt(rawApiKey);
   // NEVER log rawApiKey
 
-  const meta = projectRef ? { project_ref: projectRef } : null;
+  const meta =
+    projectRef || publicKey || projectId
+      ? {
+          ...(projectRef ? { project_ref: projectRef } : {}),
+          ...(publicKey ? { public_key: publicKey } : {}),
+          ...(projectId ? { project_id: projectId } : {}),
+        }
+      : null;
 
   // Set sort_order to the current count so new accounts go to the end
   const { count: existingCount } = await supabase

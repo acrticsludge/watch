@@ -9,6 +9,8 @@ const UpdateSchema = z.object({
   api_key: z.string().min(1).optional(),
   status: z.enum(["connected", "error", "disconnected"]).optional(),
   "meta.project_ref": z.string().min(1).optional(),
+  "meta.public_key": z.string().min(1).optional(),
+  "meta.project_id": z.string().min(1).optional(),
 });
 
 export async function PATCH(
@@ -45,6 +47,13 @@ export async function PATCH(
   }
   if (parsed.data["meta.project_ref"]) {
     updates.meta = { project_ref: parsed.data["meta.project_ref"] };
+  }
+  if (parsed.data["meta.public_key"] || parsed.data["meta.project_id"]) {
+    updates.meta = {
+      ...(typeof updates.meta === "object" && updates.meta !== null ? updates.meta : {}),
+      ...(parsed.data["meta.public_key"] ? { public_key: parsed.data["meta.public_key"] } : {}),
+      ...(parsed.data["meta.project_id"] ? { project_id: parsed.data["meta.project_id"] } : {}),
+    };
   }
 
   const serviceClient = createServiceClient();

@@ -3,6 +3,7 @@ import { fetchGitHubUsage } from "./services/github";
 import { fetchVercelUsage } from "./services/vercel";
 import { fetchSupabaseUsage } from "./services/supabase";
 import { fetchRailwayUsage } from "./services/railway";
+import { fetchMongoDBUsage } from "./services/mongodb";
 import { checkThresholds } from "./thresholds";
 import { sendFirstSyncEmail } from "./lib/onboarding/emails";
 
@@ -91,6 +92,9 @@ export async function runPollCycle(): Promise<void> {
             break;
           case "railway":
             metrics = await fetchRailwayUsage(integration, tier);
+            break;
+          case "mongodb":
+            metrics = await fetchMongoDBUsage(integration, tier);
             break;
           default:
             console.warn(`[pollCycle] Unknown service: ${integration.service}`);

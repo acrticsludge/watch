@@ -30,11 +30,16 @@ const SB = (
     <path d="M11.9 1.036c-.015-.986-1.26-1.41-1.874-.637L.764 12.05C.01 13.21-.876 14.11 0 14.11h11.16l.085 8.54c.015.986 1.26 1.41 1.875.637l9.26-11.652c.755-1.162-.13-2.75-1.04-2.75H12.027l-.128-7.849z" />
   </svg>
 );
+const MDB = (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 text-[#47A248]">
+    <path d="M17.193 9.555c-1.264-5.58-4.252-7.414-4.573-8.115-.28-.394-.53-.954-.735-1.44-.036.495-.055.685-.523 1.184-.723.566-4.438 3.682-4.74 10.02-.282 5.912 4.27 9.435 4.888 9.884l.07.05A73.49 73.49 0 0 1 11.91 24h.481c.114-1.032.284-2.056.51-3.07.417-.296.604-.463.85-.693a11.342 11.342 0 0 0 3.639-8.464c.01-.814-.109-1.622-.197-2.218z" />
+  </svg>
+);
 
 // ─── Frame constants ───────────────────────────────────────────────────────────
 const FRAME_W = 560;
 const CHROME_H = 40;
-const CONTENT_H = 422;
+const CONTENT_H = 520;
 const FRAME_H = CHROME_H + CONTENT_H;
 const SCALE = 0.82;
 
@@ -180,8 +185,8 @@ export function HeroDashboardDemo() {
   const alertVisible = phase === 2 || phase === 3;
   const summary =
     phase === 0
-      ? { healthy: 1, warning: 2, critical: 0 }
-      : { healthy: 1, warning: 1, critical: 1 };
+      ? { healthy: 2, warning: 2, critical: 0 }
+      : { healthy: 2, warning: 1, critical: 1 };
 
   const sbBarColor = sbPct >= 80 ? "bg-red-500" : "bg-amber-500";
   const sbBadgeClass =
@@ -224,7 +229,7 @@ export function HeroDashboardDemo() {
                     Dashboard
                   </p>
                   <p className="text-sm text-zinc-500 mt-0.5">
-                    3 services connected
+                    4 services connected
                   </p>
                 </div>
                 <div className="h-8 px-3 rounded-lg bg-white/5 border border-white/6 flex items-center gap-2 shrink-0">
@@ -289,7 +294,7 @@ export function HeroDashboardDemo() {
               </div>
 
               {/* Cards */}
-              <div className="grid grid-cols-3 gap-2.5">
+              <div className="grid grid-cols-2 gap-2.5">
                 <DashCard
                   icon={GH}
                   service="GitHub Actions"
@@ -365,6 +370,16 @@ export function HeroDashboardDemo() {
                     </span>
                   </div>
                 </div>
+
+                <DashCard
+                  icon={MDB}
+                  service="MongoDB Atlas"
+                  label="prod-cluster"
+                  metrics={[
+                    { name: "Storage", pct: 38 },
+                    { name: "Connections", pct: 15 },
+                  ]}
+                />
               </div>
 
               {/* Alert toast */}

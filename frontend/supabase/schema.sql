@@ -10,7 +10,7 @@ create extension if not exists "uuid-ossp";
 create table if not exists integrations (
   id              uuid primary key default uuid_generate_v4(),
   user_id         uuid not null references auth.users(id) on delete cascade,
-  service         text not null check (service in ('github', 'vercel', 'supabase', 'railway')),
+  service         text not null check (service in ('github', 'vercel', 'supabase', 'railway', 'mongodb')),
   account_label   text not null,
   api_key         text not null,           -- AES-256-GCM encrypted blob: iv:authTag:ciphertext
   status          text not null default 'disconnected'
@@ -47,7 +47,7 @@ create index if not exists usage_snapshots_entity_idx on usage_snapshots(integra
 -- ============================================================
 -- ALTER TABLE integrations DROP CONSTRAINT IF EXISTS integrations_service_check;
 -- ALTER TABLE integrations ADD CONSTRAINT integrations_service_check
---   CHECK (service IN ('github', 'vercel', 'supabase', 'railway'));
+--   CHECK (service IN ('github', 'vercel', 'supabase', 'railway', 'mongodb'));
 -- ALTER TABLE integrations DROP CONSTRAINT IF EXISTS integrations_status_check;
 -- ALTER TABLE integrations ADD CONSTRAINT integrations_status_check
 --   CHECK (status IN ('connected', 'error', 'disconnected', 'unsupported'));

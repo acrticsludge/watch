@@ -173,6 +173,7 @@ const DEFAULT_METRICS: Record<string, string[]> = {
   vercel: ["bandwidth_gb", "build_minutes", "function_invocations"],
   supabase: ["db_size_mb", "storage_mb", "monthly_active_users"],
   railway: ["memory_usage_mb", "cpu_percent"],
+  mongodb: ["storage_mb", "connections"],
 };
 
 const PRO_METRICS: Record<string, string[]> = {
@@ -204,6 +205,7 @@ const PRO_METRICS: Record<string, string[]> = {
     "network_rx_mb",
     "disk_usage_mb",
   ],
+  mongodb: ["network_bytes_in_mb", "network_bytes_out_mb"],
 };
 
 export function SettingsContent({
@@ -264,6 +266,9 @@ export function SettingsContent({
   const pushChannel = alertChannels.find((c) => c.type === "push");
   const [pushEnabled, setPushEnabled] = useState(pushChannel?.enabled ?? false);
   const [pushSaving, setPushSaving] = useState(false);
+
+  const [slackError, setSlackError] = useState("");
+  const [discordError, setDiscordError] = useState("");
 
   const [newPassword, setNewPassword] = useState("");
   const [pwSaving, setPwSaving] = useState(false);
@@ -571,23 +576,30 @@ export function SettingsContent({
                 .
               </p>
             ) : (
-              <div className="flex gap-2">
-                <Input
-                  type="url"
-                  placeholder="https://hooks.slack.com/services/..."
-                  value={slackUrl}
-                  onChange={(e) => setSlackUrl(e.target.value)}
-                />
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() =>
-                    saveWebhookChannel("slack", slackUrl, slackEnabled)
-                  }
-                  className="border-white/10 text-zinc-300 hover:bg-white/[0.06] shrink-0"
-                >
-                  Save
-                </Button>
+              <div className="space-y-1.5">
+                <div className="flex gap-2">
+                  <Input
+                    type="url"
+                    placeholder="https://hooks.slack.com/services/..."
+                    value={slackUrl}
+                    onChange={(e) => { setSlackUrl(e.target.value); if (slackError) setSlackError(""); }}
+                    className={slackError ? "border-red-500/50 focus-visible:ring-red-500/30" : ""}
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      if (!slackUrl.trim()) { setSlackError("Webhook URL is required."); return; }
+                      if (!slackUrl.startsWith("https://")) { setSlackError("Must be a valid HTTPS URL."); return; }
+                      setSlackError("");
+                      saveWebhookChannel("slack", slackUrl, slackEnabled);
+                    }}
+                    className="border-white/10 text-zinc-300 hover:bg-white/6 shrink-0"
+                  >
+                    Save
+                  </Button>
+                </div>
+                {slackError && <p className="text-xs text-red-400">{slackError}</p>}
               </div>
             )}
           </div>
@@ -664,23 +676,30 @@ export function SettingsContent({
                 .
               </p>
             ) : (
-              <div className="flex gap-2">
-                <Input
-                  type="url"
-                  placeholder="https://discord.com/api/webhooks/..."
-                  value={discordUrl}
-                  onChange={(e) => setDiscordUrl(e.target.value)}
-                />
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() =>
-                    saveWebhookChannel("discord", discordUrl, discordEnabled)
-                  }
-                  className="border-white/10 text-zinc-300 hover:bg-white/[0.06] shrink-0"
-                >
-                  Save
-                </Button>
+              <div className="space-y-1.5">
+                <div className="flex gap-2">
+                  <Input
+                    type="url"
+                    placeholder="https://discord.com/api/webhooks/..."
+                    value={discordUrl}
+                    onChange={(e) => { setDiscordUrl(e.target.value); if (discordError) setDiscordError(""); }}
+                    className={discordError ? "border-red-500/50 focus-visible:ring-red-500/30" : ""}
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      if (!discordUrl.trim()) { setDiscordError("Webhook URL is required."); return; }
+                      if (!discordUrl.startsWith("https://")) { setDiscordError("Must be a valid HTTPS URL."); return; }
+                      setDiscordError("");
+                      saveWebhookChannel("discord", discordUrl, discordEnabled);
+                    }}
+                    className="border-white/10 text-zinc-300 hover:bg-white/6 shrink-0"
+                  >
+                    Save
+                  </Button>
+                </div>
+                {discordError && <p className="text-xs text-red-400">{discordError}</p>}
               </div>
             )}
           </div>
