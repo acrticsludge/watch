@@ -13,9 +13,9 @@ import { METRIC_LABELS } from "@/lib/utils";
 
 interface Snapshot {
   recorded_at: string;
-  percent_used: number;
+  percent_used: number | null;
   current_value: number;
-  limit_value: number;
+  limit_value: number | null;
 }
 
 interface UsageHistoryChartProps {
@@ -45,7 +45,7 @@ export function UsageHistoryChart({ metricName, snapshots }: UsageHistoryChartPr
 
   const data = snapshots.map((s) => ({
     ts: s.recorded_at,          // raw ISO — unique per point, used as dataKey
-    pct: Math.round(s.percent_used),
+    pct: Math.round(s.percent_used ?? 0),
     value: s.current_value,
     limit: s.limit_value,
   }));
