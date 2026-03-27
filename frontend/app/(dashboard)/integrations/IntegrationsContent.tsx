@@ -200,7 +200,7 @@ export function IntegrationsContent({
     const errors: Record<string, string> = {};
     for (const field of svc.fields) {
       if (isEdit && field.type === "password") continue; // blank = keep existing
-      if (field.optional) continue; // optional fields are never required
+      if ((field as { optional?: boolean }).optional) continue; // optional fields are never required
       if (!formData[field.key]?.trim()) {
         errors[field.key] = `${field.label} is required.`;
       }
