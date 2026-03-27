@@ -180,38 +180,64 @@ export async function fetchMongoDBUsage(
     return [];
   }
 
-  // Prefer primary nodes; fall back to the first available process
-  const primaryProcesses = processes.filter((p) => p.typeName === "REPLICA_PRIMARY");
-  const aggregateProcess = primaryProcesses[0] ?? processes[0];
+  // Sort processes: prefer explicit REPLICA_PRIMARY, then nodes whose hostname
+  // ends with "-00" (Atlas typically assigns primary to the first replica member).
+  // This avoids accidentally querying a secondary that may 404 on measurements.
+  const sortedProcesses = [...processes].sort((a, b) => {
+    const score = (p: typeof processes[0]) =>
+      p.typeName === "REPLICA_PRIMARY" ? 2 : p.id.includes("-00.") ? 1 : 0;
+    return score(b) - score(a);
+  });
+  const aggregateProcess = sortedProcesses[0];
 
   const metrics: UsageMetric[] = [];
   const primaryLimits = clusterLimitsMap.get(clusters[0]?.name ?? "") ?? DEFAULT_LIMITS;
 
   // ── 3. Fetch aggregate measurements (account-level) ──────────────────────
+  // M0/M2/M5 shared clusters only support coarser granularity (P1D).
+  // Try PT1H first for better resolution; fall back to P1D if 404.
   const measurementNames = [
     "DB_DATA_SIZE_TOTAL",
     "CONNECTIONS",
     ...(isPro ? ["NETWORK_BYTES_IN", "NETWORK_BYTES_OUT"] : []),
   ];
-  const measParams = [
-    "granularity=PT1H",
-    "period=PT2H",
-    ...measurementNames.map((m) => `m=${m}`),
-  ].join("&");
 
-  const measRes = await digestFetch(
-    `${ATLAS_BASE}/groups/${projectId}/processes/${aggregateProcess.id}/measurements?${measParams}`,
-    publicKey,
-    privateKey
-  );
+  const GRAN_CONFIGS = [
+    { granularity: "PT1H", period: "PT2H" },
+    { granularity: "P1D",  period: "P7D"  },
+  ] as const;
 
-  if (!measRes.ok) {
-    console.warn(`[mongodb] Measurements fetch failed: ${measRes.status} (process ${aggregateProcess.id})`);
-    return [];
+  let measurements: AtlasMeasurement[] | null = null;
+
+  for (const cfg of GRAN_CONFIGS) {
+    const measParams = [
+      `granularity=${cfg.granularity}`,
+      `period=${cfg.period}`,
+      ...measurementNames.map((m) => `m=${m}`),
+    ].join("&");
+
+    const measRes = await digestFetch(
+      `${ATLAS_BASE}/groups/${projectId}/processes/${aggregateProcess.id}/measurements?${measParams}`,
+      publicKey,
+      privateKey
+    );
+
+    if (measRes.ok) {
+      const measData = await measRes.json() as { measurements: AtlasMeasurement[] };
+      measurements = measData.measurements ?? [];
+      break;
+    }
+
+    console.warn(
+      `[mongodb] Measurements ${measRes.status} for process ${aggregateProcess.id} ` +
+      `at granularity=${cfg.granularity}${cfg.granularity === "PT1H" ? " — retrying with P1D" : ""}`
+    );
   }
 
-  const measData = await measRes.json() as { measurements: AtlasMeasurement[] };
-  const measurements = measData.measurements ?? [];
+  if (!measurements) {
+    console.warn(`[mongodb] No measurements returned for project ${projectId} (integration ${integration.id})`);
+    return [];
+  }
 
   // ── FREE: Storage ────────────────────────────────────────────────────────
   const dataSizeBytes = latestValue(measurements, "DB_DATA_SIZE_TOTAL");
