@@ -23,14 +23,21 @@ export async function POST(req: NextRequest) {
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  // Gate to pro
+  // Gate to pro — match status check with getSubscription() (active, trialing, past_due)
   const { data: subscription } = await supabase
     .from("subscriptions")
-    .select("tier")
+    .select("tier, status, past_due_since")
     .eq("user_id", user.id)
-    .eq("status", "active")
+    .in("status", ["active", "trialing", "past_due"])
     .maybeSingle();
-  if (!subscription || subscription.tier === "free") {
+
+  let subTier = subscription?.tier ?? "free";
+  if (subscription?.status === "past_due") {
+    const gracePeriodMs = 3 * 24 * 60 * 60 * 1000;
+    const since = subscription.past_due_since ? new Date(subscription.past_due_since as string).getTime() : 0;
+    if (Date.now() - since > gracePeriodMs) subTier = "free";
+  }
+  if (subTier === "free") {
     return NextResponse.json({ error: "Pro feature" }, { status: 403 });
   }
 

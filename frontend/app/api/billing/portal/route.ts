@@ -17,7 +17,7 @@ export async function GET() {
     .from("subscriptions")
     .select("dodo_customer_id")
     .eq("user_id", user.id)
-    .eq("status", "active")
+    .in("status", ["active", "trialing", "past_due"])
     .maybeSingle();
 
   if (!subscription?.dodo_customer_id) {

@@ -35,12 +35,22 @@ export async function GET(req: NextRequest) {
 
   const { data: subscription } = await supabase
     .from("subscriptions")
-    .select("tier")
+    .select("tier, status, past_due_since")
     .eq("user_id", user.id)
-    .eq("status", "active")
+    .in("status", ["active", "trialing", "past_due"])
     .maybeSingle();
 
-  const tier = (subscription?.tier as keyof typeof TIER_LIMITS) ?? "free";
+  // Enforce 3-day grace period for past_due subscriptions
+  let tier: keyof typeof TIER_LIMITS = "free";
+  if (subscription) {
+    if (subscription.status === "past_due") {
+      const gracePeriodMs = 3 * 24 * 60 * 60 * 1000;
+      const since = subscription.past_due_since ? new Date(subscription.past_due_since as string).getTime() : 0;
+      if (Date.now() - since <= gracePeriodMs) tier = subscription.tier as keyof typeof TIER_LIMITS;
+    } else {
+      tier = subscription.tier as keyof typeof TIER_LIMITS;
+    }
+  }
   if (tier === "free") {
     return NextResponse.json({ error: "Pro feature" }, { status: 403 });
   }
