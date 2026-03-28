@@ -298,7 +298,7 @@ function MongoDBDatabaseAccordion({
               )}
               {isExpanded && dbColls.length === 0 && (
                 <div className="border-t border-white/6 px-3 py-2 bg-white/[0.02]">
-                  <p className="text-[11px] text-zinc-700">No collection data</p>
+                  <p className="text-[11px] text-zinc-700">No collection data — grant <span className="text-zinc-500">readAnyDatabase</span> role in Atlas to enable</p>
                 </div>
               )}
             </div>

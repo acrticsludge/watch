@@ -104,12 +104,11 @@ If you're on an M0/free-tier cluster, or you want per-database and per-collectio
 1. In Atlas, go to **Database Access** → **Add New Database User**
 2. Choose **Password** authentication
 3. Set a username (e.g. `stackwatch-monitor`) and a strong password
-4. Leave **Built-In Role** unselected. Instead, expand **Specific Privileges** and add one entry:
-   - **Privilege:** `clusterMonitor`
-   - **Database:** `admin`
-   - **Collection:** *(leave blank)*
+4. Leave **Built-In Role** unselected. Instead, expand **Specific Privileges** and add two entries:
+   - **Privilege:** `clusterMonitor` — **Database:** `admin` — **Collection:** *(leave blank)*
+   - **Privilege:** `readAnyDatabase` — **Database:** *(leave blank)* — **Collection:** *(leave blank)*
 
-   > **Why not "Only read any database"?** That role only covers `dbStats`/`collStats`. `serverStatus`, `replSetGetStatus`, and `currentOp` (used for memory, replication lag, and slow queries) require `clusterMonitor` on the `admin` database. "Atlas admin" works but is far too permissive — never use it for monitoring.
+   > **Why both?** `clusterMonitor` grants access to monitoring commands (`serverStatus`, `replSetGetStatus`, `currentOp`) but does **not** include `listCollections` on individual databases. `readAnyDatabase` adds the ability to list and inspect collections — without it, the per-collection breakdown in the dashboard will show "No collection data". Together they give Stackwatch everything it needs while staying read-only.
 5. Click **Add User**
 
 ### Get your connection string
@@ -150,7 +149,10 @@ The next poll cycle will use the direct connection path. The "M0: add a connecti
 - Follow Step 4 above to add a connection string and get real values
 
 ### Dashboard shows no data after adding connection string
-- Verify the DB user has `clusterMonitor` granted via **Specific Privileges** (Database: `admin`, Collection: blank). The Atlas built-in role dropdown only shows 3 options and `clusterMonitor` is not among them — it must be added as a specific privilege. "Only read any database" lacks `serverStatus`/`currentOp`; "Atlas admin" is overly permissive.
+- Verify the DB user has both `clusterMonitor` (Database: `admin`) and `readAnyDatabase` granted via **Specific Privileges**. The Atlas built-in role dropdown only shows 3 options and neither privilege is among them — they must be added as specific privileges. "Atlas admin" works but is overly permissive — never use it for monitoring.
+
+### Per-collection breakdown shows "No collection data"
+- The DB user is missing the `readAnyDatabase` privilege. `clusterMonitor` alone does **not** grant `listCollections` on individual databases. Add `readAnyDatabase` as a specific privilege (Database and Collection both blank) and wait for the next poll cycle.
 - Check that the worker's IP is in the Atlas network access list (or set to `0.0.0.0/0`)
 - Confirm the connection string format is correct (use SRV format: `mongodb+srv://...`)
 
@@ -176,7 +178,7 @@ The next poll cycle will use the direct connection path. The "M0: add a connecti
 
 - Your **Atlas Private Key** is encrypted with AES-256-GCM before being stored in the database
 - Your **Connection String** (if provided) is also encrypted with AES-256-GCM — only the encrypted value is stored, the plaintext is never persisted
-- The `clusterMonitor` privilege (on the `admin` database) grants **zero read/write access to your collection data** — Stackwatch only runs monitoring commands (`dbStats`, `serverStatus`, `replSetGetStatus`, `currentOp`)
+- `clusterMonitor` (on `admin`) grants monitoring commands only (`dbStats`, `serverStatus`, `replSetGetStatus`, `currentOp`). `readAnyDatabase` adds read-only access for `listCollections` and `collStats` — Stackwatch never writes to your databases
 - Stackwatch uses the Admin API key **read-only** — it never creates, modifies, or deletes any Atlas resource
 - Row-level security ensures your credentials are only accessible to your own account
 - To revoke access: delete the integration in Stackwatch, delete the API key in Atlas, and remove the DB user created in Step 4
