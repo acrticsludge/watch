@@ -174,22 +174,23 @@ async function fetchViaDirectConnection(
 
         // Per-collection breakdown
         try {
-          const collections = await db.listCollections().toArray();
+          const collections = await db.listCollections({ type: "collection" }).toArray();
           for (const coll of collections) {
+            let collStorageMB = 0;
             try {
               const cs = await db.command({ collStats: coll.name }) as { storageSize?: number };
-              const collStorageMB = Math.round(((cs.storageSize ?? 0) / 1_000_000) * 100) / 100;
-              metrics.push({
-                metricName: "collection_size_mb",
-                currentValue: collStorageMB,
-                limitValue: null,
-                percentUsed: null,
-                entityId: `${dbInfo.name}/${coll.name}`,
-                entityLabel: coll.name,
-              });
+              collStorageMB = Math.round(((cs.storageSize ?? 0) / 1_000_000) * 100) / 100;
             } catch {
-              // Skip individual collections that fail
+              // collStats unavailable (restricted permissions) — record with 0 MB
             }
+            metrics.push({
+              metricName: "collection_size_mb",
+              currentValue: collStorageMB,
+              limitValue: null,
+              percentUsed: null,
+              entityId: `${dbInfo.name}/${coll.name}`,
+              entityLabel: coll.name,
+            });
           }
         } catch {
           // Skip collection listing if unavailable

@@ -101,27 +101,44 @@ export async function runPollCycle(): Promise<void> {
             return;
         }
 
-        // Write usage snapshots
+        // Write usage snapshots — split aggregate and entity inserts so one
+        // failing (e.g. NOT NULL constraint on limit_value) doesn't block the other.
         if (metrics.length > 0) {
-          const { error: insertError } = await supabase
-            .from("usage_snapshots")
-            .insert(
-              metrics.map((m) => ({
-                integration_id: integration.id,
-                metric_name: m.metricName,
-                current_value: m.currentValue,
-                limit_value: m.limitValue,
-                percent_used: m.percentUsed,
-                entity_id: m.entityId ?? null,
-                entity_label: m.entityLabel ?? null,
-              }))
-            );
+          const aggregateMetrics = metrics.filter((m) => !m.entityId);
+          const entityMetrics = metrics.filter((m) => !!m.entityId);
 
-          if (insertError) {
-            console.error(
-              `[pollCycle] Failed to insert snapshots for ${integration.id}:`,
-              insertError.message
-            );
+          const toRow = (m: UsageMetric) => ({
+            integration_id: integration.id,
+            metric_name: m.metricName,
+            current_value: m.currentValue,
+            limit_value: m.limitValue,
+            percent_used: m.percentUsed,
+            entity_id: m.entityId ?? null,
+            entity_label: m.entityLabel ?? null,
+          });
+
+          if (aggregateMetrics.length > 0) {
+            const { error: aggError } = await supabase
+              .from("usage_snapshots")
+              .insert(aggregateMetrics.map(toRow));
+            if (aggError) {
+              console.error(
+                `[pollCycle] Failed to insert aggregate snapshots for ${integration.id}:`,
+                aggError.message
+              );
+            }
+          }
+
+          if (entityMetrics.length > 0) {
+            const { error: entityError } = await supabase
+              .from("usage_snapshots")
+              .insert(entityMetrics.map(toRow));
+            if (entityError) {
+              console.error(
+                `[pollCycle] Failed to insert entity snapshots for ${integration.id}:`,
+                entityError.message
+              );
+            }
           }
 
           // Update last_synced_at and set status to connected
@@ -136,7 +153,6 @@ export async function runPollCycle(): Promise<void> {
           }
 
           // Check thresholds only on aggregate (non-entity) metrics to avoid alert spam
-          const aggregateMetrics = metrics.filter((m) => !m.entityId);
           await checkThresholds(integration.user_id, integration.id, aggregateMetrics);
         } else {
           // Service connected successfully but returned no data (e.g. plan doesn't expose billing API).
