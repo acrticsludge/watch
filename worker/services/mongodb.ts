@@ -174,8 +174,12 @@ async function fetchViaDirectConnection(
 
         // Per-collection breakdown
         try {
-          const collections = await db.listCollections({ type: "collection" }).toArray();
-          for (const coll of collections) {
+          const collections = await db.listCollections().toArray();
+          const userCollections = collections.filter((c) => c.type !== "view");
+          console.log(
+            `[mongodb] DB "${dbInfo.name}": ${collections.length} total, ${userCollections.length} non-view collections`
+          );
+          for (const coll of userCollections) {
             let collStorageMB = 0;
             try {
               const cs = await db.command({ collStats: coll.name }) as { storageSize?: number };
@@ -192,8 +196,11 @@ async function fetchViaDirectConnection(
               entityLabel: coll.name,
             });
           }
-        } catch {
-          // Skip collection listing if unavailable
+        } catch (err) {
+          console.error(
+            `[mongodb] listCollections failed for DB "${dbInfo.name}":`,
+            err instanceof Error ? err.message : String(err)
+          );
         }
       }
     }
