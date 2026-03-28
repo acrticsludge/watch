@@ -9,8 +9,8 @@ const securityHeaders = [
     key: "Content-Security-Policy-Report-Only",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.clarity.ms",
-      "connect-src 'self' https://clarity.microsoft.com https://www.google-analytics.com",
+      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.clarity.ms https://us.i.posthog.com",
+      "connect-src 'self' https://clarity.microsoft.com https://www.google-analytics.com https://us.i.posthog.com https://app.posthog.com",
       "img-src 'self' data: https://avatars.githubusercontent.com",
       "font-src 'self'",
       "style-src 'self' 'unsafe-inline'",

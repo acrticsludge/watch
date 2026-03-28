@@ -10,6 +10,9 @@ import { Toaster } from "@/app/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
 import Script from "next/script";
 import { FeedbackWidget } from "@/app/components/FeedbackWidget";
+import { PostHogProvider } from "@/app/components/PostHogProvider";
+import { PostHogPageView } from "@/app/components/PostHogPageView";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
@@ -80,10 +83,15 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
-        {children}
-        <Toaster />
-        <Analytics />
-        <FeedbackWidget />
+        <PostHogProvider>
+          {children}
+          <Toaster />
+          <Analytics />
+          <FeedbackWidget />
+          <Suspense fallback={null}>
+            <PostHogPageView />
+          </Suspense>
+        </PostHogProvider>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-C7GBHPZLYJ"
           strategy="afterInteractive"
