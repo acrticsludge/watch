@@ -12,6 +12,25 @@ const FeedbackSchema = z.object({
   general:  z.string().max(2000).optional(),
 });
 
+// ── In-memory IP rate limiter ───────────────────────────────────────────────
+const WINDOW_MS = 60 * 60 * 1000; // 1 hour
+const MAX_PER_WINDOW = 3;
+
+const hits = new Map<string, { count: number; resetAt: number }>();
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = hits.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    hits.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+    return false;
+  }
+
+  entry.count++;
+  return entry.count > MAX_PER_WINDOW;
+}
+
 function escapeHtml(s: string) {
   return s
     .replace(/&/g, "&amp;")
@@ -23,6 +42,11 @@ function escapeHtml(s: string) {
 
 export async function POST(req: Request) {
   try {
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+    if (isRateLimited(ip)) {
+      return NextResponse.json({ ok: true });
+    }
+
     const body = await req.json().catch(() => null);
     const parsed = FeedbackSchema.safeParse(body);
     if (!parsed.success) return NextResponse.json({ ok: true }); // best-effort; don't leak errors
