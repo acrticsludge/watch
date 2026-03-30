@@ -6,40 +6,44 @@ import { motion, useInView } from "framer-motion";
 const channels = [
   {
     name: "Email",
-    description: "Structured alert email with service, metric, current value, limit, and % used. Lands in your inbox before the build queue backs up.",
+    description:
+      "Structured alert email with service, metric, current value, limit, and % used. Lands in your inbox before the build queue backs up.",
     iconBg: "bg-blue-500/10 border-blue-500/20",
     icon: (
-      <svg className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg className="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
       </svg>
     ),
   },
   {
     name: "Slack",
-    description: "Posts a formatted message to any channel via incoming webhook. Paste your webhook URL in Settings — no Slack app approval required.",
+    description:
+      "Posts a formatted message to any channel via incoming webhook. Paste your webhook URL in Settings — no Slack app approval required.",
     iconBg: "bg-[#4A154B]/20 border-[#4A154B]/30",
     icon: (
-      <svg className="h-5 w-5 text-[#E01E5A]" viewBox="0 0 24 24" fill="currentColor">
+      <svg className="h-4 w-4 text-[#E01E5A]" viewBox="0 0 24 24" fill="currentColor">
         <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z" />
       </svg>
     ),
   },
   {
     name: "Discord",
-    description: "Same structured alert via Discord webhook. Works with any server and channel — just paste the webhook URL and save.",
+    description:
+      "Same structured alert via Discord webhook. Works with any server and channel — just paste the webhook URL and save.",
     iconBg: "bg-[#5865F2]/10 border-[#5865F2]/20",
     icon: (
-      <svg className="h-5 w-5 text-[#5865F2]" viewBox="0 0 24 24" fill="currentColor">
+      <svg className="h-4 w-4 text-[#5865F2]" viewBox="0 0 24 24" fill="currentColor">
         <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057.099 18.08.111 18.1.12 18.12a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
       </svg>
     ),
   },
   {
     name: "Browser Push",
-    description: "Native OS notifications even when the dashboard isn't open. Enable once in Settings — no app install needed.",
+    description:
+      "Native OS notifications even when the dashboard isn't open. Enable once in Settings — no app install needed.",
     iconBg: "bg-violet-500/10 border-violet-500/20",
     icon: (
-      <svg className="h-5 w-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg className="h-4 w-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
       </svg>
     ),
@@ -51,44 +55,37 @@ export function AlertChannelsSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="features" className="py-24 bg-[#0a0a0a] border-t border-white/4" ref={ref}>
-      <div className="max-w-5xl mx-auto px-6">
+    <section id="features" className="py-14 bg-[#0a0a0a] border-t border-[#161616]" ref={ref}>
+      <div className="max-w-2xl mx-auto px-6">
         <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
+          className="text-center mb-8"
+          initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         >
-          <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest mb-3">
-            Notifications
+          <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.18em] mb-3">
+            Alert channels
           </p>
-          <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">
+          <h2 className="text-xl font-semibold text-white tracking-tight">
             Alerts where you already work
           </h2>
-          <p className="text-zinc-500 text-base max-w-md mx-auto">
-            Every alert includes the service name, metric, current usage, limit, and percentage — delivered to whichever channel you're already watching.
-          </p>
         </motion.div>
 
         <motion.div
-          className="grid sm:grid-cols-2 md:grid-cols-4 gap-3"
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } }}
+          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4"
+          initial={{ opacity: 0, y: 16 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
         >
           {channels.map((c) => (
-            <motion.div
-              key={c.name}
-              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="group bg-[#111] border border-white/6 rounded-xl p-5 hover:border-white/10 hover:-translate-y-1 transition-all duration-300 cursor-default"
-            >
-              <div className={`h-9 w-9 rounded-lg border flex items-center justify-center mb-3 ${c.iconBg}`}>
+            <div key={c.name} className="flex items-center gap-2.5">
+              <div
+                className={`h-7 w-7 rounded-md border shrink-0 flex items-center justify-center ${c.iconBg}`}
+              >
                 {c.icon}
               </div>
-              <h3 className="font-semibold text-white mb-1 text-sm">{c.name}</h3>
-              <p className="text-xs text-zinc-500 leading-relaxed">{c.description}</p>
-            </motion.div>
+              <span className="text-sm text-zinc-400">{c.name}</span>
+            </div>
           ))}
         </motion.div>
       </div>

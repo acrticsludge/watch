@@ -44,7 +44,7 @@ const services = [
 
 export function ServicesStrip() {
   return (
-    <div className="border-b border-white/4 bg-[#0a0a0a] py-3.5">
+    <div className="border-b border-[#161616] bg-[#0a0a0a] py-3.5">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2.5">
           <span className="text-[10px] font-mono text-zinc-700 uppercase tracking-[0.15em] shrink-0">

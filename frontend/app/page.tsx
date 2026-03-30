@@ -2,18 +2,13 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { LandingNav } from "@/app/components/landing/LandingNav";
 import { Hero } from "@/app/components/landing/Hero";
-import { ProblemSection } from "@/app/components/landing/ProblemSection";
 import { HowItWorks } from "@/app/components/landing/HowItWorks";
-import { ServicesSection } from "@/app/components/landing/ServicesSection";
-import { DemoWidget } from "@/app/components/landing/DemoWidget";
 import { AlertChannelsSection } from "@/app/components/landing/AlertChannelsSection";
-import { PricingSection, type PlanState } from "@/app/components/landing/PricingSection";
 import { CTASection } from "@/app/components/landing/CTASection";
-import { FAQSection } from "@/app/components/landing/FAQSection";
 import { LandingFooter } from "@/app/components/landing/LandingFooter";
 import { ServicesStrip } from "@/app/components/landing/ServicesStrip";
+import { HeroDemoLoader } from "@/app/components/landing/HeroDemoLoader";
 import { createClient } from "@/lib/supabase/server";
-import { getSession } from "@/lib/queries/user";
 
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
@@ -189,35 +184,6 @@ async function DynamicNav() {
   return <LandingNav isLoggedIn={!!user} />;
 }
 
-async function DynamicPricingSection() {
-  const session = await getSession();
-  let planState: PlanState = "none";
-
-  if (session) {
-    const supabase = await createClient();
-    const { data: sub } = await supabase
-      .from("subscriptions")
-      .select("tier, status, cancel_at_period_end")
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (sub) {
-      if (sub.status === "trialing") {
-        planState = "trialing";
-      } else if (sub.status === "active" && (sub.tier === "pro" || sub.tier === "team")) {
-        planState = sub.cancel_at_period_end ? "active_cancelling" : "active";
-      } else if (sub.status === "past_due") {
-        planState = "past_due";
-      } else {
-        planState = "used_trial";
-      }
-    }
-  }
-
-  return <PricingSection userEmail={session?.user?.email} planState={planState} />;
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function LandingPage() {
@@ -233,42 +199,19 @@ export default function LandingPage() {
       </Suspense>
 
       <main>
-        {/* All sections below are fully static — rendered at build time */}
         <Hero />
         <ServicesStrip />
-        <ProblemSection />
-        <HowItWorks />
-        <ServicesSection />
 
-        {/* Demo section */}
-        <section className="py-24 bg-[#0a0a0a] border-t border-white/4">
-          <div className="max-w-5xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest mb-3">
-                Live preview
-              </p>
-              <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">
-                See it in action
-              </h2>
-              <p className="text-zinc-500 text-base max-w-xl mx-auto">
-                This is what your dashboard looks like. Explore freely — no
-                strings attached.
-              </p>
-            </div>
-            <DemoWidget />
+        {/* Demo video */}
+        <section className="py-16 bg-[#0a0a0a] border-t border-[#161616]">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6">
+            <HeroDemoLoader />
           </div>
         </section>
 
+        <HowItWorks />
         <AlertChannelsSection />
-
         <CTASection />
-
-        {/* Pricing: streams in with isPro/userEmail; static fallback shows immediately */}
-        <Suspense fallback={<PricingSection />}>
-          <DynamicPricingSection />
-        </Suspense>
-
-        <FAQSection />
       </main>
 
       <LandingFooter />

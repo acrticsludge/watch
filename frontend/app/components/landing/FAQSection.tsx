@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
 
 const FAQS = [
   {
@@ -42,30 +43,27 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section className="py-24 bg-[#0a0a0a] border-t border-white/4">
+    <section className="py-24 bg-[#0a0a0a] border-t border-[#161616]">
       <div className="max-w-2xl mx-auto px-6">
         {/* Header */}
-        <div className="text-center mb-14">
-          <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest mb-3">
+        <div className="text-center mb-12">
+          <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.18em] mb-3">
             FAQ
           </p>
-          <h2 className="text-2xl font-bold text-white tracking-tight">
+          <h2 className="text-2xl font-semibold text-white tracking-tight">
             Common questions
           </h2>
         </div>
 
-        {/* Accordion */}
-        <div className="space-y-1">
+        {/* Single-container accordion */}
+        <div className="border border-[#1a1a1a] rounded-lg overflow-hidden divide-y divide-[#1a1a1a]">
           {FAQS.map((item, i) => {
             const isOpen = open === i;
             return (
-              <div
-                key={i}
-                className="border border-white/[0.06] rounded-xl overflow-hidden"
-              >
+              <div key={i}>
                 <button
                   onClick={() => setOpen(isOpen ? null : i)}
-                  className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left text-sm font-medium text-zinc-200 hover:text-white transition-colors bg-transparent"
+                  className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/[0.02] transition-colors duration-150"
                 >
                   <span>{item.q}</span>
                   <svg
@@ -77,28 +75,40 @@ export function FAQSection() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
+                      strokeWidth={1.5}
                       d="M19 9l-7 7-7-7"
                     />
                   </svg>
                 </button>
-                {isOpen && (
-                  <div className="px-5 pb-5 text-sm text-zinc-500 leading-relaxed border-t border-white/[0.05]">
-                    <p className="pt-4">{item.a}</p>
-                  </div>
-                )}
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="content"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2, ease: [0.04, 0.62, 0.23, 0.98] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-5 pb-5 pt-4 text-sm text-zinc-500 leading-relaxed border-t border-[#1a1a1a]">
+                        {item.a}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })}
         </div>
 
         {/* Inline CTA */}
-        <div className="mt-14 text-center">
+        <div className="mt-12 text-center">
           <p className="text-sm text-zinc-600 mb-4">
             Still have questions?{" "}
             <a
               href="mailto:anubhavrai100@gmail.com"
-              className="text-zinc-400 underline underline-offset-2 hover:text-white transition-colors"
+              className="text-zinc-400 underline underline-offset-2 hover:text-white transition-colors duration-150"
             >
               Send us a note
             </a>{" "}
@@ -106,7 +116,7 @@ export function FAQSection() {
           </p>
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 h-10 px-6 rounded-lg bg-white text-zinc-900 text-sm font-medium hover:bg-zinc-100 transition-colors"
+            className="inline-flex items-center gap-2 h-10 px-6 rounded bg-white text-zinc-900 text-sm font-medium hover:bg-zinc-100 transition-colors duration-150"
           >
             Get started for free →
           </Link>
