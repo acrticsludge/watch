@@ -20,6 +20,7 @@ export function LandingFooter() {
             { href: "/login", label: "Log in" },
             { href: "/signup", label: "Sign up" },
             { href: "/pricing", label: "Pricing" },
+            { href: "/faq", label: "FAQ" },
             { href: "/privacy", label: "Privacy" },
             { href: "/terms", label: "Terms" },
           ].map((link) => (
