@@ -38,8 +38,9 @@ export async function runPollCycle(): Promise<void> {
   const userIds = [...new Set(integrations.map((i) => i.user_id))];
   const { data: subscriptions } = await supabase
     .from("subscriptions")
-    .select("user_id, tier")
-    .in("user_id", userIds);
+    .select("user_id, tier, status")
+    .in("user_id", userIds)
+    .in("status", ["active", "trialing", "past_due"]);
 
   const tierMap = new Map<string, string>();
   for (const sub of subscriptions ?? []) {

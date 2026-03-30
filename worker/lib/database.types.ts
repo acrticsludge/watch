@@ -152,7 +152,7 @@ export type Database = {
           id: string;
           user_id: string;
           tier: "free" | "pro" | "team";
-          status: "active" | "canceled" | "past_due";
+          status: "active" | "trialing" | "past_due" | "cancelled" | "canceled";
           created_at: string;
           updated_at: string;
         };
@@ -160,7 +160,7 @@ export type Database = {
           id?: string;
           user_id: string;
           tier?: "free" | "pro" | "team";
-          status?: "active" | "canceled" | "past_due";
+          status?: "active" | "trialing" | "past_due" | "cancelled" | "canceled";
           created_at?: string;
           updated_at?: string;
         };
@@ -168,7 +168,7 @@ export type Database = {
           id?: string;
           user_id?: string;
           tier?: "free" | "pro" | "team";
-          status?: "active" | "canceled" | "past_due";
+          status?: "active" | "trialing" | "past_due" | "cancelled" | "canceled";
           created_at?: string;
           updated_at?: string;
         };
