@@ -71,10 +71,10 @@ function DashCard({
     p >= 80 ? "bg-red-500" : p >= 60 ? "bg-amber-500" : "bg-blue-500";
 
   return (
-    <div className="bg-[#111] border border-white/6 rounded-xl p-4 flex flex-col gap-3">
+    <div className="bg-[#0d0d0d] border border-[#1f1f1f] rounded-lg p-4 flex flex-col gap-3">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-2">
-          <div className="h-7 w-7 rounded-lg bg-white/5 border border-white/6 flex items-center justify-center shrink-0">
+          <div className="h-6 w-6 rounded-md bg-[#141414] border border-[#1f1f1f] flex items-center justify-center shrink-0">
             {icon}
           </div>
           <div>
@@ -110,7 +110,7 @@ function DashCard({
           </div>
         ))}
       </div>
-      <div className="pt-2 border-t border-white/4 flex items-center justify-between">
+      <div className="pt-2 border-t border-[#1f1f1f] flex items-center justify-between">
         <span className="text-[10px] text-zinc-700">Synced 2m ago</span>
         <span className="flex items-center gap-1 text-[10px] text-green-500">
           <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
@@ -131,17 +131,17 @@ function ChromeFrame({
 }) {
   return (
     <div
-      className="bg-[#0d0d0d] border border-white/8 rounded-2xl overflow-hidden"
+      className="bg-[#0d0d0d] border border-[#1f1f1f] rounded-xl overflow-hidden"
       style={{ width: FRAME_W }}
     >
-      <div className="h-10 bg-[#161616] border-b border-white/6 flex items-center px-4 gap-3 shrink-0">
+      <div className="h-10 bg-[#111] border-b border-[#1f1f1f] flex items-center px-4 gap-3 shrink-0">
         <div className="flex items-center gap-1.5">
           <div className="h-3 w-3 rounded-full bg-[#ff5f57]" />
           <div className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
           <div className="h-3 w-3 rounded-full bg-[#28c940]" />
         </div>
         <div className="flex-1 mx-2">
-          <div className="h-6 bg-[#0a0a0a] border border-white/6 rounded-md flex items-center gap-2 px-3">
+          <div className="h-6 bg-[#0a0a0a] border border-[#1f1f1f] rounded flex items-center gap-2 px-3">
             <svg
               className="h-3 w-3 text-zinc-700 shrink-0"
               fill="none"
@@ -200,7 +200,7 @@ export function HeroDashboardDemo() {
       style={{ opacity: phase === 3 ? 0 : 1, transition: "opacity 0.4s ease" }}
     >
       <div
-        className="relative overflow-hidden rounded-2xl shadow-2xl shadow-black/60"
+        className="relative overflow-hidden rounded-xl shadow-xl shadow-black/40"
         style={{ width: FRAME_W * SCALE, height: FRAME_H * SCALE }}
       >
         <div
@@ -225,14 +225,14 @@ export function HeroDashboardDemo() {
               {/* Header */}
               <div className="flex items-start justify-between mb-5">
                 <div>
-                  <p className="text-2xl font-bold text-white tracking-tight">
+                  <p className="text-xl font-semibold text-white tracking-tight">
                     Dashboard
                   </p>
                   <p className="text-sm text-zinc-500 mt-0.5">
                     4 services connected
                   </p>
                 </div>
-                <div className="h-8 px-3 rounded-lg bg-white/5 border border-white/6 flex items-center gap-2 shrink-0">
+                <div className="h-8 px-3 rounded bg-[#141414] border border-[#1f1f1f] flex items-center gap-2 shrink-0">
                   <svg
                     className="h-3.5 w-3.5 text-zinc-500"
                     fill="none"
@@ -271,7 +271,7 @@ export function HeroDashboardDemo() {
                 ].map((s) => (
                   <div
                     key={s.label}
-                    className="bg-[#111] border border-white/6 rounded-xl px-3 py-3"
+                    className="bg-[#0d0d0d] border border-[#1f1f1f] rounded-md px-3 py-3"
                   >
                     <p className="text-[11px] text-zinc-600 mb-1.5 font-medium">
                       {s.label}
@@ -287,7 +287,7 @@ export function HeroDashboardDemo() {
 
               {/* Section label */}
               <div className="flex items-center gap-3 mb-4">
-                <p className="text-[11px] font-medium text-zinc-600 uppercase tracking-widest shrink-0">
+                <p className="text-[10px] font-mono text-zinc-700 uppercase tracking-[0.15em] shrink-0">
                   Usage
                 </p>
                 <div className="flex-1 h-px bg-white/5" />
@@ -313,15 +313,15 @@ export function HeroDashboardDemo() {
 
                 {/* Supabase — animated */}
                 <div
-                  className="bg-[#111] rounded-xl p-4 flex flex-col gap-3"
+                  className="bg-[#0d0d0d] rounded-lg p-4 flex flex-col gap-3"
                   style={{
-                    border: `1px solid ${sbPct >= 80 ? "rgba(239,68,68,0.2)" : "rgba(255,255,255,0.06)"}`,
+                    border: `1px solid ${sbPct >= 80 ? "rgba(239,68,68,0.2)" : "#1f1f1f"}`,
                     transition: "border-color 0.5s ease",
                   }}
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-lg bg-white/5 border border-white/6 flex items-center justify-center shrink-0">
+                      <div className="h-6 w-6 rounded-md bg-[#141414] border border-[#1f1f1f] flex items-center justify-center shrink-0">
                         {SB}
                       </div>
                       <div>
@@ -360,7 +360,7 @@ export function HeroDashboardDemo() {
                       </div>
                     </div>
                   </div>
-                  <div className="pt-2 border-t border-white/4 flex items-center justify-between">
+                  <div className="pt-2 border-t border-[#1f1f1f] flex items-center justify-between">
                     <span className="text-[10px] text-zinc-700">
                       Synced 2m ago
                     </span>
@@ -396,10 +396,10 @@ export function HeroDashboardDemo() {
                     "transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease",
                   zIndex: 10,
                 }}
-                className="bg-[#150909] border border-red-500/25 rounded-xl p-3 shadow-2xl shadow-red-900/20 w-52"
+                className="bg-[#150909] border border-red-500/25 rounded-lg p-3 shadow-2xl shadow-red-900/20 w-52"
               >
                 <div className="flex items-start gap-2.5">
-                  <div className="h-6 w-6 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="h-6 w-6 rounded-md bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 mt-0.5">
                     {SB}
                   </div>
                   <div className="flex-1 min-w-0">

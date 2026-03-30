@@ -182,28 +182,30 @@ export async function fetchSupabaseUsage(
     console.warn(`[supabase] Could not fetch cache hit ratio for '${projectRef}':`, err instanceof Error ? err.message : String(err));
   }
 
-  // ── PRO: Per-table storage breakdown ───────────────────────────────────────
+  // ── PRO: Per-table storage breakdown (all schemas) ─────────────────────────
   try {
     const tableRows = await runQuery(
       projectRef,
       token,
       `SELECT
+        schemaname,
         relname AS table_name,
         pg_total_relation_size(relid)::bigint AS total_bytes
       FROM pg_stat_user_tables
-      WHERE schemaname = 'public'
       ORDER BY total_bytes DESC`
     );
     for (const row of tableRows) {
       const bytes = Number(row.total_bytes ?? 0);
-      const tableName = String(row.table_name ?? "unknown");
+      const schema = String(row.schemaname ?? "public");
+      const table = String(row.table_name ?? "unknown");
+      const label = schema === "public" ? table : `${schema}.${table}`;
       metrics.push({
         metricName: "db_size_mb",
         currentValue: Math.round((bytes / (1024 * 1024)) * 100) / 100,
         limitValue: FREE_TIER_LIMITS.db_size_mb,
         percentUsed: Math.round((bytes / (1024 * 1024 * FREE_TIER_LIMITS.db_size_mb)) * 10000) / 100,
-        entityId: tableName,
-        entityLabel: tableName,
+        entityId: label,
+        entityLabel: label,
       });
     }
   } catch (err) {

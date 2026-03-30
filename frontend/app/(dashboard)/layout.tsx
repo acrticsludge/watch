@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSession, getSubscription } from "@/lib/queries/user";
 import { Sidebar } from "@/app/components/layout/Sidebar";
@@ -11,7 +12,9 @@ export default async function DashboardLayout({
   const session = await getSession();
 
   if (!session) {
-    redirect("/login");
+    const headersList = await headers();
+    const pathname = headersList.get("x-pathname") || "/dashboard";
+    redirect(`/login?redirectTo=${encodeURIComponent(pathname)}`);
   }
 
   const subscription = await getSubscription();

@@ -62,21 +62,21 @@ export function ServicesSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="py-24 bg-[#0a0a0a] border-t border-white/[0.04]" ref={ref}>
+    <section className="py-24 bg-[#0a0a0a] border-t border-[#161616]" ref={ref}>
       <div className="max-w-5xl mx-auto px-6">
         <motion.div
           className="text-center mb-12"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         >
-          <p className="text-xs font-mono text-zinc-600 uppercase tracking-widest mb-3">
+          <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.18em] mb-3">
             Integrations
           </p>
-          <h2 className="text-2xl font-bold text-white mb-3 tracking-tight">
+          <h2 className="text-2xl font-semibold text-white mb-3 tracking-tight">
             Connect and monitor your critical tools
           </h2>
-          <p className="text-zinc-500 text-base">
+          <p className="text-zinc-500 text-sm">
             Connect once, monitor everything.{" "}
             <span className="text-zinc-700">More coming soon.</span>
           </p>
@@ -91,11 +91,11 @@ export function ServicesSection() {
           {services.map((s) => (
             <motion.div
               key={s.name}
-              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className={`group bg-[#111] rounded-xl border border-white/6 ${s.accent} p-5 flex flex-col gap-3 hover:-translate-y-1 transition-all duration-300`}
+              variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="bg-[#0d0d0d] rounded-lg border border-[#1f1f1f] p-5 flex flex-col gap-3 hover:border-[#2a2a2a] transition-colors duration-150"
             >
-              <div className="h-9 w-9 rounded-lg bg-white/5 border border-white/6 flex items-center justify-center shrink-0">
+              <div className="h-8 w-8 rounded-md bg-[#141414] border border-[#1f1f1f] flex items-center justify-center shrink-0">
                 {s.logo}
               </div>
               <div>
