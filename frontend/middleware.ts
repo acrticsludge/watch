@@ -1,9 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED_PREFIXES = ["/dashboard", "/integrations", "/settings", "/alerts"];
-const AUTH_ROUTES = ["/login", "/signup"];
-
 export async function middleware(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
 
@@ -28,35 +25,20 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  // Use getSession (cookie-only, no network call) for routing — data is still
-  // protected by RLS. getUser() (server-verified) is called inside page components.
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  const user = session?.user ?? null;
+  // Refresh session cookie — the only job of middleware.
+  await supabase.auth.getSession();
 
-  const pathname = request.nextUrl.pathname;
-  const isProtected = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p));
-  const isAuthRoute = AUTH_ROUTES.some((p) => pathname === p);
-
-  if (isProtected && !user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("redirectTo", pathname);
-    return NextResponse.redirect(url);
-  }
-
-  if (isAuthRoute && user) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/dashboard";
-    return NextResponse.redirect(url);
-  }
+  // Forward the pathname so layouts can build redirectTo links.
+  supabaseResponse.headers.set("x-pathname", request.nextUrl.pathname);
 
   return supabaseResponse;
 }
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon\\.ico|sw\\.js|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml|json)$).*)",
+    "/dashboard/:path*",
+    "/integrations/:path*",
+    "/settings/:path*",
+    "/alerts/:path*",
   ],
 };

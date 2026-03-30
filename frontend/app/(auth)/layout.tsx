@@ -1,8 +1,13 @@
-export default function AuthLayout({
+import { getSession } from "@/lib/queries/user";
+import { redirect } from "next/navigation";
+
+export default async function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getSession();
+  if (session) redirect("/dashboard");
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#0a0a0a] px-4">
       <div className="w-full max-w-sm">
