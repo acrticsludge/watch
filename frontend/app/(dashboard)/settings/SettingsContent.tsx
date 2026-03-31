@@ -746,7 +746,7 @@ export function SettingsContent({
                 <p className="text-zinc-500 text-xs">
                   {cancelAtPeriodEnd
                     ? `Trial ends ${new Date(trialEndsAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. No charge will be made.`
-                    : `Trial ends ${new Date(trialEndsAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. You'll be charged $10/mo after unless you cancel.`}
+                    : `Trial ends ${new Date(trialEndsAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. You'll be charged $120/yr after unless you cancel.`}
                 </p>
               )}
             </div>
