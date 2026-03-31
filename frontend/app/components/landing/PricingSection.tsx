@@ -5,13 +5,12 @@ import { motion, useInView } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 export type PlanState =
-  | "none"           // no subscription ever — eligible for trial
-  | "trialing"       // currently in trial
-  | "active"         // active pro
+  | "none" // no subscription ever — eligible for trial
+  | "trialing" // currently in trial
+  | "active" // active pro
   | "active_cancelling" // active but cancel_at_period_end = true
-  | "past_due"       // payment failed
-  | "used_trial";    // cancelled/lapsed — trial already consumed
-
+  | "past_due" // payment failed
+  | "used_trial"; // cancelled/lapsed — trial already consumed
 
 export function PricingSection({
   userEmail,
@@ -76,7 +75,7 @@ export function PricingSection({
     },
     {
       name: "Team",
-      price: "$30",
+      price: "-$",
       period: "/month",
       description: "For teams sharing infrastructure",
       features: [
