@@ -81,7 +81,6 @@ export async function fetchSupabaseUsage(
   if (usageRes.ok) {
     const usageData = await usageRes.json() as { metrics?: UsageMetricRaw[] };
     mgmtMetrics = usageData.metrics ?? [];
-    console.log(`[supabase] Management API metrics for '${projectRef}':`, JSON.stringify(mgmtMetrics));
   } else if (usageRes.status !== 404) {
     console.warn(`[supabase] Management API usage endpoint error for '${projectRef}': ${usageRes.status}`);
   }
