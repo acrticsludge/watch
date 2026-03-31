@@ -10,6 +10,7 @@ export interface AlertPayload {
   limitValue: number | null;
   percentUsed: number | null;
   recordedAt: string;
+  topEntity?: { label: string; valueMb: number }; // highest sub-entity (e.g. top DB for MongoDB storage_mb)
 }
 
 export interface AlertChannel {

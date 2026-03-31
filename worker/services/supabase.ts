@@ -82,8 +82,8 @@ export async function fetchSupabaseUsage(
     const usageData = await usageRes.json() as { metrics?: UsageMetricRaw[] };
     mgmtMetrics = usageData.metrics ?? [];
     console.log(`[supabase] mgmt metrics for '${projectRef}':`, mgmtMetrics.map((m) => `${m.metric}=${m.usage}`).join(", "));
-  } else {
-    console.warn(`[supabase] Management API usage endpoint returned ${usageRes.status} for '${projectRef}' — falling back to pg_database_size()`);
+  } else if (usageRes.status !== 404) {
+    console.warn(`[supabase] Management API usage endpoint error for '${projectRef}': ${usageRes.status}`);
   }
 
   // ── FREE: DB size ───────────────────────────────────────────────────────────

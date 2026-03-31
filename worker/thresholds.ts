@@ -65,6 +65,25 @@ export async function checkThresholds(
       }
     }
 
+    // For MongoDB storage_mb alerts, attach the top-consuming database
+    let topEntity: { label: string; valueMb: number } | undefined;
+    if (integration?.service === "mongodb" && metric.metricName === "storage_mb") {
+      const { data: dbRows } = await supabase
+        .from("usage_snapshots")
+        .select("entity_label, entity_id, current_value")
+        .eq("integration_id", integrationId)
+        .eq("metric_name", "db_size_mb")
+        .not("entity_id", "is", null)
+        .order("current_value", { ascending: false })
+        .limit(1);
+      if (dbRows && dbRows.length > 0) {
+        topEntity = {
+          label: dbRows[0].entity_label ?? dbRows[0].entity_id ?? "unknown",
+          valueMb: dbRows[0].current_value,
+        };
+      }
+    }
+
     // Fire the alert
     await fireAlerts(userEmail, {
       userId,
@@ -76,6 +95,7 @@ export async function checkThresholds(
       limitValue: metric.limitValue,
       percentUsed: metric.percentUsed,
       recordedAt: new Date().toISOString(),
+      topEntity,
     });
   }
 }

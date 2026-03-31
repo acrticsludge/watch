@@ -43,10 +43,16 @@ export async function sendAlertEmail(
           <td style="padding: 10px 0; color: #6b7280; font-size: 14px;">Limit</td>
           <td style="padding: 10px 0; text-align: right; font-weight: 600; color: #111827; font-size: 14px;">${alert.limitValue?.toLocaleString() ?? "—"} ${unit}</td>
         </tr>
-        <tr>
+        <tr${alert.topEntity ? "" : ' style="border-bottom: none;"'}>
           <td style="padding: 10px 0; color: #6b7280; font-size: 14px;">Recorded at</td>
           <td style="padding: 10px 0; text-align: right; color: #111827; font-size: 14px;">${new Date(alert.recordedAt).toLocaleString()}</td>
         </tr>
+        ${alert.topEntity
+          ? `<tr>
+          <td style="padding: 10px 0; color: #6b7280; font-size: 14px;">Top database</td>
+          <td style="padding: 10px 0; text-align: right; font-weight: 600; color: #111827; font-size: 14px;">${alert.topEntity.label} &mdash; ${alert.topEntity.valueMb.toLocaleString()} MB</td>
+        </tr>`
+          : ""}
       </table>
       <a href="${APP_URL}/dashboard" style="display: inline-block; background: #2563eb; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 500;">View Dashboard</a>
     </div>

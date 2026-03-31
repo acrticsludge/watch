@@ -215,8 +215,6 @@ const PRO_METRICS: Record<string, string[]> = {
     "avg_write_latency_ms",
     "disk_iops_read",
     "disk_iops_write",
-    "db_size_mb",
-    "collection_size_mb",
     "replication_lag_s",
     "slow_queries_count",
   ],
