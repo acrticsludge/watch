@@ -68,14 +68,39 @@ export async function fetchSupabaseUsage(
 
   const metrics: UsageMetric[] = [];
 
-  // ── FREE: DB size ───────────────────────────────────────────────────────────
-  const dbRows = await runQuery(
-    projectRef,
-    token,
-    "SELECT pg_database_size(current_database()) AS db_bytes"
+  // ── Fetch Management API usage once — used for db_size (all tiers) and pro metrics ──
+  // pg_database_size() underreports because Supabase measures at disk/volume level
+  // (includes WAL, temp files, overhead). The Management API returns the same value
+  // the Supabase dashboard shows.
+  type UsageMetricRaw = { metric: string; usage: number; limit: number };
+  let mgmtMetrics: UsageMetricRaw[] = [];
+  const usageRes = await fetch(
+    `https://api.supabase.com/v1/projects/${projectRef}/usage`,
+    { headers: { Authorization: `Bearer ${token}` } }
   );
-  const dbBytes = Number(dbRows[0]?.db_bytes ?? 0);
-  const dbMb = Math.round((dbBytes / (1024 * 1024)) * 100) / 100;
+  if (usageRes.ok) {
+    const usageData = await usageRes.json() as { metrics?: UsageMetricRaw[] };
+    mgmtMetrics = usageData.metrics ?? [];
+  } else if (usageRes.status !== 404) {
+    console.warn(`[supabase] Management API usage endpoint error for '${projectRef}': ${usageRes.status}`);
+  }
+
+  // ── FREE: DB size ───────────────────────────────────────────────────────────
+  let dbMb = 0;
+  const dbSizeRaw = mgmtMetrics.find((m) => m.metric === "db_size");
+  if (dbSizeRaw != null) {
+    // Management API returns db_size in bytes — matches Supabase dashboard
+    dbMb = Math.round((dbSizeRaw.usage / (1024 * 1024)) * 100) / 100;
+  } else {
+    // Fallback: pg_database_size() (may underreport vs Supabase dashboard)
+    const dbRows = await runQuery(
+      projectRef,
+      token,
+      "SELECT pg_database_size(current_database()) AS db_bytes"
+    );
+    const dbBytes = Number(dbRows[0]?.db_bytes ?? 0);
+    dbMb = Math.round((dbBytes / (1024 * 1024)) * 100) / 100;
+  }
   metrics.push({
     metricName: "db_size_mb",
     currentValue: dbMb,
@@ -182,30 +207,28 @@ export async function fetchSupabaseUsage(
     console.warn(`[supabase] Could not fetch cache hit ratio for '${projectRef}':`, err instanceof Error ? err.message : String(err));
   }
 
-  // ── PRO: Per-table storage breakdown (all schemas) ─────────────────────────
+  // ── PRO: Per-table storage breakdown (public schema only) ──────────────────
   try {
     const tableRows = await runQuery(
       projectRef,
       token,
       `SELECT
-        schemaname,
         relname AS table_name,
         pg_total_relation_size(relid)::bigint AS total_bytes
       FROM pg_stat_user_tables
+      WHERE schemaname = 'public'
       ORDER BY total_bytes DESC`
     );
     for (const row of tableRows) {
       const bytes = Number(row.total_bytes ?? 0);
-      const schema = String(row.schemaname ?? "public");
-      const table = String(row.table_name ?? "unknown");
-      const label = schema === "public" ? table : `${schema}.${table}`;
+      const tableName = String(row.table_name ?? "unknown");
       metrics.push({
         metricName: "db_size_mb",
         currentValue: Math.round((bytes / (1024 * 1024)) * 100) / 100,
         limitValue: FREE_TIER_LIMITS.db_size_mb,
         percentUsed: Math.round((bytes / (1024 * 1024 * FREE_TIER_LIMITS.db_size_mb)) * 10000) / 100,
-        entityId: label,
-        entityLabel: label,
+        entityId: tableName,
+        entityLabel: tableName,
       });
     }
   } catch (err) {
@@ -213,68 +236,56 @@ export async function fetchSupabaseUsage(
   }
 
   // ── PRO: Management API usage (realtime, edge functions, egress) ────────────
-  const usageRes = await fetch(
-    `https://api.supabase.com/v1/projects/${projectRef}/usage`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
+  // mgmtMetrics already fetched above — reuse it here
+  for (const m of mgmtMetrics) {
+    const usage = m.usage ?? 0;
+    const limit = m.limit;
 
-  if (usageRes.ok) {
-    const usageData = await usageRes.json() as {
-      metrics?: Array<{ metric: string; usage: number; limit: number }>;
-    };
-
-    for (const m of usageData.metrics ?? []) {
-      const usage = m.usage ?? 0;
-      const limit = m.limit;
-
-      switch (m.metric) {
-        case "realtime_message_count":
-          metrics.push({
-            metricName: "realtime_messages",
-            currentValue: usage,
-            limitValue: limit ?? PRO_TIER_LIMITS.realtime_messages,
-            percentUsed: (limit ?? PRO_TIER_LIMITS.realtime_messages) > 0
-              ? Math.round((usage / (limit ?? PRO_TIER_LIMITS.realtime_messages)) * 10000) / 100
-              : 0,
-          });
-          break;
-        case "realtime_peak_connection":
-          metrics.push({
-            metricName: "realtime_peak_connections",
-            currentValue: usage,
-            limitValue: limit ?? PRO_TIER_LIMITS.realtime_peak_connections,
-            percentUsed: (limit ?? PRO_TIER_LIMITS.realtime_peak_connections) > 0
-              ? Math.round((usage / (limit ?? PRO_TIER_LIMITS.realtime_peak_connections)) * 10000) / 100
-              : 0,
-          });
-          break;
-        case "func_invocations":
-          metrics.push({
-            metricName: "func_invocations",
-            currentValue: usage,
-            limitValue: limit ?? PRO_TIER_LIMITS.func_invocations,
-            percentUsed: (limit ?? PRO_TIER_LIMITS.func_invocations) > 0
-              ? Math.round((usage / (limit ?? PRO_TIER_LIMITS.func_invocations)) * 10000) / 100
-              : 0,
-          });
-          break;
-        case "db_egress": {
-          const egressMb = Math.round(usage * 1024 * 100) / 100;
-          const limitMb = limit != null
-            ? Math.round(limit * 1024 * 100) / 100
-            : PRO_TIER_LIMITS.db_egress_mb;
-          metrics.push({
-            metricName: "db_egress_mb",
-            currentValue: egressMb,
-            limitValue: limitMb,
-            percentUsed: limitMb > 0 ? Math.round((egressMb / limitMb) * 10000) / 100 : 0,
-          });
-          break;
-        }
+    switch (m.metric) {
+      case "realtime_message_count":
+        metrics.push({
+          metricName: "realtime_messages",
+          currentValue: usage,
+          limitValue: limit ?? PRO_TIER_LIMITS.realtime_messages,
+          percentUsed: (limit ?? PRO_TIER_LIMITS.realtime_messages) > 0
+            ? Math.round((usage / (limit ?? PRO_TIER_LIMITS.realtime_messages)) * 10000) / 100
+            : 0,
+        });
+        break;
+      case "realtime_peak_connection":
+        metrics.push({
+          metricName: "realtime_peak_connections",
+          currentValue: usage,
+          limitValue: limit ?? PRO_TIER_LIMITS.realtime_peak_connections,
+          percentUsed: (limit ?? PRO_TIER_LIMITS.realtime_peak_connections) > 0
+            ? Math.round((usage / (limit ?? PRO_TIER_LIMITS.realtime_peak_connections)) * 10000) / 100
+            : 0,
+        });
+        break;
+      case "func_invocations":
+        metrics.push({
+          metricName: "func_invocations",
+          currentValue: usage,
+          limitValue: limit ?? PRO_TIER_LIMITS.func_invocations,
+          percentUsed: (limit ?? PRO_TIER_LIMITS.func_invocations) > 0
+            ? Math.round((usage / (limit ?? PRO_TIER_LIMITS.func_invocations)) * 10000) / 100
+            : 0,
+        });
+        break;
+      case "db_egress": {
+        const egressMb = Math.round(usage * 1024 * 100) / 100;
+        const limitMb = limit != null
+          ? Math.round(limit * 1024 * 100) / 100
+          : PRO_TIER_LIMITS.db_egress_mb;
+        metrics.push({
+          metricName: "db_egress_mb",
+          currentValue: egressMb,
+          limitValue: limitMb,
+          percentUsed: limitMb > 0 ? Math.round((egressMb / limitMb) * 10000) / 100 : 0,
+        });
+        break;
       }
     }
-  } else if (usageRes.status !== 404) {
-    console.warn(`[supabase] Management API usage endpoint error for '${projectRef}': ${usageRes.status}`);
   }
 
   return metrics;
