@@ -173,6 +173,8 @@ export async function runPollCycle(): Promise<void> {
           .from("integrations")
           .update({ status: "error" })
           .eq("id", integration.id);
+        // Re-throw so Promise.allSettled counts this as rejected (failed)
+        throw err;
       }
     })
   );
