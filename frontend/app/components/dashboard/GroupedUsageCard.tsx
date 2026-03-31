@@ -105,11 +105,13 @@ function MetricRow({
   entitySnapshots,
   integrationId,
   isPro,
+  service,
 }: {
   snap: Snapshot;
   entitySnapshots: Snapshot[];
   integrationId: string;
   isPro: boolean;
+  service: string;
 }) {
   const [showChart, setShowChart] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[] | null>(null);
@@ -208,6 +210,11 @@ function MetricRow({
           ))}
         </div>
       )}
+      {service === "supabase" && snap.metric_name === "db_size_mb" && (
+        <p className="text-[10px] text-zinc-600 mt-1.5 leading-relaxed">
+          Measured via PostgreSQL — may be a few MB lower than the Supabase dashboard, which includes WAL files and dead tuple overhead.
+        </p>
+      )}
       {showChart && (
         <div className="mt-3 p-3 bg-white/3 rounded-lg border border-white/6">
           {loading ? (
@@ -259,6 +266,20 @@ function MongoDBDatabaseAccordion({
       {dbSnapshots.length > 0 && (
       <>
       <p className="text-[10px] font-medium text-zinc-500 uppercase tracking-wider mb-2">Databases</p>
+      {(() => {
+        const topDb = dbSnapshots.reduce((a, b) => b.current_value > a.current_value ? b : a, dbSnapshots[0]);
+        return topDb ? (
+          <div className="flex items-center justify-between px-3 py-2 mb-2 rounded-lg bg-white/4 border border-white/8">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-zinc-500 uppercase tracking-wider">Top DB</span>
+              <span className="text-xs text-zinc-300 font-medium truncate">{topDb.entity_label ?? topDb.entity_id}</span>
+            </div>
+            <span className="text-xs text-zinc-400 tabular-nums shrink-0 ml-2">
+              {topDb.current_value.toLocaleString()} MB
+            </span>
+          </div>
+        ) : null;
+      })()}
       <div className="space-y-1">
         {dbSnapshots.map((db) => {
           const dbName = db.entity_id ?? db.entity_label ?? "unknown";
@@ -371,6 +392,7 @@ function UsageDetailModal({
               entitySnapshots={entitySnapshots}
               integrationId={integrationId}
               isPro={isPro}
+              service={service}
             />
           ))}
           {service === "mongodb" &&

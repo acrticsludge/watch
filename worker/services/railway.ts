@@ -324,14 +324,12 @@ export async function fetchRailwayUsage(
   });
 
   const diskUsedMB = Math.round(globalAgg.totalDiskGB * 1024 * 100) / 100;
-  if (diskUsedMB > 0) {
-    metrics.push({
-      metricName: "disk_usage_mb",
-      currentValue: diskUsedMB,
-      limitValue: diskLimitMB,
-      percentUsed: diskLimitMB > 0 ? Math.round((diskUsedMB / diskLimitMB) * 10000) / 100 : 0,
-    });
-  }
+  metrics.push({
+    metricName: "disk_usage_mb",
+    currentValue: diskUsedMB,
+    limitValue: diskLimitMB,
+    percentUsed: diskLimitMB > 0 ? Math.round((diskUsedMB / diskLimitMB) * 10000) / 100 : 0,
+  });
 
   // ── PRO PER-PROJECT entity breakdown ────────────────────────────────────────
   for (const { project, serviceCount, agg } of projectData) {

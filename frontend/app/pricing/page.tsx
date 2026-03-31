@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = {
   title: "Pricing Plans",
   description:
-    "Stackwatch pricing: Free ($0), Pro ($10/mo), Team ($30/mo). Free plan includes 1 account per service and email alerts. Pro adds Slack, Discord, and 5-minute polling. No credit card required to start.",
+    "Stackwatch pricing: Free ($0), Pro ($120/yr). Free plan includes 1 account per service and email alerts. Pro adds Slack, Discord, and 5-minute polling. No credit card required to start.",
   alternates: { canonical: "/pricing" },
   openGraph: { url: "/pricing" },
 };

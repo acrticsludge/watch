@@ -215,8 +215,6 @@ const PRO_METRICS: Record<string, string[]> = {
     "avg_write_latency_ms",
     "disk_iops_read",
     "disk_iops_write",
-    "db_size_mb",
-    "collection_size_mb",
     "replication_lag_s",
     "slow_queries_count",
   ],
@@ -748,7 +746,7 @@ export function SettingsContent({
                 <p className="text-zinc-500 text-xs">
                   {cancelAtPeriodEnd
                     ? `Trial ends ${new Date(trialEndsAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. No charge will be made.`
-                    : `Trial ends ${new Date(trialEndsAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. You'll be charged $10/mo after unless you cancel.`}
+                    : `Trial ends ${new Date(trialEndsAt).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}. You'll be charged $120/yr after unless you cancel.`}
                 </p>
               )}
             </div>
