@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { requireJsonBody } from "@/lib/api";
 
 const PushSubSchema = z.object({
   endpoint: z.string().url(),
@@ -41,41 +42,65 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Pro feature" }, { status: 403 });
   }
 
-  const parsed = BodySchema.safeParse(await req.json().catch(() => null));
+  const bodyResult = await requireJsonBody(req);
+  if (!bodyResult.ok) return bodyResult.error;
+  const parsed = BodySchema.safeParse(bodyResult.data);
   if (!parsed.success)
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   const { subscription: pushSub, enabled } = parsed.data;
 
-  if (!enabled || !pushSub) {
-    // Disable — remove stored subscription
-    await supabase
+  try {
+    if (!enabled || !pushSub) {
+      // Disable — remove stored subscription
+      const { error } = await supabase
+        .from("alert_channels")
+        .update({ enabled: false })
+        .eq("user_id", user.id)
+        .eq("type", "push");
+      if (error) {
+        console.error("[push subscribe] disable failed:", error);
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+      }
+      return NextResponse.json({ ok: true });
+    }
+
+    // Upsert channel with push subscription object in config
+    const existing = await supabase
       .from("alert_channels")
-      .update({ enabled: false })
+      .select("id")
       .eq("user_id", user.id)
-      .eq("type", "push");
-    return NextResponse.json({ ok: true });
-  }
+      .eq("type", "push")
+      .maybeSingle();
 
-  // Upsert channel with push subscription object in config
-  const existing = await supabase
-    .from("alert_channels")
-    .select("id")
-    .eq("user_id", user.id)
-    .eq("type", "push")
-    .maybeSingle();
+    if (existing.error) {
+      console.error("[push subscribe] lookup failed:", existing.error);
+      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
 
-  if (existing.data) {
-    await supabase
-      .from("alert_channels")
-      .update({ config: pushSub as unknown as import("@/lib/database.types").Json, enabled: true })
-      .eq("id", existing.data.id);
-  } else {
-    await supabase.from("alert_channels").insert({
-      user_id: user.id,
-      type: "push",
-      config: pushSub as unknown as import("@/lib/database.types").Json,
-      enabled: true,
-    });
+    if (existing.data) {
+      const { error } = await supabase
+        .from("alert_channels")
+        .update({ config: pushSub as unknown as import("@/lib/database.types").Json, enabled: true })
+        .eq("id", existing.data.id);
+      if (error) {
+        console.error("[push subscribe] update failed:", error);
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+      }
+    } else {
+      const { error } = await supabase.from("alert_channels").insert({
+        user_id: user.id,
+        type: "push",
+        config: pushSub as unknown as import("@/lib/database.types").Json,
+        enabled: true,
+      });
+      if (error) {
+        console.error("[push subscribe] insert failed:", error);
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+      }
+    }
+  } catch (err) {
+    console.error("[push subscribe] unexpected error:", err);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });

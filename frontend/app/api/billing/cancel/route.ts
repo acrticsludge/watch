@@ -36,9 +36,8 @@ export async function POST() {
       cancel_at_next_billing_date: true,
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    console.error("[cancel] dodo API failed:", message);
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error("[cancel] dodo API failed:", err);
+    return NextResponse.json({ error: "Failed to cancel subscription. Please try again or contact support." }, { status: 500 });
   }
 
   // Mark locally so the UI can show "access until [date]" immediately.
@@ -54,5 +53,6 @@ export async function POST() {
     // Dodo is already cancelled — don't fail the request, just log it.
   }
 
+  console.log(JSON.stringify({ audit: true, action: "subscription.cancel_requested", userId: user.id, dodoSubscriptionId: subscription.dodo_subscription_id, ts: new Date().toISOString() }));
   return NextResponse.json({ success: true });
 }

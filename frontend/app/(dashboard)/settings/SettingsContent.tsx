@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   Tabs,
@@ -19,13 +19,23 @@ import { METRIC_LABELS, SERVICE_LABELS } from "@/lib/utils";
 
 function ManagePortalButton() {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
   async function openPortal() {
     setLoading(true);
-    const res = await fetch("/api/billing/portal");
-    setLoading(false);
-    if (!res.ok) return;
-    const { url } = await res.json();
-    if (url) window.location.href = url;
+    try {
+      const res = await fetch("/api/billing/portal");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        toast({ title: "Failed to open billing portal", description: body.error ?? undefined, variant: "destructive" });
+        return;
+      }
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      toast({ title: "Failed to open billing portal", description: "Network error. Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <button
@@ -115,13 +125,23 @@ function CancelSubscriptionButton({
 
 function UpgradeButton() {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
   async function startCheckout() {
     setLoading(true);
-    const res = await fetch("/api/billing/checkout", { method: "POST" });
-    setLoading(false);
-    if (!res.ok) return;
-    const { url } = await res.json();
-    if (url) window.location.href = url;
+    try {
+      const res = await fetch("/api/billing/checkout", { method: "POST" });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        toast({ title: "Failed to start checkout", description: body.error ?? undefined, variant: "destructive" });
+        return;
+      }
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      toast({ title: "Failed to start checkout", description: "Network error. Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <button
@@ -219,6 +239,213 @@ const PRO_METRICS: Record<string, string[]> = {
     "slow_queries_count",
   ],
 };
+
+function MfaSection() {
+  const supabase = createClient();
+  const { toast } = useToast();
+  const [verifiedFactors, setVerifiedFactors] = useState<Array<{ id: string }>>([]);
+  const [facLoading, setFacLoading] = useState(true);
+  const [enrollData, setEnrollData] = useState<{
+    factorId: string;
+    qrCode: string;
+    secret: string;
+  } | null>(null);
+  const [mfaCode, setMfaCode] = useState("");
+  const [mfaError, setMfaError] = useState("");
+  const [mfaSaving, setMfaSaving] = useState(false);
+
+  useEffect(() => {
+    void loadFactors();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function loadFactors() {
+    setFacLoading(true);
+    const { data } = await supabase.auth.mfa.listFactors();
+    setVerifiedFactors(
+      (data?.totp ?? []).filter((f) => f.status === "verified"),
+    );
+    setFacLoading(false);
+  }
+
+  async function handleEnroll() {
+    const { data, error } = await supabase.auth.mfa.enroll({
+      factorType: "totp",
+    });
+    if (error || !data) {
+      toast({ title: "Failed to start 2FA setup", variant: "destructive" });
+      return;
+    }
+    setEnrollData({
+      factorId: data.id,
+      qrCode: data.totp.qr_code,
+      secret: data.totp.secret,
+    });
+    setMfaCode("");
+    setMfaError("");
+  }
+
+  async function handleVerify() {
+    if (!enrollData || mfaCode.length !== 6) return;
+    setMfaSaving(true);
+    setMfaError("");
+    const { data: challenge, error: cErr } = await supabase.auth.mfa.challenge(
+      { factorId: enrollData.factorId },
+    );
+    if (cErr || !challenge) {
+      setMfaSaving(false);
+      setMfaError("Failed to start challenge. Try again.");
+      return;
+    }
+    const { error: vErr } = await supabase.auth.mfa.verify({
+      factorId: enrollData.factorId,
+      challengeId: challenge.id,
+      code: mfaCode,
+    });
+    setMfaSaving(false);
+    if (vErr) {
+      setMfaError("Invalid code. Check your authenticator app and try again.");
+      return;
+    }
+    setEnrollData(null);
+    setMfaCode("");
+    toast({
+      title: "2FA enabled",
+      description: "Your account is now protected with TOTP authentication.",
+    });
+    void loadFactors();
+  }
+
+  async function handleUnenroll(factorId: string) {
+    const { error } = await supabase.auth.mfa.unenroll({ factorId });
+    if (error) {
+      toast({ title: "Failed to remove 2FA", variant: "destructive" });
+      return;
+    }
+    toast({ title: "2FA removed", description: "Two-factor authentication has been disabled." });
+    void loadFactors();
+  }
+
+  if (facLoading) {
+    return (
+      <div className="mt-6 pt-6 border-t border-white/[0.06]">
+        <p className="text-xs text-zinc-600">Loading…</p>
+      </div>
+    );
+  }
+
+  if (verifiedFactors.length > 0) {
+    return (
+      <div className="mt-6 pt-6 border-t border-white/[0.06]">
+        <h3 className="font-semibold text-white mb-1 text-sm">
+          Two-factor authentication
+        </h3>
+        <div className="flex items-center gap-2 mb-3">
+          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-2.5 py-0.5">
+            <svg
+              className="w-3 h-3"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+            Enabled
+          </span>
+        </div>
+        <p className="text-zinc-500 text-xs mb-4">
+          Your account is protected with an authenticator app.
+        </p>
+        <button
+          onClick={() => handleUnenroll(verifiedFactors[0].id)}
+          className="text-sm text-zinc-600 hover:text-red-400 transition-colors underline underline-offset-2"
+        >
+          Remove 2FA
+        </button>
+      </div>
+    );
+  }
+
+  if (enrollData) {
+    return (
+      <div className="mt-6 pt-6 border-t border-white/[0.06]">
+        <h3 className="font-semibold text-white mb-1 text-sm">
+          Set up two-factor authentication
+        </h3>
+        <p className="text-zinc-500 text-xs mb-4">
+          Scan this QR code with an authenticator app (e.g. Google
+          Authenticator, Authy), then enter the 6-digit code to confirm.
+        </p>
+        <div className="mb-4 w-36 h-36 bg-white rounded-lg flex items-center justify-center overflow-hidden">
+          <img
+            src={`data:image/svg+xml,${encodeURIComponent(enrollData.qrCode)}`}
+            alt="QR code for 2FA setup"
+            className="w-full h-full"
+          />
+        </div>
+        <p className="text-zinc-600 text-xs mb-4">
+          Can&apos;t scan? Enter this secret manually:{" "}
+          <span className="font-mono text-zinc-400">{enrollData.secret}</span>
+        </p>
+        <div className="flex gap-2 items-center mb-1">
+          <Input
+            placeholder="6-digit code"
+            value={mfaCode}
+            onChange={(e) => {
+              setMfaCode(e.target.value.replace(/\D/g, "").slice(0, 6));
+              if (mfaError) setMfaError("");
+            }}
+            maxLength={6}
+            className="w-36 font-mono"
+          />
+          <Button
+            size="sm"
+            onClick={handleVerify}
+            disabled={mfaSaving || mfaCode.length !== 6}
+          >
+            {mfaSaving ? "Verifying…" : "Verify"}
+          </Button>
+          <button
+            onClick={() => {
+              setEnrollData(null);
+              setMfaCode("");
+              setMfaError("");
+            }}
+            className="text-sm text-zinc-600 hover:text-zinc-400 transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+        {mfaError && <p className="text-xs text-red-400 mt-1">{mfaError}</p>}
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-6 pt-6 border-t border-white/[0.06]">
+      <h3 className="font-semibold text-white mb-1 text-sm">
+        Two-factor authentication
+      </h3>
+      <p className="text-zinc-500 text-xs mb-4">
+        Add an extra layer of security to your account with an authenticator
+        app.
+      </p>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleEnroll}
+        className="border-white/10 text-zinc-300 hover:bg-white/6"
+      >
+        Enable 2FA
+      </Button>
+    </div>
+  );
+}
 
 export function SettingsContent({
   userEmail,
@@ -851,6 +1078,7 @@ export function SettingsContent({
               {pwSaving ? "Saving..." : "Update password"}
             </Button>
           </form>
+          <MfaSection />
         </div>
       </TabsContent>
     </Tabs>

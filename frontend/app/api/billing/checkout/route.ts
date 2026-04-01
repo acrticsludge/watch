@@ -21,6 +21,11 @@ export async function POST() {
       .eq("user_id", user.id)
       .maybeSingle();
 
+    // Prevent duplicate checkout sessions for already-subscribed users
+    if (existingSub?.status === "active" || existingSub?.status === "trialing") {
+      return NextResponse.json({ error: "Already subscribed" }, { status: 409 });
+    }
+
     const trialDays = existingSub ? 0 : 14;
 
     const session = await dodo.checkoutSessions.create({

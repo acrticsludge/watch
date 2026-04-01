@@ -47,15 +47,26 @@ export async function POST(req: NextRequest) {
     if (!customerEmail) {
       return NextResponse.json({ received: true });
     }
-    const { data: userList } = await supabase.auth.admin.listUsers({
-      perPage: 1000,
-    });
-    const user = userList?.users.find((u) => u.email === customerEmail);
-    if (!user) {
+    // Paginate through all users to find by email — perPage 1000 cap means a
+    // single page lookup silently misses users beyond the first 1000.
+    const PER_PAGE = 1000;
+    let found: { id: string } | undefined;
+    let page = 1;
+    while (!found) {
+      const { data: userList } = await supabase.auth.admin.listUsers({
+        page,
+        perPage: PER_PAGE,
+      });
+      if (!userList?.users.length) break;
+      found = userList.users.find((u) => u.email === customerEmail);
+      if (userList.users.length < PER_PAGE) break; // last page
+      page++;
+    }
+    if (!found) {
       console.error(`[dodo webhook] no user found for email: ${customerEmail}`);
       return NextResponse.json({ received: true });
     }
-    userId = user.id;
+    userId = found.id;
   }
 
   switch (type) {
@@ -84,8 +95,9 @@ export async function POST(req: NextRequest) {
       );
       if (upsertErr) {
         console.error("[dodo webhook] subscription.active upsert failed:", upsertErr);
-        return NextResponse.json({ error: upsertErr.message }, { status: 500 });
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
       }
+      console.log(JSON.stringify({ event: type, userId, dodoSubscriptionId, status: isTrial ? "trialing" : "active", ts: new Date().toISOString() }));
       break;
     }
 
@@ -120,9 +132,11 @@ export async function POST(req: NextRequest) {
           tier: "pro",
           next_billing_at: nextBillingDate ?? null,
           past_due_since: null,
+          cancel_at_period_end: false,
           updated_at: new Date().toISOString(),
         })
         .eq("dodo_subscription_id", dodoSubscriptionId);
+      console.log(JSON.stringify({ event: type, userId, dodoSubscriptionId, status: "active", ts: new Date().toISOString() }));
       break;
     }
 
@@ -154,6 +168,7 @@ export async function POST(req: NextRequest) {
           updated_at: new Date().toISOString(),
         })
         .eq("dodo_subscription_id", dodoSubscriptionId);
+      console.log(JSON.stringify({ event: type, userId, dodoSubscriptionId, status: "canceled", ts: new Date().toISOString() }));
       break;
     }
 

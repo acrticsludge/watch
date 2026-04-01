@@ -2,11 +2,22 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { checkAlertChannelLimit, TierLimitError } from "@/lib/tiers";
+import { requireJsonBody, isAuthRateLimited } from "@/lib/api";
+
+// Block private/internal IP ranges to prevent SSRF from the alert worker
+const PRIVATE_IP_RE =
+  /^https?:\/\/(localhost|127\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.|169\.254\.|0\.0\.0\.0)/i;
 
 const httpsWebhookConfig = z.object({
-  webhook_url: z.string().url().refine((u) => u.startsWith("https://"), {
-    message: "Webhook URL must use HTTPS",
-  }),
+  webhook_url: z
+    .string()
+    .url()
+    .refine((u) => u.startsWith("https://"), {
+      message: "Webhook URL must use HTTPS",
+    })
+    .refine((u) => !PRIVATE_IP_RE.test(u), {
+      message: "Webhook URL cannot target private or internal addresses",
+    }),
 });
 
 const CreateSchema = z.discriminatedUnion("type", [
@@ -29,9 +40,13 @@ export async function GET() {
   const { data, error } = await supabase
     .from("alert_channels")
     .select("id, type, config, enabled, created_at")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .limit(20);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[channels GET]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 
   // Mask webhook URLs — only show last 8 chars
   const masked = (data ?? []).map((ch) => {
@@ -53,10 +68,13 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  if (isAuthRateLimited(user.id))
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
 
-  const parsed = CreateSchema.safeParse(body);
+  const bodyResult = await requireJsonBody(request);
+  if (!bodyResult.ok) return bodyResult.error;
+
+  const parsed = CreateSchema.safeParse(bodyResult.data);
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
   try {
@@ -79,7 +97,11 @@ export async function POST(request: Request) {
     .select("id, type, enabled")
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[channels POST]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+  console.log(JSON.stringify({ audit: true, action: "channel.create", userId: user.id, channelId: data.id, type: data.type, ts: new Date().toISOString() }));
   return NextResponse.json(data, { status: 201 });
 }
 
@@ -92,10 +114,10 @@ export async function PATCH(request: Request) {
   const id = searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-  let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const bodyResult = await requireJsonBody(request);
+  if (!bodyResult.ok) return bodyResult.error;
 
-  const parsed = UpdateSchema.safeParse(body);
+  const parsed = UpdateSchema.safeParse(bodyResult.data);
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
   const updatePayload: {
@@ -113,7 +135,10 @@ export async function PATCH(request: Request) {
     .select("id, type, enabled")
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[channels PATCH]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
   return NextResponse.json(data);
 }
 
@@ -132,6 +157,10 @@ export async function DELETE(request: Request) {
     .eq("id", id)
     .eq("user_id", user.id);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[channels DELETE]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
+  console.log(JSON.stringify({ audit: true, action: "channel.delete", userId: user.id, channelId: id, ts: new Date().toISOString() }));
   return new NextResponse(null, { status: 204 });
 }
