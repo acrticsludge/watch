@@ -44,16 +44,20 @@ export async function POST(
       .from("integrations")
       .update({ sort_order: target.sort_order })
       .eq("id", currentPrimary.id);
-    if (swapErr)
-      return NextResponse.json({ error: swapErr.message }, { status: 500 });
+    if (swapErr) {
+      console.error("[promote swap]", swapErr);
+      return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    }
   }
 
   const { error: promoteErr } = await serviceClient
     .from("integrations")
     .update({ sort_order: 0 })
     .eq("id", id);
-  if (promoteErr)
-    return NextResponse.json({ error: promoteErr.message }, { status: 500 });
+  if (promoteErr) {
+    console.error("[promote update]", promoteErr);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 
   return NextResponse.json({ success: true });
 }

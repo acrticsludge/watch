@@ -48,8 +48,10 @@ export async function GET() {
     .neq("status", "disconnected")
     .order("created_at", { ascending: true });
 
-  if (error)
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[integrations GET]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
   return NextResponse.json(data);
 }
 
@@ -137,8 +139,10 @@ export async function POST(request: Request) {
     .select("id, service, account_label, status, created_at")
     .single();
 
-  if (error)
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[integrations POST]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 
   // Fire first-integration onboarding email if this is the user's first ever integration.
   // Non-blocking: failure here must not affect the API response.

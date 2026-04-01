@@ -21,6 +21,9 @@ export async function GET(request: Request) {
     .order("sent_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[alert history GET]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
   return NextResponse.json({ data, total: count, page, limit });
 }

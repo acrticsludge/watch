@@ -67,6 +67,9 @@ export async function GET(req: NextRequest) {
     .gte("recorded_at", since)
     .order("recorded_at", { ascending: true });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[usage history GET]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
   return NextResponse.json(snapshots ?? []);
 }

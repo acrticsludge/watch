@@ -41,7 +41,10 @@ export async function GET() {
     .select("id, type, config, enabled, created_at")
     .eq("user_id", user.id);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[channels GET]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 
   // Mask webhook URLs — only show last 8 chars
   const masked = (data ?? []).map((ch) => {
@@ -89,7 +92,10 @@ export async function POST(request: Request) {
     .select("id, type, enabled")
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[channels POST]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
   return NextResponse.json(data, { status: 201 });
 }
 
@@ -123,7 +129,10 @@ export async function PATCH(request: Request) {
     .select("id, type, enabled")
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[channels PATCH]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
   return NextResponse.json(data);
 }
 
@@ -142,6 +151,9 @@ export async function DELETE(request: Request) {
     .eq("id", id)
     .eq("user_id", user.id);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (error) {
+    console.error("[channels DELETE]", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
   return new NextResponse(null, { status: 204 });
 }

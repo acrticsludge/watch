@@ -26,7 +26,12 @@ export async function middleware(request: NextRequest) {
   );
 
   // Refresh session cookie — the only job of middleware.
-  await supabase.auth.getSession();
+  try {
+    await supabase.auth.getSession();
+  } catch (err) {
+    console.error("[middleware] session refresh failed:", err);
+    // Continue — don't break the request if session refresh fails
+  }
 
   // Forward the pathname so layouts can build redirectTo links.
   supabaseResponse.headers.set("x-pathname", request.nextUrl.pathname);

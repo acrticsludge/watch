@@ -19,13 +19,23 @@ import { METRIC_LABELS, SERVICE_LABELS } from "@/lib/utils";
 
 function ManagePortalButton() {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
   async function openPortal() {
     setLoading(true);
-    const res = await fetch("/api/billing/portal");
-    setLoading(false);
-    if (!res.ok) return;
-    const { url } = await res.json();
-    if (url) window.location.href = url;
+    try {
+      const res = await fetch("/api/billing/portal");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        toast({ title: "Failed to open billing portal", description: body.error ?? undefined, variant: "destructive" });
+        return;
+      }
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      toast({ title: "Failed to open billing portal", description: "Network error. Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <button
@@ -115,13 +125,23 @@ function CancelSubscriptionButton({
 
 function UpgradeButton() {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
   async function startCheckout() {
     setLoading(true);
-    const res = await fetch("/api/billing/checkout", { method: "POST" });
-    setLoading(false);
-    if (!res.ok) return;
-    const { url } = await res.json();
-    if (url) window.location.href = url;
+    try {
+      const res = await fetch("/api/billing/checkout", { method: "POST" });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        toast({ title: "Failed to start checkout", description: body.error ?? undefined, variant: "destructive" });
+        return;
+      }
+      const { url } = await res.json();
+      if (url) window.location.href = url;
+    } catch {
+      toast({ title: "Failed to start checkout", description: "Network error. Please try again.", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <button

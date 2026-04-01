@@ -26,7 +26,10 @@ export async function GET(request: Request) {
   }
 
   const { data: integrations, error: intgError } = await query;
-  if (intgError) return NextResponse.json({ error: intgError.message }, { status: 500 });
+  if (intgError) {
+    console.error("[usage GET integrations]", intgError);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 
   if (!integrations || integrations.length === 0) {
     return NextResponse.json([]);
@@ -40,7 +43,10 @@ export async function GET(request: Request) {
     .in("integration_id", ids)
     .order("recorded_at", { ascending: false });
 
-  if (snapError) return NextResponse.json({ error: snapError.message }, { status: 500 });
+  if (snapError) {
+    console.error("[usage GET snapshots]", snapError);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  }
 
   // Get latest per (integration_id, metric_name)
   const latestMap = new Map<string, typeof snapshots[0]>();
