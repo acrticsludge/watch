@@ -3,10 +3,20 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { checkAlertChannelLimit, TierLimitError } from "@/lib/tiers";
 
+// Block private/internal IP ranges to prevent SSRF from the alert worker
+const PRIVATE_IP_RE =
+  /^https?:\/\/(localhost|127\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.|192\.168\.|169\.254\.|0\.0\.0\.0)/i;
+
 const httpsWebhookConfig = z.object({
-  webhook_url: z.string().url().refine((u) => u.startsWith("https://"), {
-    message: "Webhook URL must use HTTPS",
-  }),
+  webhook_url: z
+    .string()
+    .url()
+    .refine((u) => u.startsWith("https://"), {
+      message: "Webhook URL must use HTTPS",
+    })
+    .refine((u) => !PRIVATE_IP_RE.test(u), {
+      message: "Webhook URL cannot target private or internal addresses",
+    }),
 });
 
 const CreateSchema = z.discriminatedUnion("type", [
