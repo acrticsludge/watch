@@ -38,11 +38,17 @@ async function getUserTier(
 ): Promise<keyof typeof TIER_LIMITS> {
   const { data } = await supabase
     .from("subscriptions")
-    .select("tier")
+    .select("tier, status, past_due_since")
     .eq("user_id", userId)
-    .in("status", ["active", "trialing"])
+    .in("status", ["active", "trialing", "past_due"])
     .maybeSingle();
-  const t = data?.tier as keyof typeof TIER_LIMITS | undefined;
+  if (!data) return "free";
+  if (data.status === "past_due") {
+    const gracePeriodMs = 3 * 24 * 60 * 60 * 1000;
+    const since = data.past_due_since ? new Date(data.past_due_since as string).getTime() : 0;
+    if (Date.now() - since > gracePeriodMs) return "free";
+  }
+  const t = data.tier as keyof typeof TIER_LIMITS | undefined;
   return t && t in TIER_LIMITS ? t : "free";
 }
 

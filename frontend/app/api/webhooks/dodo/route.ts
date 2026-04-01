@@ -97,6 +97,7 @@ export async function POST(req: NextRequest) {
         console.error("[dodo webhook] subscription.active upsert failed:", upsertErr);
         return NextResponse.json({ error: upsertErr.message }, { status: 500 });
       }
+      console.log(JSON.stringify({ event: type, userId, dodoSubscriptionId, status: isTrial ? "trialing" : "active", ts: new Date().toISOString() }));
       break;
     }
 
@@ -131,9 +132,11 @@ export async function POST(req: NextRequest) {
           tier: "pro",
           next_billing_at: nextBillingDate ?? null,
           past_due_since: null,
+          cancel_at_period_end: false,
           updated_at: new Date().toISOString(),
         })
         .eq("dodo_subscription_id", dodoSubscriptionId);
+      console.log(JSON.stringify({ event: type, userId, dodoSubscriptionId, status: "active", ts: new Date().toISOString() }));
       break;
     }
 
@@ -165,6 +168,7 @@ export async function POST(req: NextRequest) {
           updated_at: new Date().toISOString(),
         })
         .eq("dodo_subscription_id", dodoSubscriptionId);
+      console.log(JSON.stringify({ event: type, userId, dodoSubscriptionId, status: "canceled", ts: new Date().toISOString() }));
       break;
     }
 
