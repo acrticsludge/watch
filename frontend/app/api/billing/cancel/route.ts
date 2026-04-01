@@ -53,5 +53,6 @@ export async function POST() {
     // Dodo is already cancelled — don't fail the request, just log it.
   }
 
+  console.log(JSON.stringify({ audit: true, action: "subscription.cancel_requested", userId: user.id, dodoSubscriptionId: subscription.dodo_subscription_id, ts: new Date().toISOString() }));
   return NextResponse.json({ success: true });
 }

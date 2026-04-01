@@ -5,6 +5,7 @@ import { createServiceClient } from "@/lib/supabase/service";
 import { encrypt } from "@/lib/encryption";
 import { checkIntegrationLimit, TierLimitError } from "@/lib/tiers";
 import { sendFirstIntegrationEmail } from "@/lib/onboarding/emails";
+import { requireJsonBody, isAuthRateLimited } from "@/lib/api";
 
 const CreateSchema = z.object({
   service: z.enum(["github", "vercel", "supabase", "railway", "mongodb"]),
@@ -46,7 +47,8 @@ export async function GET() {
     .from("integrations")
     .select("id, service, account_label, status, created_at, last_synced_at")
     .neq("status", "disconnected")
-    .order("created_at", { ascending: true });
+    .order("created_at", { ascending: true })
+    .limit(50);
 
   if (error) {
     console.error("[integrations GET]", error);
@@ -63,14 +65,13 @@ export async function POST(request: Request) {
   if (!user)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  let body: unknown;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+  if (isAuthRateLimited(user.id))
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
 
-  const parsed = CreateSchema.safeParse(body);
+  const bodyResult = await requireJsonBody(request);
+  if (!bodyResult.ok) return bodyResult.error;
+
+  const parsed = CreateSchema.safeParse(bodyResult.data);
   if (!parsed.success) {
     return NextResponse.json(
       { error: parsed.error.issues[0]?.message ?? "Invalid input" },
@@ -162,5 +163,6 @@ export async function POST(request: Request) {
     })();
   }
 
+  console.log(JSON.stringify({ audit: true, action: "integration.create", userId: user.id, service, integrationId: data.id, ts: new Date().toISOString() }));
   return NextResponse.json(data, { status: 201 });
 }

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { encrypt } from "@/lib/encryption";
+import { requireJsonBody } from "@/lib/api";
 
 const UpdateSchema = z.object({
   account_label: z.string().min(1).max(80).trim().optional(),
@@ -36,10 +37,10 @@ export async function PATCH(
 
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const bodyResult = await requireJsonBody(request);
+  if (!bodyResult.ok) return bodyResult.error;
 
-  const parsed = UpdateSchema.safeParse(body);
+  const parsed = UpdateSchema.safeParse(bodyResult.data);
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
   const updates: Record<string, unknown> = {};
@@ -125,5 +126,6 @@ export async function DELETE(
     console.error("[integrations DELETE]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
+  console.log(JSON.stringify({ audit: true, action: "integration.delete", userId: user.id, integrationId: id, ts: new Date().toISOString() }));
   return new NextResponse(null, { status: 204 });
 }

@@ -41,7 +41,8 @@ export async function GET(request: Request) {
     .from("usage_snapshots")
     .select("integration_id, metric_name, current_value, limit_value, percent_used, recorded_at")
     .in("integration_id", ids)
-    .order("recorded_at", { ascending: false });
+    .order("recorded_at", { ascending: false })
+    .limit(500);
 
   if (snapError) {
     console.error("[usage GET snapshots]", snapError);

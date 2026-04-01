@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
       );
       if (upsertErr) {
         console.error("[dodo webhook] subscription.active upsert failed:", upsertErr);
-        return NextResponse.json({ error: upsertErr.message }, { status: 500 });
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
       }
       console.log(JSON.stringify({ event: type, userId, dodoSubscriptionId, status: isTrial ? "trialing" : "active", ts: new Date().toISOString() }));
       break;

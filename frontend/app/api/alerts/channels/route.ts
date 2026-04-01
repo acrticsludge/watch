@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { checkAlertChannelLimit, TierLimitError } from "@/lib/tiers";
+import { requireJsonBody, isAuthRateLimited } from "@/lib/api";
 
 // Block private/internal IP ranges to prevent SSRF from the alert worker
 const PRIVATE_IP_RE =
@@ -39,7 +40,8 @@ export async function GET() {
   const { data, error } = await supabase
     .from("alert_channels")
     .select("id, type, config, enabled, created_at")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .limit(20);
 
   if (error) {
     console.error("[channels GET]", error);
@@ -66,10 +68,13 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  if (isAuthRateLimited(user.id))
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
 
-  const parsed = CreateSchema.safeParse(body);
+  const bodyResult = await requireJsonBody(request);
+  if (!bodyResult.ok) return bodyResult.error;
+
+  const parsed = CreateSchema.safeParse(bodyResult.data);
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
   try {
@@ -96,6 +101,7 @@ export async function POST(request: Request) {
     console.error("[channels POST]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
+  console.log(JSON.stringify({ audit: true, action: "channel.create", userId: user.id, channelId: data.id, type: data.type, ts: new Date().toISOString() }));
   return NextResponse.json(data, { status: 201 });
 }
 
@@ -108,10 +114,10 @@ export async function PATCH(request: Request) {
   const id = searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });
 
-  let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  const bodyResult = await requireJsonBody(request);
+  if (!bodyResult.ok) return bodyResult.error;
 
-  const parsed = UpdateSchema.safeParse(body);
+  const parsed = UpdateSchema.safeParse(bodyResult.data);
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
   const updatePayload: {
@@ -155,5 +161,6 @@ export async function DELETE(request: Request) {
     console.error("[channels DELETE]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
+  console.log(JSON.stringify({ audit: true, action: "channel.delete", userId: user.id, channelId: id, ts: new Date().toISOString() }));
   return new NextResponse(null, { status: 204 });
 }

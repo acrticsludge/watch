@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { requireJsonBody } from "@/lib/api";
 
 const PushSubSchema = z.object({
   endpoint: z.string().url(),
@@ -41,7 +42,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Pro feature" }, { status: 403 });
   }
 
-  const parsed = BodySchema.safeParse(await req.json().catch(() => null));
+  const bodyResult = await requireJsonBody(req);
+  if (!bodyResult.ok) return bodyResult.error;
+  const parsed = BodySchema.safeParse(bodyResult.data);
   if (!parsed.success)
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   const { subscription: pushSub, enabled } = parsed.data;

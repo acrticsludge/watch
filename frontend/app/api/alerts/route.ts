@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
+import { requireJsonBody, isAuthRateLimited } from "@/lib/api";
 
 const UpsertSchema = z.object({
   integration_id: z.string().uuid(),
@@ -17,7 +18,8 @@ export async function GET() {
   const { data, error } = await supabase
     .from("alert_configs")
     .select("*")
-    .eq("user_id", user.id);
+    .eq("user_id", user.id)
+    .limit(500);
 
   if (error) {
     console.error("[alerts GET]", error);
@@ -31,10 +33,13 @@ export async function POST(request: Request) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  let body: unknown;
-  try { body = await request.json(); } catch { return NextResponse.json({ error: "Invalid JSON" }, { status: 400 }); }
+  if (isAuthRateLimited(user.id))
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
 
-  const parsed = UpsertSchema.safeParse(body);
+  const bodyResult = await requireJsonBody(request);
+  if (!bodyResult.ok) return bodyResult.error;
+
+  const parsed = UpsertSchema.safeParse(bodyResult.data);
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
   // Verify integration belongs to user
