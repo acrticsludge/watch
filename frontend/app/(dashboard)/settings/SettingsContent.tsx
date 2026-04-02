@@ -175,6 +175,12 @@ interface Integration {
   account_label: string;
 }
 
+interface SpikeConfig {
+  integration_id: string;
+  metric_name: string;
+  enabled: boolean;
+}
+
 interface SettingsContentProps {
   userEmail: string;
   integrations: Integration[];
@@ -187,6 +193,7 @@ interface SettingsContentProps {
   cancelAtPeriodEnd?: boolean;
   defaultTab?: string;
   snapshotMetrics?: Record<string, string[]>;
+  spikeConfigs?: SpikeConfig[];
 }
 
 const DEFAULT_METRICS: Record<string, string[]> = {
@@ -459,6 +466,7 @@ export function SettingsContent({
   cancelAtPeriodEnd = false,
   defaultTab = "alerts",
   snapshotMetrics = {},
+  spikeConfigs = [],
 }: SettingsContentProps) {
   const isPro = tier === "pro" || tier === "team";
   const isTrialing = subscriptionStatus === "trialing";
@@ -514,6 +522,31 @@ export function SettingsContent({
   const [pwSaving, setPwSaving] = useState(false);
 
   const supabase = createClient();
+
+  const [spikeEnabled, setSpikeEnabled] = useState<Record<string, boolean>>(
+    () => {
+      const map: Record<string, boolean> = {};
+      for (const cfg of spikeConfigs) {
+        map[`${cfg.integration_id}::${cfg.metric_name}`] = cfg.enabled;
+      }
+      return map;
+    },
+  );
+
+  async function saveSpikeConfig(integrationId: string, metricName: string) {
+    const key = `${integrationId}::${metricName}`;
+    const enabled = spikeEnabled[key] ?? false;
+    const res = await fetch("/api/alerts/spikes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ integration_id: integrationId, metric_name: metricName, enabled }),
+    });
+    if (!res.ok) {
+      toast({ title: "Failed to save spike config", variant: "destructive" });
+    } else {
+      toast({ title: "Spike alert saved" });
+    }
+  }
 
   async function saveThreshold(integrationId: string, metricName: string) {
     const key = `${integrationId}::${metricName}`;
@@ -762,6 +795,63 @@ export function SettingsContent({
                         </div>
                       );
                     })}
+                  </div>
+
+                  {/* Spike Alerts subsection */}
+                  <div className="mt-6 pt-5 border-t border-white/[0.04]">
+                    <div className="flex items-center gap-2 mb-4">
+                      <h4 className="text-sm font-medium text-zinc-300">Spike Alerts</h4>
+                      {!isPro && (
+                        <span className="text-[10px] font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">
+                          Pro
+                        </span>
+                      )}
+                    </div>
+                    {!isPro ? (
+                      <p className="text-sm text-zinc-600">
+                        Spike detection is available on the{" "}
+                        <a
+                          href="/pricing"
+                          className="text-zinc-400 hover:text-white underline underline-offset-2 transition-colors"
+                        >
+                          Pro plan
+                        </a>
+                        . Get notified when a metric suddenly jumps above its normal baseline.
+                      </p>
+                    ) : (
+                      <div className="space-y-4">
+                        {metrics.map((metric) => {
+                          const key = `${intg.id}::${metric}`;
+                          const enabled = spikeEnabled[key] ?? false;
+                          return (
+                            <div key={`spike-${metric}`} className="flex items-center gap-4">
+                              <Switch
+                                checked={enabled}
+                                onCheckedChange={(checked) =>
+                                  setSpikeEnabled((p) => ({ ...p, [key]: checked }))
+                                }
+                              />
+                              <div className="flex-1">
+                                <Label className="text-sm text-zinc-400">
+                                  {METRIC_LABELS[metric] ?? metric}
+                                </Label>
+                                <p className="text-xs text-zinc-600 mt-0.5">
+                                  Alert when this metric spikes above its recent baseline
+                                </p>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => saveSpikeConfig(intg.id, metric)}
+                                className="border-white/10 text-zinc-300 hover:bg-white/[0.06]"
+                              >
+                                Save
+                              </Button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
               );

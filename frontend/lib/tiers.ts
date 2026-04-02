@@ -32,7 +32,7 @@ export class TierLimitError extends Error {
   }
 }
 
-async function getUserTier(
+export async function getUserTier(
   supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
   userId: string,
 ): Promise<keyof typeof TIER_LIMITS> {

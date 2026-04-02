@@ -28,6 +28,7 @@ Each service requires an API key or token. Keys are encrypted before being store
 - All alert channels (Email, Slack, Discord, Browser Push)
 - 5-minute polling
 - 30-day history + usage graphs
+- Spike detection alerts — notified when a metric spikes unusually above its recent baseline
 
 ## Status Indicators
 
