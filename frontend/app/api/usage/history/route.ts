@@ -57,6 +57,10 @@ export async function GET(req: NextRequest) {
 
   const days = TIER_LIMITS[tier].historyDays;
   const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
+  // Fetch newest-first so that PostgREST's default 1000-row cap doesn't silently
+  // truncate recent data. Cap at 96 points/day (15-min intervals) × history window.
+  // We reverse before returning so the chart always receives ascending order.
+  const maxPoints = days * 96;
 
   const { data: snapshots, error } = await supabase
     .from("usage_snapshots")
@@ -65,11 +69,12 @@ export async function GET(req: NextRequest) {
     .eq("metric_name", metricName)
     .is("entity_id", null)
     .gte("recorded_at", since)
-    .order("recorded_at", { ascending: true });
+    .order("recorded_at", { ascending: false })
+    .limit(maxPoints);
 
   if (error) {
     console.error("[usage history GET]", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-  return NextResponse.json(snapshots ?? []);
+  return NextResponse.json((snapshots ?? []).reverse());
 }

@@ -68,14 +68,38 @@ const SERVICE_ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
+// Metrics that are instantaneous readings, sizes, or rates — they fluctuate up
+// and down rather than accumulating toward a monthly limit, so linear extrapolation
+// produces meaningless "days to limit" values.
+const FLUCTUATING_METRICS = new Set([
+  // Instantaneous resource usage
+  "memory_usage_mb", "memory_peak_mb", "memory_resident_mb",
+  "cpu_percent", "cpu_peak_percent",
+  "disk_usage_mb",
+  // Database / storage sizes (grow slowly, don't reset monthly)
+  "db_size_mb", "storage_mb", "collection_size_mb", "actions_storage_gb",
+  // Instantaneous counts & ratios
+  "db_connections", "connections", "cache_hit_ratio", "realtime_peak_connections",
+  "slow_queries_count",
+  // Latency / performance readings
+  "replication_lag_s", "avg_read_latency_ms", "avg_write_latency_ms",
+  "disk_iops_read", "disk_iops_write",
+  // Hourly network throughput rates (not monthly cumulative totals)
+  "network_bytes_in_mb", "network_bytes_out_mb",
+]);
+
 type Projection =
   | { type: "will-exceed"; daysLeft: number }
   | { type: "safe"; projectedPct: number };
 
-function getProjection(current: number, limit: number | null): Projection | null {
+function getProjection(metricName: string, current: number, limit: number | null): Projection | null {
+  if (FLUCTUATING_METRICS.has(metricName)) return null;
   if (limit === null || limit <= 0) return null;
   const now = new Date();
   const dayOfMonth = now.getDate();
+  // Need at least 3 days of data before the extrapolation is meaningful.
+  // On day 1-2, dividing by dayOfMonth produces a wildly inflated daily rate.
+  if (dayOfMonth < 3) return null;
   const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   const daysRemaining = daysInMonth - dayOfMonth;
   if (current <= 0) return null;
@@ -180,7 +204,7 @@ function MetricRow({
           {snap.limit_value !== null ? ` / ${snap.limit_value.toLocaleString()} ${unit}` : ` ${unit}`}
         </span>
         {(() => {
-          const proj = getProjection(snap.current_value, snap.limit_value);
+          const proj = getProjection(snap.metric_name, snap.current_value, snap.limit_value);
           if (!proj) return null;
           if (proj.type === "will-exceed") {
             return (
@@ -491,7 +515,7 @@ export function GroupedUsageCard({
         <div className="flex-1 space-y-2.5 mb-3">
           {visible.map((snap) => {
             const pct = Math.round(snap.percent_used ?? 0);
-            const proj = getProjection(snap.current_value, snap.limit_value);
+            const proj = getProjection(snap.metric_name, snap.current_value, snap.limit_value);
             return (
               <div key={snap.metric_name} className="flex items-center gap-2">
                 <span className="text-xs text-zinc-600 w-32 shrink-0 truncate">

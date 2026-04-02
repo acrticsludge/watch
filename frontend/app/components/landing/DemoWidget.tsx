@@ -59,7 +59,7 @@ function estimateDaysUntilLimit(current: number, limit: number): number | null {
   const dayOfMonth = now.getDate();
   const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   const daysRemaining = daysInMonth - dayOfMonth;
-  if (dayOfMonth === 0 || current <= 0) return null;
+  if (dayOfMonth < 3 || current <= 0) return null;
   const dailyRate = current / dayOfMonth;
   const daysLeft = (limit - current) / dailyRate;
   if (daysLeft < daysRemaining) return Math.max(0, Math.round(daysLeft));
