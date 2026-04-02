@@ -43,7 +43,8 @@ export async function sendDiscordAlert(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ embeds: [embed] }),
     });
-  } catch {
+  } catch (err) {
+    console.error("[discord alert] delivery failed:", err instanceof Error ? err.message : String(err));
     // Discord failure should not block other channels
   }
 }

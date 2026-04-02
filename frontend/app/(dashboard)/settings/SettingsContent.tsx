@@ -536,59 +536,74 @@ export function SettingsContent({
   async function saveSpikeConfig(integrationId: string, metricName: string) {
     const key = `${integrationId}::${metricName}`;
     const enabled = spikeEnabled[key] ?? false;
-    const res = await fetch("/api/alerts/spikes", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ integration_id: integrationId, metric_name: metricName, enabled }),
-    });
-    if (!res.ok) {
-      toast({ title: "Failed to save spike config", variant: "destructive" });
-    } else {
-      toast({ title: "Spike alert saved" });
+    try {
+      const res = await fetch("/api/alerts/spikes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ integration_id: integrationId, metric_name: metricName, enabled }),
+      });
+      if (!res.ok) {
+        setSpikeEnabled((p) => ({ ...p, [key]: !enabled }));
+        toast({ title: "Failed to save spike config", variant: "destructive" });
+      } else {
+        toast({ title: "Spike alert saved" });
+      }
+    } catch {
+      setSpikeEnabled((p) => ({ ...p, [key]: !enabled }));
+      toast({ title: "Failed to save spike config", description: "Network error. Please try again.", variant: "destructive" });
     }
   }
 
   async function saveThreshold(integrationId: string, metricName: string) {
     const key = `${integrationId}::${metricName}`;
     const val = thresholds[key] ?? { threshold: 80, enabled: true };
-    const res = await fetch("/api/alerts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        integration_id: integrationId,
-        metric_name: metricName,
-        threshold_percent: val.threshold,
-        enabled: val.enabled,
-      }),
-    });
-    if (!res.ok) {
-      toast({ title: "Failed to save threshold", variant: "destructive" });
-    } else {
-      toast({ title: "Threshold saved" });
+    try {
+      const res = await fetch("/api/alerts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          integration_id: integrationId,
+          metric_name: metricName,
+          threshold_percent: val.threshold,
+          enabled: val.enabled,
+        }),
+      });
+      if (!res.ok) {
+        toast({ title: "Failed to save threshold", variant: "destructive" });
+      } else {
+        toast({ title: "Threshold saved" });
+      }
+    } catch {
+      toast({ title: "Failed to save threshold", description: "Network error. Please try again.", variant: "destructive" });
     }
   }
 
   async function saveEmailChannel() {
     setEmailSaving(true);
-    const method = emailChannel ? "PATCH" : "POST";
-    const url = emailChannel
-      ? `/api/alerts/channels?id=${emailChannel.id}`
-      : "/api/alerts/channels";
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type: "email",
-        config: { email: userEmail },
-        enabled: emailEnabled,
-      }),
-    });
-    setEmailSaving(false);
-    if (!res.ok) {
-      toast({ title: "Failed to save email settings", variant: "destructive" });
-    } else {
-      toast({ title: "Email notifications updated" });
-      router.refresh();
+    try {
+      const method = emailChannel ? "PATCH" : "POST";
+      const url = emailChannel
+        ? `/api/alerts/channels?id=${emailChannel.id}`
+        : "/api/alerts/channels";
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "email",
+          config: { email: userEmail },
+          enabled: emailEnabled,
+        }),
+      });
+      if (!res.ok) {
+        toast({ title: "Failed to save email settings", variant: "destructive" });
+      } else {
+        toast({ title: "Email notifications updated" });
+        router.refresh();
+      }
+    } catch {
+      toast({ title: "Failed to save email settings", description: "Network error. Please try again.", variant: "destructive" });
+    } finally {
+      setEmailSaving(false);
     }
   }
 
@@ -602,23 +617,27 @@ export function SettingsContent({
     const url = existing
       ? `/api/alerts/channels?id=${existing.id}`
       : "/api/alerts/channels";
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        type,
-        config: { webhook_url: webhookUrl },
-        enabled,
-      }),
-    });
-    if (!res.ok) {
-      toast({
-        title: `Failed to save ${type} settings`,
-        variant: "destructive",
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type,
+          config: { webhook_url: webhookUrl },
+          enabled,
+        }),
       });
-    } else {
-      toast({ title: `${type} notifications updated` });
-      router.refresh();
+      if (!res.ok) {
+        toast({
+          title: `Failed to save ${type} settings`,
+          variant: "destructive",
+        });
+      } else {
+        toast({ title: `${type} notifications updated` });
+        router.refresh();
+      }
+    } catch {
+      toast({ title: `Failed to save ${type} settings`, description: "Network error. Please try again.", variant: "destructive" });
     }
   }
 

@@ -14,8 +14,12 @@ export default function SettingsPage({
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white tracking-tight">Settings</h1>
-        <p className="text-zinc-500 text-sm mt-1">Configure alert thresholds and notification channels.</p>
+        <h1 className="text-2xl font-bold text-white tracking-tight">
+          Settings
+        </h1>
+        <p className="text-zinc-500 text-sm mt-1">
+          Configure alert thresholds and notification channels.
+        </p>
       </div>
       <Suspense fallback={<SettingsSkeleton />}>
         <SettingsData searchParams={searchParams} />
@@ -32,18 +36,38 @@ async function SettingsData({
   const { tab } = await searchParams;
   const supabase = await createClient();
 
-  const [session, subscription, { data: integrations }, { data: alertConfigs }, { data: alertChannels }, { data: spikeConfigs }] =
-    await Promise.all([
-      getSession(),
-      getSubscription(),
-      supabase
-        .from("integrations")
-        .select("id, service, account_label")
-        .neq("status", "disconnected"),
-      supabase.from("alert_configs").select("*"),
-      supabase.from("alert_channels").select("id, type, config, enabled"),
-      supabase.from("spike_configs").select("integration_id, metric_name, enabled"),
-    ]);
+  const [
+    session,
+    subscription,
+    { data: integrations },
+    { data: alertConfigs },
+    { data: alertChannels },
+  ] = await Promise.all([
+    getSession(),
+    getSubscription(),
+    supabase
+      .from("integrations")
+      .select("id, service, account_label")
+      .neq("status", "disconnected"),
+    supabase.from("alert_configs").select("*"),
+    supabase.from("alert_channels").select("id, type, config, enabled"),
+  ]);
+
+  // Fetch spike configs separately so a failure (e.g. migration not yet applied)
+  // doesn't crash the entire settings page.
+  let spikeConfigs: {
+    integration_id: string;
+    metric_name: string;
+    enabled: boolean;
+  }[] = [];
+  try {
+    const { data } = await supabase
+      .from("spike_configs")
+      .select("integration_id, metric_name, enabled");
+    spikeConfigs = data ?? [];
+  } catch {
+    // Ignore errors, e.g., table not yet migrated
+  }
 
   // Build a map of which metrics have snapshot data per integration.
   // Used to hide alert configs for pro metrics that this cluster never reports
@@ -59,7 +83,8 @@ async function SettingsData({
       .limit(200);
     const seen = new Map<string, Set<string>>();
     for (const row of snapRows ?? []) {
-      if (!seen.has(row.integration_id)) seen.set(row.integration_id, new Set());
+      if (!seen.has(row.integration_id))
+        seen.set(row.integration_id, new Set());
       seen.get(row.integration_id)!.add(row.metric_name);
     }
     for (const [id, metricsSet] of seen) {
@@ -109,7 +134,10 @@ function SettingsSkeleton() {
       {/* Tab bar skeleton */}
       <div className="flex gap-1 border-b border-white/6 pb-0">
         {[80, 60, 80, 60].map((w, i) => (
-          <div key={i} className={`h-9 w-${w} bg-white/5 rounded-t-lg animate-pulse`} />
+          <div
+            key={i}
+            className={`h-9 w-${w} bg-white/5 rounded-t-lg animate-pulse`}
+          />
         ))}
       </div>
       {/* Content skeleton */}
