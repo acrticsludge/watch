@@ -198,6 +198,30 @@ export type Database = {
         };
         Relationships: [];
       };
+      spike_configs: {
+        Row: {
+          id: string;
+          user_id: string;
+          integration_id: string;
+          metric_name: string;
+          enabled: boolean;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          integration_id: string;
+          metric_name: string;
+          enabled?: boolean;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          integration_id?: string;
+          metric_name?: string;
+          enabled?: boolean;
+        };
+        Relationships: [];
+      };
       alert_history: {
         Row: {
           id: string;
@@ -207,6 +231,7 @@ export type Database = {
           percent_used: number;
           channel: ChannelType;
           sent_at: string;
+          alert_kind: "threshold" | "spike";
         };
         Insert: {
           id?: string;
@@ -216,6 +241,7 @@ export type Database = {
           percent_used: number;
           channel: ChannelType;
           sent_at?: string;
+          alert_kind?: "threshold" | "spike";
         };
         Update: {
           id?: string;
@@ -225,6 +251,7 @@ export type Database = {
           percent_used?: number;
           channel?: ChannelType;
           sent_at?: string;
+          alert_kind?: "threshold" | "spike";
         };
         Relationships: [
           {

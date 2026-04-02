@@ -51,6 +51,7 @@ export async function fireAlerts(
         metric_name: alert.metricName,
         percent_used: alert.percentUsed,
         channel: channel.type,
+        alert_kind: alert.alertKind ?? "threshold",
       });
     })
   );

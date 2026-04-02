@@ -32,7 +32,7 @@ async function SettingsData({
   const { tab } = await searchParams;
   const supabase = await createClient();
 
-  const [session, subscription, { data: integrations }, { data: alertConfigs }, { data: alertChannels }] =
+  const [session, subscription, { data: integrations }, { data: alertConfigs }, { data: alertChannels }, { data: spikeConfigs }] =
     await Promise.all([
       getSession(),
       getSubscription(),
@@ -42,6 +42,7 @@ async function SettingsData({
         .neq("status", "disconnected"),
       supabase.from("alert_configs").select("*"),
       supabase.from("alert_channels").select("id, type, config, enabled"),
+      supabase.from("spike_configs").select("integration_id, metric_name, enabled"),
     ]);
 
   // Build a map of which metrics have snapshot data per integration.
@@ -97,6 +98,7 @@ async function SettingsData({
       cancelAtPeriodEnd={subscription?.cancel_at_period_end ?? false}
       defaultTab={tab ?? "alerts"}
       snapshotMetrics={snapshotMetrics}
+      spikeConfigs={spikeConfigs ?? []}
     />
   );
 }

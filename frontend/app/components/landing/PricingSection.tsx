@@ -68,6 +68,7 @@ export function PricingSection({
         "5-minute polling",
         "30-day alert history",
         "Usage history charts",
+        "Spike detection and anomaly alerts",
       ],
       cta: "Start free trial",
       href: null,
