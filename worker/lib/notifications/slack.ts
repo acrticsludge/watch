@@ -39,7 +39,8 @@ export async function sendSlackAlert(
         ],
       }),
     });
-  } catch {
+  } catch (err) {
+    console.error("[slack alert] delivery failed:", err instanceof Error ? err.message : String(err));
     // Slack failure should not block other channels
   }
 }

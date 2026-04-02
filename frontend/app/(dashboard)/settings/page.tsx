@@ -32,7 +32,7 @@ async function SettingsData({
   const { tab } = await searchParams;
   const supabase = await createClient();
 
-  const [session, subscription, { data: integrations }, { data: alertConfigs }, { data: alertChannels }, { data: spikeConfigs }] =
+  const [session, subscription, { data: integrations }, { data: alertConfigs }, { data: alertChannels }] =
     await Promise.all([
       getSession(),
       getSubscription(),
@@ -42,8 +42,14 @@ async function SettingsData({
         .neq("status", "disconnected"),
       supabase.from("alert_configs").select("*"),
       supabase.from("alert_channels").select("id, type, config, enabled"),
-      supabase.from("spike_configs").select("integration_id, metric_name, enabled"),
     ]);
+
+  // Fetch spike configs separately so a failure (e.g. migration not yet applied)
+  // doesn't crash the entire settings page.
+  const { data: spikeConfigs } = await supabase
+    .from("spike_configs")
+    .select("integration_id, metric_name, enabled")
+    .catch(() => ({ data: [] as { integration_id: string; metric_name: string; enabled: boolean }[] }));
 
   // Build a map of which metrics have snapshot data per integration.
   // Used to hide alert configs for pro metrics that this cluster never reports
