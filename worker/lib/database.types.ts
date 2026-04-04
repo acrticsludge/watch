@@ -17,6 +17,7 @@ export type Database = {
         Row: {
           id: string;
           user_id: string;
+          project_id: string | null;
           service: ServiceType;
           account_label: string;
           api_key: string;
@@ -28,6 +29,7 @@ export type Database = {
         Insert: {
           id?: string;
           user_id: string;
+          project_id?: string | null;
           service: ServiceType;
           account_label: string;
           api_key: string;
@@ -39,6 +41,7 @@ export type Database = {
         Update: {
           id?: string;
           user_id?: string;
+          project_id?: string | null;
           service?: ServiceType;
           account_label?: string;
           api_key?: string;

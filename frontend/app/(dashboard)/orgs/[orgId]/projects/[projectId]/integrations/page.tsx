@@ -1,0 +1,57 @@
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { createClient } from "@/lib/supabase/server";
+import { getSubscription } from "@/lib/queries/user";
+import { ProjectIntegrationsContent } from "./ProjectIntegrationsContent";
+
+export const metadata: Metadata = { title: "Integrations" };
+
+export default function ProjectIntegrationsPage({
+  params,
+}: {
+  params: Promise<{ orgId: string; projectId: string }>;
+}) {
+  return (
+    <div>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-white tracking-tight">Integrations</h1>
+        <p className="text-zinc-500 text-sm mt-1">Connect your services to start monitoring usage.</p>
+      </div>
+      <Suspense fallback={<IntegrationsSkeleton />}>
+        <IntegrationsData params={params} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function IntegrationsData({
+  params,
+}: {
+  params: Promise<{ orgId: string; projectId: string }>;
+}) {
+  const { projectId } = await params;
+  const supabase = await createClient();
+
+  const [{ data: integrations }, subscription] = await Promise.all([
+    supabase
+      .from("integrations")
+      .select("id, service, account_label, status, created_at, last_synced_at, meta, sort_order")
+      .eq("project_id", projectId)
+      .neq("status", "disconnected")
+      .order("sort_order", { ascending: true }),
+    getSubscription(),
+  ]);
+
+  const tier = subscription?.tier ?? "free";
+  return <ProjectIntegrationsContent integrations={integrations ?? []} tier={tier} projectId={projectId} />;
+}
+
+function IntegrationsSkeleton() {
+  return (
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {[0, 1, 2].map((i) => (
+        <div key={i} className="bg-[#111] border border-white/6 rounded-xl p-5 h-36 animate-pulse" />
+      ))}
+    </div>
+  );
+}

@@ -11,6 +11,7 @@ const CreateSchema = z.object({
   service: z.enum(["github", "vercel", "supabase", "railway", "mongodb"]),
   account_label: z.string().min(1).max(80).trim(),
   api_key: z.string().min(1).trim(),
+  project_id: z.string().uuid().optional().nullable(),
   "meta.project_ref": z.string().optional(),
   "meta.public_key": z.string().optional(),
   "meta.project_id": z.string().optional(),
@@ -82,6 +83,7 @@ export async function POST(request: Request) {
   const {
     service,
     account_label,
+    project_id: integrationProjectId,
     "meta.project_ref": projectRef,
     "meta.public_key": publicKey,
     "meta.project_id": projectId,
@@ -89,8 +91,20 @@ export async function POST(request: Request) {
   } = parsed.data;
   const rawApiKey = parsed.data.api_key;
 
+  // If project_id provided, verify ownership before limit check
+  if (integrationProjectId) {
+    const { data: proj } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("id", integrationProjectId)
+      .single();
+    if (!proj) {
+      return NextResponse.json({ error: "Project not found or access denied" }, { status: 403 });
+    }
+  }
+
   try {
-    await checkIntegrationLimit(supabase, user.id, service);
+    await checkIntegrationLimit(supabase, user.id, service, integrationProjectId);
   } catch (err) {
     if (err instanceof TierLimitError) {
       return NextResponse.json(
@@ -118,18 +132,25 @@ export async function POST(request: Request) {
       : null;
 
   // Set sort_order to the current count so new accounts go to the end
-  const { count: existingCount } = await supabase
+  // Scope sort_order by project if provided, otherwise by user
+  let sortOrderQuery = supabase
     .from("integrations")
     .select("id", { count: "exact", head: true })
-    .eq("user_id", user.id)
     .eq("service", service)
     .neq("status", "disconnected");
+  if (integrationProjectId) {
+    sortOrderQuery = sortOrderQuery.eq("project_id", integrationProjectId);
+  } else {
+    sortOrderQuery = sortOrderQuery.eq("user_id", user.id);
+  }
+  const { count: existingCount } = await sortOrderQuery;
 
   const serviceClient = createServiceClient();
   const { data, error } = await serviceClient
     .from("integrations")
     .insert({
       user_id: user.id,
+      project_id: integrationProjectId ?? null,
       service,
       account_label,
       api_key: encryptedKey,
