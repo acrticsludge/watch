@@ -22,7 +22,7 @@ export async function runPollCycle(): Promise<void> {
 
   const { data: integrations, error } = await supabase
     .from("integrations")
-    .select("id, user_id, service, account_label, api_key, meta, last_synced_at")
+    .select("id, user_id, project_id, service, account_label, api_key, meta, last_synced_at")
     .neq("status", "disconnected");
 
   if (error) {

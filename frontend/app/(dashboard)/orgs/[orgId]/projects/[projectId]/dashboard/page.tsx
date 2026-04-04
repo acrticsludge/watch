@@ -1,0 +1,269 @@
+import type { Metadata } from "next";
+import { Suspense } from "react";
+import { createClient } from "@/lib/supabase/server";
+import { getSubscription } from "@/lib/queries/user";
+import { GroupedUsageCard } from "@/app/components/dashboard/GroupedUsageCard";
+import { DashboardRefresher } from "@/app/(dashboard)/dashboard/DashboardRefresher";
+import { Button } from "@/app/components/ui/button";
+import Link from "next/link";
+import { FREE_METRICS } from "@/lib/utils";
+
+export const metadata: Metadata = { title: "Dashboard" };
+
+interface Integration {
+  id: string;
+  service: string;
+  account_label: string;
+  status: string;
+  last_synced_at: string | null;
+  sort_order: number;
+}
+
+interface LatestSnapshot {
+  integration_id: string;
+  metric_name: string;
+  current_value: number;
+  limit_value: number | null;
+  percent_used: number | null;
+  entity_id: string | null;
+  entity_label: string | null;
+  recorded_at: string;
+}
+
+export default function ProjectDashboardPage({
+  params,
+}: {
+  params: Promise<{ orgId: string; projectId: string }>;
+}) {
+  return (
+    <div>
+      <div className="flex items-start justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-white tracking-tight">Dashboard</h1>
+        </div>
+        <DashboardRefresher />
+      </div>
+      <Suspense fallback={<UsageSkeleton />}>
+        <ProjectDashboardBody params={params} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function ProjectDashboardBody({
+  params,
+}: {
+  params: Promise<{ orgId: string; projectId: string }>;
+}) {
+  const { orgId, projectId } = await params;
+  const supabase = await createClient();
+
+  const { data: integrations } = await supabase
+    .from("integrations")
+    .select("id, service, account_label, status, last_synced_at, sort_order")
+    .eq("project_id", projectId)
+    .neq("status", "disconnected")
+    .order("sort_order", { ascending: true });
+
+  if (!integrations || integrations.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <div className="h-16 w-16 rounded-2xl bg-white/4 border border-white/6 flex items-center justify-center mb-5">
+          <svg className="h-8 w-8 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        </div>
+        <h2 className="text-base font-semibold text-white mb-2">No services connected yet</h2>
+        <p className="text-zinc-500 text-sm max-w-xs mb-6 leading-relaxed">
+          Connect GitHub Actions, Vercel, or Supabase to start monitoring usage and get alerted before you hit limits.
+        </p>
+        <Button asChild size="sm">
+          <Link href={`/orgs/${orgId}/projects/${projectId}/integrations`}>Connect a service</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <Suspense fallback={<UsageSkeleton />}>
+      <UsageContent integrations={integrations} projectId={projectId} orgId={orgId} />
+    </Suspense>
+  );
+}
+
+async function UsageContent({
+  integrations,
+  projectId,
+  orgId,
+}: {
+  integrations: Integration[];
+  projectId: string;
+  orgId: string;
+}) {
+  const supabase = await createClient();
+  const integrationIds = integrations.map((i) => i.id);
+
+  const [subscription, { data: snapshots }] = await Promise.all([
+    getSubscription(),
+    supabase
+      .from("usage_snapshots")
+      .select("integration_id, metric_name, current_value, limit_value, percent_used, entity_id, entity_label, recorded_at")
+      .in("integration_id", integrationIds)
+      .order("recorded_at", { ascending: false })
+      .limit(5000),
+  ]);
+
+  const tier = subscription?.tier ?? "free";
+  const isFree = tier === "free";
+
+  const activeIntegrations = isFree
+    ? (() => {
+        const seen = new Set<string>();
+        return integrations.filter((i) => {
+          if (seen.has(i.service)) return false;
+          seen.add(i.service);
+          return true;
+        });
+      })()
+    : integrations;
+
+  const latestMap = new Map<string, LatestSnapshot>();
+  for (const s of snapshots ?? []) {
+    const key = `${s.integration_id}::${s.metric_name}::${s.entity_id ?? ""}`;
+    if (!latestMap.has(key)) latestMap.set(key, s);
+  }
+
+  const integrationServiceMap = new Map(activeIntegrations.map((i) => [i.id, i.service]));
+  const allSnapshots = Array.from(latestMap.values());
+  const aggregateSnapshots = allSnapshots.filter((s) => {
+    if (s.entity_id) return false;
+    if (!isFree) return true;
+    const service = integrationServiceMap.get(s.integration_id);
+    return (FREE_METRICS[service ?? ""] ?? []).includes(s.metric_name);
+  });
+
+  const criticalCount = aggregateSnapshots.filter((s) => (s.percent_used ?? 0) >= 80).length;
+  const warningCount = aggregateSnapshots.filter((s) => (s.percent_used ?? 0) >= 60 && (s.percent_used ?? 0) < 80).length;
+  const healthyCount = aggregateSnapshots.filter((s) => (s.percent_used ?? 0) < 60).length;
+
+  return (
+    <>
+      {aggregateSnapshots.length > 0 && (
+        <div className="grid grid-cols-3 gap-3 mb-8">
+          <div className="bg-[#111] border border-white/6 rounded-xl px-4 py-3.5">
+            <p className="text-xs text-zinc-600 mb-1.5 font-medium">Healthy</p>
+            <p className="text-2xl font-semibold text-green-400 tabular-nums leading-none">{healthyCount}</p>
+          </div>
+          <div className="bg-[#111] border border-white/6 rounded-xl px-4 py-3.5">
+            <p className="text-xs text-zinc-600 mb-1.5 font-medium">Warning</p>
+            <p className="text-2xl font-semibold text-amber-400 tabular-nums leading-none">{warningCount}</p>
+          </div>
+          <div className="bg-[#111] border border-white/6 rounded-xl px-4 py-3.5">
+            <p className="text-xs text-zinc-600 mb-1.5 font-medium">Critical</p>
+            <p className="text-2xl font-semibold text-red-400 tabular-nums leading-none">{criticalCount}</p>
+          </div>
+        </div>
+      )}
+
+      <div className="flex items-center gap-3 mb-5">
+        <p className="text-xs font-medium text-zinc-600 uppercase tracking-widest shrink-0">Usage</p>
+        <div className="flex-1 h-px bg-white/5" />
+      </div>
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {activeIntegrations.map((integration) => {
+          const freeMetrics = FREE_METRICS[integration.service] ?? [];
+          const integrationSnapshots = Array.from(latestMap.entries())
+            .filter(([key]) => key.startsWith(`${integration.id}::`))
+            .map(([, v]) => v)
+            .filter((s) => !s.entity_id)
+            .filter((s) => !isFree || freeMetrics.includes(s.metric_name));
+
+          const entitySnapshots = isFree
+            ? []
+            : Array.from(latestMap.entries())
+                .filter(([key]) => key.startsWith(`${integration.id}::`))
+                .map(([, v]) => v)
+                .filter((s) => !!s.entity_id);
+
+          if (integration.status === "unsupported" || integrationSnapshots.length === 0) {
+            const isError = integration.status === "error";
+            const isUnsupported = integration.status === "unsupported";
+            let borderClass = "border-white/6";
+            if (isError) borderClass = "border-red-500/20";
+            if (isUnsupported) borderClass = "border-amber-500/20";
+
+            return (
+              <div key={integration.id} className={`h-full bg-[#111] border rounded-xl p-5 flex flex-col ${borderClass}`}>
+                <div className="flex items-center gap-2.5 mb-3">
+                  {isError || isUnsupported ? (
+                    <>
+                      <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${isError ? "bg-red-500/10" : "bg-amber-500/10"}`}>
+                        <svg className={`h-4 w-4 ${isError ? "text-red-400" : "text-amber-400"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-zinc-200">{integration.account_label}</p>
+                        <p className="text-xs text-zinc-600 capitalize">{integration.service}</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="h-8 w-8 rounded-lg bg-white/5 animate-pulse" />
+                      <div className="space-y-1.5">
+                        <div className="h-3 w-24 bg-white/5 rounded animate-pulse" />
+                        <div className="h-2.5 w-16 bg-white/4 rounded animate-pulse" />
+                      </div>
+                    </>
+                  )}
+                </div>
+                <p className={`text-sm ${isError ? "text-red-400" : isUnsupported ? "text-amber-400/80" : "text-zinc-600"}`}>
+                  {isError ? "Sync failed — check your API key in Integrations." : isUnsupported ? "Billing API not available for your current plan." : "Waiting for first sync..."}
+                </p>
+              </div>
+            );
+          }
+
+          return (
+            <GroupedUsageCard
+              key={integration.id}
+              integrationId={integration.id}
+              service={integration.service}
+              accountLabel={integration.account_label}
+              snapshots={integrationSnapshots}
+              entitySnapshots={entitySnapshots}
+              lastSyncedAt={integration.last_synced_at}
+              status={integration.status}
+              isPro={!isFree}
+            />
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
+function UsageSkeleton() {
+  return (
+    <>
+      <div className="grid grid-cols-3 gap-3 mb-8">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="bg-[#111] border border-white/6 rounded-xl px-4 py-3.5">
+            <div className="h-3 w-14 bg-white/5 rounded animate-pulse mb-3" />
+            <div className="h-7 w-8 bg-white/5 rounded animate-pulse" />
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center gap-3 mb-5">
+        <div className="h-3 w-12 bg-white/5 rounded animate-pulse" />
+        <div className="flex-1 h-px bg-white/5" />
+      </div>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="bg-[#111] border border-white/6 rounded-xl p-5 h-48 animate-pulse" />
+        ))}
+      </div>
+    </>
+  );
+}

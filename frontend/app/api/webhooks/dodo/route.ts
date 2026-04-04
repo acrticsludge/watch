@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { Webhook } from "standardwebhooks";
+import { isWebhookRateLimited } from "@/lib/api";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -22,6 +23,12 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error("[dodo webhook] signature verification failed:", err);
     return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+  }
+
+  // IP-based rate limit — defense-in-depth after signature verification
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? req.headers.get("x-real-ip") ?? "unknown";
+  if (isWebhookRateLimited(ip)) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429 });
   }
 
   const type = event.type as string;

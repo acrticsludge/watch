@@ -5,6 +5,34 @@
 create extension if not exists "uuid-ossp";
 
 -- ============================================================
+-- organizations
+-- ============================================================
+create table if not exists organizations (
+  id         uuid primary key default uuid_generate_v4(),
+  owner_id   uuid not null references auth.users(id) on delete cascade,
+  name       text not null check (char_length(name) between 1 and 80),
+  slug       text not null check (slug ~ '^[a-z0-9-]{1,40}$'),
+  created_at timestamptz not null default now(),
+  unique (owner_id, slug)
+);
+
+create index if not exists organizations_owner_id_idx on organizations(owner_id);
+
+-- ============================================================
+-- projects
+-- ============================================================
+create table if not exists projects (
+  id         uuid primary key default uuid_generate_v4(),
+  org_id     uuid not null references organizations(id) on delete cascade,
+  name       text not null check (char_length(name) between 1 and 80),
+  slug       text not null check (slug ~ '^[a-z0-9-]{1,40}$'),
+  created_at timestamptz not null default now(),
+  unique (org_id, slug)
+);
+
+create index if not exists projects_org_id_idx on projects(org_id);
+
+-- ============================================================
 -- integrations
 -- ============================================================
 create table if not exists integrations (
@@ -17,11 +45,13 @@ create table if not exists integrations (
                     check (status in ('connected', 'error', 'disconnected')),
   created_at      timestamptz not null default now(),
   last_synced_at  timestamptz,
-  meta            jsonb                    -- service-specific extras (e.g. project_ref for Supabase)
+  meta            jsonb,                   -- service-specific extras (e.g. project_ref for Supabase)
+  project_id      uuid references projects(id) on delete set null
 );
 
 create index if not exists integrations_user_id_idx on integrations(user_id);
 create index if not exists integrations_service_idx on integrations(service);
+create index if not exists integrations_project_id_idx on integrations(project_id);
 
 -- ============================================================
 -- usage_snapshots

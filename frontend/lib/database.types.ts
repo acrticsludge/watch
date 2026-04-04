@@ -13,10 +13,67 @@ export type ChannelType = "email" | "slack" | "discord" | "push";
 export type Database = {
   public: {
     Tables: {
+      organizations: {
+        Row: {
+          id: string;
+          owner_id: string;
+          name: string;
+          slug: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_id: string;
+          name: string;
+          slug: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          owner_id?: string;
+          name?: string;
+          slug?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      projects: {
+        Row: {
+          id: string;
+          org_id: string;
+          name: string;
+          slug: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          org_id: string;
+          name: string;
+          slug: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          org_id?: string;
+          name?: string;
+          slug?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "projects_org_id_fkey";
+            columns: ["org_id"];
+            isOneToOne: false;
+            referencedRelation: "organizations";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
       integrations: {
         Row: {
           id: string;
           user_id: string;
+          project_id: string | null;
           service: ServiceType;
           account_label: string;
           api_key: string;
@@ -29,6 +86,7 @@ export type Database = {
         Insert: {
           id?: string;
           user_id: string;
+          project_id?: string | null;
           service: ServiceType;
           account_label: string;
           api_key: string;
@@ -41,6 +99,7 @@ export type Database = {
         Update: {
           id?: string;
           user_id?: string;
+          project_id?: string | null;
           service?: ServiceType;
           account_label?: string;
           api_key?: string;
