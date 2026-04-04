@@ -2,6 +2,36 @@
 -- Run AFTER schema.sql
 
 -- ============================================================
+-- organizations
+-- ============================================================
+alter table organizations enable row level security;
+
+create policy "organizations: owner can manage"
+  on organizations for all
+  using (auth.uid() = owner_id)
+  with check (auth.uid() = owner_id);
+
+-- ============================================================
+-- projects
+-- ============================================================
+alter table projects enable row level security;
+
+create policy "projects: org owner can manage"
+  on projects for all
+  using (
+    exists (
+      select 1 from organizations
+      where id = projects.org_id and owner_id = auth.uid()
+    )
+  )
+  with check (
+    exists (
+      select 1 from organizations
+      where id = projects.org_id and owner_id = auth.uid()
+    )
+  );
+
+-- ============================================================
 -- integrations
 -- ============================================================
 alter table integrations enable row level security;

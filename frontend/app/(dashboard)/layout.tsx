@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getSession, getSubscription } from "@/lib/queries/user";
+import { getSession, getSubscription, getOrgCount } from "@/lib/queries/user";
 import { Sidebar } from "@/app/components/layout/Sidebar";
 import { ProLaunchBanner } from "@/app/components/dashboard/ProLaunchBanner";
 
@@ -15,6 +15,17 @@ export default async function DashboardLayout({
     const headersList = await headers();
     const pathname = headersList.get("x-pathname") || "/dashboard";
     redirect(`/login?redirectTo=${encodeURIComponent(pathname)}`);
+  }
+
+  // Redirect org-less users to onboarding (new users, or users before migration)
+  // Skip this check for the /onboarding route itself to avoid infinite redirect
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "";
+  if (!pathname.startsWith("/onboarding")) {
+    const orgCount = await getOrgCount();
+    if (orgCount === 0) {
+      redirect("/onboarding");
+    }
   }
 
   const subscription = await getSubscription();

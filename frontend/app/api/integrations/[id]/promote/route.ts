@@ -17,7 +17,7 @@ export async function POST(
   // Fetch the target integration
   const { data: target } = await supabase
     .from("integrations")
-    .select("id, service, sort_order")
+    .select("id, service, sort_order, project_id")
     .eq("id", id)
     .eq("user_id", user.id)
     .single();
@@ -27,14 +27,20 @@ export async function POST(
   if (target.sort_order === 0)
     return NextResponse.json({ message: "Already primary" });
 
-  // Find the current primary for the same service
-  const { data: currentPrimary } = await supabase
+  // Find the current primary for the same service scoped by project (or user)
+  let primaryQuery = supabase
     .from("integrations")
     .select("id, sort_order")
-    .eq("user_id", user.id)
     .eq("service", target.service)
-    .eq("sort_order", 0)
-    .single();
+    .eq("sort_order", 0);
+
+  if (target.project_id) {
+    primaryQuery = primaryQuery.eq("project_id", target.project_id);
+  } else {
+    primaryQuery = primaryQuery.eq("user_id", user.id);
+  }
+
+  const { data: currentPrimary } = await primaryQuery.single();
 
   const serviceClient = createServiceClient();
 

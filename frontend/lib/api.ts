@@ -62,3 +62,25 @@ export function isAuthRateLimited(userId: string): boolean {
   entry.count++;
   return entry.count > RATE_MAX;
 }
+
+// ── Per-IP rate limiter for webhook endpoints ─────────────────────────────────
+const WEBHOOK_RATE_MAX = 100;
+
+const webhookHits = new Map<string, { count: number; resetAt: number }>();
+
+/**
+ * Returns true if the IP has exceeded WEBHOOK_RATE_MAX requests in RATE_WINDOW_MS.
+ * Defense-in-depth against DoS flooding — called after HMAC signature verification.
+ */
+export function isWebhookRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = webhookHits.get(ip);
+
+  if (!entry || now > entry.resetAt) {
+    webhookHits.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return false;
+  }
+
+  entry.count++;
+  return entry.count > WEBHOOK_RATE_MAX;
+}

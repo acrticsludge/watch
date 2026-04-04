@@ -2,16 +2,22 @@ import type { ServiceType, ChannelType } from "@/lib/database.types";
 
 export const TIER_LIMITS = {
   free: {
+    orgs: 1,
+    projectsPerOrg: 1,
     integrationsPerService: 1,
     historyDays: 7,
     alertChannels: ["email"] as ChannelType[],
   },
   pro: {
+    orgs: 2,
+    projectsPerOrg: 3,
     integrationsPerService: 5,
     historyDays: 30,
     alertChannels: ["email", "slack", "discord", "push"] as ChannelType[],
   },
   team: {
+    orgs: Infinity,
+    projectsPerOrg: Infinity,
     integrationsPerService: 999,
     historyDays: 90,
     alertChannels: ["email", "slack", "discord", "push"] as ChannelType[],
@@ -52,20 +58,82 @@ export async function getUserTier(
   return t && t in TIER_LIMITS ? t : "free";
 }
 
+export async function checkOrgLimit(
+  supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
+  userId: string,
+): Promise<void> {
+  const tier = await getUserTier(supabase, userId);
+  const limit = TIER_LIMITS[tier].orgs;
+  if (limit === Infinity) return;
+
+  const { count } = await supabase
+    .from("organizations")
+    .select("id", { count: "exact", head: true })
+    .eq("owner_id", userId);
+
+  if ((count ?? 0) >= limit) {
+    throw new TierLimitError(
+      `${tier === "free" ? "Free" : "Pro"} plan allows ${limit} organization${limit !== 1 ? "s" : ""}. Delete an existing one or upgrade to add more.`,
+    );
+  }
+}
+
+export async function checkProjectLimit(
+  supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
+  userId: string,
+  orgId: string,
+): Promise<void> {
+  // Verify org ownership (RLS should catch this, but be explicit)
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id")
+    .eq("id", orgId)
+    .eq("owner_id", userId)
+    .single();
+
+  if (!org) {
+    throw new TierLimitError("Organization not found or access denied.");
+  }
+
+  const tier = await getUserTier(supabase, userId);
+  const limit = TIER_LIMITS[tier].projectsPerOrg;
+  if (limit === Infinity) return;
+
+  const { count } = await supabase
+    .from("projects")
+    .select("id", { count: "exact", head: true })
+    .eq("org_id", orgId);
+
+  if ((count ?? 0) >= limit) {
+    throw new TierLimitError(
+      `${tier === "free" ? "Free" : "Pro"} plan allows ${limit} project${limit !== 1 ? "s" : ""} per organization. Delete an existing one or upgrade to add more.`,
+    );
+  }
+}
+
 export async function checkIntegrationLimit(
   supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
   userId: string,
   service: ServiceType,
+  projectId?: string | null,
 ): Promise<void> {
   const tier = await getUserTier(supabase, userId);
   const limit = TIER_LIMITS[tier].integrationsPerService;
 
-  const { count } = await supabase
+  let query = supabase
     .from("integrations")
     .select("id", { count: "exact", head: true })
-    .eq("user_id", userId)
     .eq("service", service)
     .neq("status", "disconnected");
+
+  // Scope by project if provided, otherwise fall back to user scope
+  if (projectId) {
+    query = query.eq("project_id", projectId);
+  } else {
+    query = query.eq("user_id", userId);
+  }
+
+  const { count } = await query;
 
   if ((count ?? 0) >= limit) {
     throw new TierLimitError(
