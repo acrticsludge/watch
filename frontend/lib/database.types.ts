@@ -19,6 +19,7 @@ export type Database = {
           owner_id: string;
           name: string;
           slug: string;
+          sort_order: number;
           created_at: string;
         };
         Insert: {
@@ -26,6 +27,7 @@ export type Database = {
           owner_id: string;
           name: string;
           slug: string;
+          sort_order?: number;
           created_at?: string;
         };
         Update: {
@@ -33,6 +35,7 @@ export type Database = {
           owner_id?: string;
           name?: string;
           slug?: string;
+          sort_order?: number;
           created_at?: string;
         };
         Relationships: [];
@@ -43,6 +46,7 @@ export type Database = {
           org_id: string;
           name: string;
           slug: string;
+          sort_order: number;
           created_at: string;
         };
         Insert: {
@@ -50,6 +54,7 @@ export type Database = {
           org_id: string;
           name: string;
           slug: string;
+          sort_order?: number;
           created_at?: string;
         };
         Update: {
@@ -57,6 +62,7 @@ export type Database = {
           org_id?: string;
           name?: string;
           slug?: string;
+          sort_order?: number;
           created_at?: string;
         };
         Relationships: [
@@ -186,6 +192,7 @@ export type Database = {
         Row: {
           id: string;
           user_id: string;
+          project_id: string | null;
           type: ChannelType;
           config: Json;
           enabled: boolean;
@@ -194,6 +201,7 @@ export type Database = {
         Insert: {
           id?: string;
           user_id: string;
+          project_id?: string | null;
           type: ChannelType;
           config?: Json;
           enabled?: boolean;
@@ -202,6 +210,7 @@ export type Database = {
         Update: {
           id?: string;
           user_id?: string;
+          project_id?: string | null;
           type?: ChannelType;
           config?: Json;
           enabled?: boolean;

@@ -12,16 +12,33 @@ export async function fireAlerts(
 ): Promise<void> {
   const supabase = createServiceClient();
 
-  const { data: channels } = await supabase
-    .from("alert_channels")
-    .select("*")
-    .eq("user_id", alert.userId)
-    .eq("enabled", true);
+  // Prefer project-scoped channels; fall back to user-level (project_id IS NULL)
+  let channelRows: AlertChannel[] | null = null;
 
-  if (!channels || channels.length === 0) return;
+  if (alert.projectId) {
+    const { data } = await supabase
+      .from("alert_channels")
+      .select("*")
+      .eq("user_id", alert.userId)
+      .eq("project_id", alert.projectId)
+      .eq("enabled", true);
+    channelRows = data && data.length > 0 ? (data as AlertChannel[]) : null;
+  }
+
+  if (!channelRows) {
+    const { data } = await supabase
+      .from("alert_channels")
+      .select("*")
+      .eq("user_id", alert.userId)
+      .is("project_id", null)
+      .eq("enabled", true);
+    channelRows = (data as AlertChannel[]) ?? null;
+  }
+
+  if (!channelRows || channelRows.length === 0) return;
 
   const results = await Promise.allSettled(
-    channels.map(async (ch) => {
+    channelRows.map(async (ch) => {
       const channel = ch as AlertChannel;
       switch (channel.type) {
         case "email":

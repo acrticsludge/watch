@@ -12,6 +12,7 @@ create table if not exists organizations (
   owner_id   uuid not null references auth.users(id) on delete cascade,
   name       text not null check (char_length(name) between 1 and 80),
   slug       text not null check (slug ~ '^[a-z0-9-]{1,40}$'),
+  sort_order int not null default 0,
   created_at timestamptz not null default now(),
   unique (owner_id, slug)
 );
@@ -26,6 +27,7 @@ create table if not exists projects (
   org_id     uuid not null references organizations(id) on delete cascade,
   name       text not null check (char_length(name) between 1 and 80),
   slug       text not null check (slug ~ '^[a-z0-9-]{1,40}$'),
+  sort_order int not null default 0,
   created_at timestamptz not null default now(),
   unique (org_id, slug)
 );
@@ -135,6 +137,7 @@ create index if not exists alert_configs_user_id_idx on alert_configs(user_id);
 create table if not exists alert_channels (
   id          uuid primary key default uuid_generate_v4(),
   user_id     uuid not null references auth.users(id) on delete cascade,
+  project_id  uuid references projects(id) on delete cascade,   -- null = user-level fallback
   type        text not null check (type in ('email', 'slack', 'discord', 'push')),
   config      jsonb not null default '{}',
   enabled     boolean not null default true,

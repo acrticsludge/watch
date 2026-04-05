@@ -64,12 +64,12 @@ export const getOrgAndProject = cache(async (orgId: string, projectId: string) =
   const [{ data: org }, { data: project }] = await Promise.all([
     supabase
       .from("organizations")
-      .select("id, name, slug, created_at")
+      .select("id, name, slug, sort_order, created_at")
       .eq("id", orgId)
       .single(),
     supabase
       .from("projects")
-      .select("id, org_id, name, slug, created_at")
+      .select("id, org_id, name, slug, sort_order, created_at")
       .eq("id", projectId)
       .eq("org_id", orgId)
       .single(),
@@ -81,7 +81,7 @@ export const getOrgAndProject = cache(async (orgId: string, projectId: string) =
 
 /**
  * Returns { excessOrgIds, excessProjectIds } for the authenticated user.
- * Primary org = oldest created_at. Primary project per org = oldest created_at.
+ * Primary = sort_order 0. Excess = sort_order >= tier limit.
  * Used by: /dashboard (OverLimitBanner), project layout (access gate), org page (lock cards).
  */
 export async function getOverLimitState(userId: string) {
@@ -89,35 +89,34 @@ export async function getOverLimitState(userId: string) {
   const tier = await getUserTier(supabase, userId);
   const limits = TIER_LIMITS[tier];
 
-  // Fetch all orgs ordered by created_at
+  // Fetch all orgs
   const { data: orgs } = await supabase
     .from("organizations")
-    .select("id, created_at")
-    .eq("owner_id", userId)
-    .order("created_at", { ascending: true });
+    .select("id, sort_order")
+    .eq("owner_id", userId);
 
   const allOrgs = orgs ?? [];
 
-  let excessOrgIds: string[] = [];
-  if (limits.orgs !== Infinity && allOrgs.length > limits.orgs) {
-    excessOrgIds = allOrgs.slice(limits.orgs).map((o) => o.id);
-  }
+  // Excess orgs: sort_order >= allowed count (free=1 → excess at sort_order≥1)
+  const excessOrgIds: string[] =
+    limits.orgs === Infinity
+      ? []
+      : allOrgs.filter((o) => o.sort_order >= limits.orgs).map((o) => o.id);
 
-  // For each org (including excess), find excess projects
+  // For each org, find excess projects by sort_order
   const excessProjectIds: string[] = [];
 
   if (limits.projectsPerOrg !== Infinity) {
     for (const org of allOrgs) {
       const { data: projects } = await supabase
         .from("projects")
-        .select("id, created_at")
-        .eq("org_id", org.id)
-        .order("created_at", { ascending: true });
+        .select("id, sort_order")
+        .eq("org_id", org.id);
 
-      const allProjects = projects ?? [];
-      if (allProjects.length > limits.projectsPerOrg) {
-        const excess = allProjects.slice(limits.projectsPerOrg).map((p) => p.id);
-        excessProjectIds.push(...excess);
+      for (const p of projects ?? []) {
+        if (p.sort_order >= limits.projectsPerOrg) {
+          excessProjectIds.push(p.id);
+        }
       }
     }
   }

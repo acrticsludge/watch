@@ -5,7 +5,8 @@ import type { UsageMetric } from "./pollCycle";
 export async function checkThresholds(
   userId: string,
   integrationId: string,
-  metrics: UsageMetric[]
+  metrics: UsageMetric[],
+  projectId?: string | null,
 ): Promise<void> {
   const supabase = createServiceClient();
 
@@ -87,6 +88,7 @@ export async function checkThresholds(
     // Fire the alert
     await fireAlerts(userEmail, {
       userId,
+      projectId,
       integrationId,
       service: integration?.service ?? "unknown",
       accountLabel: integration?.account_label ?? "unknown",

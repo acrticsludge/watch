@@ -6,6 +6,7 @@ import { getOverLimitState } from "@/lib/queries/user";
 import { getSubscription } from "@/lib/queries/user";
 import Link from "next/link";
 import { Button } from "@/app/components/ui/button";
+import { MakePrimaryButton } from "@/app/components/MakePrimaryButton";
 
 export const metadata: Metadata = { title: "Organization" };
 
@@ -44,9 +45,9 @@ async function OrgContent({
 
   const { data: projects } = await supabase
     .from("projects")
-    .select("id, name, slug, created_at")
+    .select("id, name, slug, sort_order, created_at")
     .eq("org_id", orgId)
-    .order("created_at", { ascending: true });
+    .order("sort_order", { ascending: true });
 
   const subscription = await getSubscription();
   const tier = subscription?.tier ?? "free";
@@ -85,11 +86,34 @@ async function OrgContent({
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {allProjects.map((project) => {
             const isExcess = excessProjectIds.includes(project.id);
+            if (isExcess) {
+              return (
+                <div
+                  key={project.id}
+                  className="bg-[#111] border border-amber-500/20 rounded-xl p-5 opacity-60"
+                >
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center">
+                      <svg className="h-4 w-4 text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                      </svg>
+                    </div>
+                    <span className="text-[10px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">paused</span>
+                  </div>
+                  <p className="font-semibold text-zinc-400 text-sm mb-0.5">{project.name}</p>
+                  <p className="text-xs text-zinc-600">{project.slug}</p>
+                  <p className="text-xs text-amber-500/70 mt-2">
+                    Paused — free plan limit.
+                  </p>
+                  <MakePrimaryButton endpoint={`/api/orgs/${orgId}/projects/${project.id}/promote`} />
+                </div>
+              );
+            }
             return (
               <Link
                 key={project.id}
                 href={`/orgs/${orgId}/projects/${project.id}/dashboard`}
-                className={`block bg-[#111] border rounded-xl p-5 transition-colors hover:border-white/12 ${isExcess ? "border-amber-500/20 opacity-75" : "border-white/6"}`}
+                className="block bg-[#111] border border-white/6 rounded-xl p-5 transition-colors hover:border-white/12"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="h-8 w-8 rounded-lg bg-white/5 flex items-center justify-center">
@@ -97,17 +121,9 @@ async function OrgContent({
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                     </svg>
                   </div>
-                  {isExcess && (
-                    <span className="text-[10px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">Over limit</span>
-                  )}
                 </div>
                 <p className="font-semibold text-white text-sm mb-0.5">{project.name}</p>
                 <p className="text-xs text-zinc-600">{project.slug}</p>
-                {isExcess && tier === "free" && (
-                  <p className="text-xs text-amber-500/70 mt-2">
-                    Exceeds free plan project limit. <Link href="/settings?tab=billing" className="underline" onClick={(e) => e.stopPropagation()}>Upgrade to Pro</Link>
-                  </p>
-                )}
               </Link>
             );
           })}

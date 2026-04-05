@@ -21,10 +21,10 @@ const httpsWebhookConfig = z.object({
 });
 
 const CreateSchema = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("slack"),   config: httpsWebhookConfig,                                             enabled: z.boolean().default(true) }),
-  z.object({ type: z.literal("discord"), config: httpsWebhookConfig,                                             enabled: z.boolean().default(true) }),
-  z.object({ type: z.literal("email"),   config: z.object({ email: z.string().email().optional() }),             enabled: z.boolean().default(true) }),
-  z.object({ type: z.literal("push"),    config: z.record(z.string(), z.unknown()),                              enabled: z.boolean().default(true) }),
+  z.object({ type: z.literal("slack"),   config: httpsWebhookConfig,                                             enabled: z.boolean().default(true), project_id: z.string().uuid().optional() }),
+  z.object({ type: z.literal("discord"), config: httpsWebhookConfig,                                             enabled: z.boolean().default(true), project_id: z.string().uuid().optional() }),
+  z.object({ type: z.literal("email"),   config: z.object({ email: z.string().email().optional() }),             enabled: z.boolean().default(true), project_id: z.string().uuid().optional() }),
+  z.object({ type: z.literal("push"),    config: z.record(z.string(), z.unknown()),                              enabled: z.boolean().default(true), project_id: z.string().uuid().optional() }),
 ]);
 
 const UpdateSchema = z.object({
@@ -32,16 +32,27 @@ const UpdateSchema = z.object({
   config: z.record(z.string(), z.unknown()).optional(),
 });
 
-export async function GET() {
+export async function GET(request: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const { data, error } = await supabase
+  const { searchParams } = new URL(request.url);
+  const projectId = searchParams.get("project_id");
+
+  let query = supabase
     .from("alert_channels")
     .select("id, type, config, enabled, created_at")
     .eq("user_id", user.id)
     .limit(20);
+
+  if (projectId) {
+    query = query.eq("project_id", projectId);
+  } else {
+    query = query.is("project_id", null);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error("[channels GET]", error);
@@ -78,7 +89,7 @@ export async function POST(request: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
 
   try {
-    await checkAlertChannelLimit(supabase, user.id, parsed.data.type);
+    await checkAlertChannelLimit(supabase, user.id, parsed.data.type, parsed.data.project_id);
   } catch (err) {
     if (err instanceof TierLimitError) {
       return NextResponse.json({ error: err.message, upgradeUrl: err.upgradeUrl }, { status: 403 });
@@ -90,6 +101,7 @@ export async function POST(request: Request) {
     .from("alert_channels")
     .insert({
       user_id: user.id,
+      project_id: parsed.data.project_id ?? null,
       type: parsed.data.type,
       config: parsed.data.config as import("@/lib/database.types").Json,
       enabled: parsed.data.enabled,

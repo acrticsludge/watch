@@ -6,7 +6,8 @@ export async function checkSpikes(
   userId: string,
   integrationId: string,
   metrics: UsageMetric[],
-  tier: string
+  tier: string,
+  projectId?: string | null,
 ): Promise<void> {
   if (tier === "free") return;
 
@@ -81,6 +82,7 @@ export async function checkSpikes(
 
     await fireAlerts(userEmail, {
       userId,
+      projectId,
       integrationId,
       service: integration?.service ?? "unknown",
       accountLabel: integration?.account_label ?? "unknown",
