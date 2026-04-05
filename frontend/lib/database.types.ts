@@ -186,6 +186,7 @@ export type Database = {
         Row: {
           id: string;
           user_id: string;
+          project_id: string | null;
           type: ChannelType;
           config: Json;
           enabled: boolean;
@@ -194,6 +195,7 @@ export type Database = {
         Insert: {
           id?: string;
           user_id: string;
+          project_id?: string | null;
           type: ChannelType;
           config?: Json;
           enabled?: boolean;
@@ -202,6 +204,7 @@ export type Database = {
         Update: {
           id?: string;
           user_id?: string;
+          project_id?: string | null;
           type?: ChannelType;
           config?: Json;
           enabled?: boolean;

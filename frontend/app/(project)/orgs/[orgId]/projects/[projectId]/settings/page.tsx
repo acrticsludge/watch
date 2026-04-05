@@ -17,7 +17,7 @@ export default function ProjectSettingsPage({
     <div>
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white tracking-tight">Settings</h1>
-        <p className="text-zinc-500 text-sm mt-1">Configure alert thresholds for this project.</p>
+        <p className="text-zinc-500 text-sm mt-1">Configure alert thresholds and notifications for this project.</p>
       </div>
       <Suspense fallback={<SettingsSkeleton />}>
         <ProjectSettingsData params={params} searchParams={searchParams} />
@@ -37,7 +37,7 @@ async function ProjectSettingsData({
   const { tab } = await searchParams;
   const supabase = await createClient();
 
-  const [session, subscription, { data: integrations }, { data: alertConfigs }, { data: alertChannels }] =
+  const [session, subscription, { data: integrations }, { data: alertConfigs }] =
     await Promise.all([
       getSession(),
       getSubscription(),
@@ -46,11 +46,14 @@ async function ProjectSettingsData({
         .select("id, service, account_label")
         .eq("project_id", projectId)
         .neq("status", "disconnected"),
-      supabase
-        .from("alert_configs")
-        .select("*"),
-      supabase.from("alert_channels").select("id, type, config, enabled"),
+      supabase.from("alert_configs").select("*"),
     ]);
+
+  // Fetch alert channels scoped to this project
+  const { data: alertChannels } = await supabase
+    .from("alert_channels")
+    .select("id, type, config, enabled")
+    .eq("project_id", projectId);
 
   let spikeConfigs: { integration_id: string; metric_name: string; enabled: boolean }[] = [];
   try {
@@ -83,22 +86,24 @@ async function ProjectSettingsData({
   const projectAlertConfigs = (alertConfigs ?? []).filter((c) =>
     integrationIds.includes(c.integration_id),
   );
-
-  // Filter spike configs to only this project's integrations
   const projectSpikeConfigs = spikeConfigs.filter((c) => integrationIds.includes(c.integration_id));
 
-  // Auto-provision email channel for users who signed up before this was added
+  // Auto-provision email channel for this project
   let finalAlertChannels = alertChannels ?? [];
   if (session?.user) {
     const hasEmail = finalAlertChannels.some((c) => c.type === "email");
     if (!hasEmail) {
       await supabase.from("alert_channels").insert({
         user_id: session.user.id,
+        project_id: projectId,
         type: "email",
         config: { email: session.user.email },
         enabled: true,
       });
-      const { data: refreshed } = await supabase.from("alert_channels").select("id, type, config, enabled");
+      const { data: refreshed } = await supabase
+        .from("alert_channels")
+        .select("id, type, config, enabled")
+        .eq("project_id", projectId);
       finalAlertChannels = refreshed ?? finalAlertChannels;
     }
   }
@@ -115,6 +120,8 @@ async function ProjectSettingsData({
       nextBillingAt={subscription?.next_billing_at ?? null}
       cancelAtPeriodEnd={subscription?.cancel_at_period_end ?? false}
       defaultTab={tab ?? "alerts"}
+      visibleTabs={["alerts", "notifications"]}
+      projectId={projectId}
       snapshotMetrics={snapshotMetrics}
       spikeConfigs={projectSpikeConfigs}
     />
@@ -125,7 +132,7 @@ function SettingsSkeleton() {
   return (
     <div className="space-y-6">
       <div className="flex gap-1 border-b border-white/6 pb-0">
-        {[80, 60, 80, 60].map((w, i) => (
+        {[80, 60].map((w, i) => (
           <div key={i} className={`h-9 w-${w} bg-white/5 rounded-t-lg animate-pulse`} />
         ))}
       </div>

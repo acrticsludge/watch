@@ -155,8 +155,8 @@ export async function runPollCycle(): Promise<void> {
           }
 
           // Check thresholds only on aggregate (non-entity) metrics to avoid alert spam
-          await checkThresholds(integration.user_id, integration.id, aggregateMetrics);
-          await checkSpikes(integration.user_id, integration.id, aggregateMetrics, tier);
+          await checkThresholds(integration.user_id, integration.id, aggregateMetrics, integration.project_id);
+          await checkSpikes(integration.user_id, integration.id, aggregateMetrics, tier, integration.project_id);
         } else {
           // Service connected successfully but returned no data (e.g. plan doesn't expose billing API).
           // Mark as "unsupported" so the dashboard can show a clear message instead of an error.
