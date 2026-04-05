@@ -5,6 +5,7 @@ import { getOverLimitState, getSubscription } from "@/lib/queries/user";
 import { TIER_LIMITS } from "@/lib/tiers";
 import Link from "next/link";
 import { Button } from "@/app/components/ui/button";
+import { MakePrimaryButton } from "@/app/components/MakePrimaryButton";
 import { DashboardRefresher } from "./DashboardRefresher";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -36,8 +37,8 @@ async function DashboardBody() {
   const [orgsResult, subscription] = await Promise.all([
     supabase
       .from("organizations")
-      .select("id, name, slug, created_at")
-      .order("created_at", { ascending: true }),
+      .select("id, name, slug, sort_order, created_at")
+      .order("sort_order", { ascending: true }),
     getSubscription(),
   ]);
 
@@ -102,7 +103,7 @@ async function OrgCard({
   excessProjectIds,
   tier,
 }: {
-  org: { id: string; name: string; slug: string; created_at: string };
+  org: { id: string; name: string; slug: string; sort_order: number; created_at: string };
   isExcess: boolean;
   excessProjectIds: string[];
   tier: string;
@@ -110,21 +111,21 @@ async function OrgCard({
   const supabase = await createClient();
   const { data: projects } = await supabase
     .from("projects")
-    .select("id, name, slug, created_at")
+    .select("id, name, slug, sort_order, created_at")
     .eq("org_id", org.id)
-    .order("created_at", { ascending: true });
+    .order("sort_order", { ascending: true });
 
   const allProjects = projects ?? [];
   const limits = TIER_LIMITS[tier as keyof typeof TIER_LIMITS];
 
   return (
-    <div className={`bg-[#111] border rounded-xl p-6 ${isExcess ? "border-amber-500/20" : "border-white/6"}`}>
+    <div className={`bg-[#111] border rounded-xl p-6 ${isExcess ? "border-amber-500/20 opacity-75" : "border-white/6"}`}>
       <div className="flex items-start justify-between mb-4">
         <div>
           <div className="flex items-center gap-2">
             <h2 className="font-semibold text-white">{org.name}</h2>
             {isExcess && (
-              <span className="text-[10px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">Over limit</span>
+              <span className="text-[10px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">paused</span>
             )}
           </div>
           <p className="text-xs text-zinc-600 mt-0.5">{org.slug}</p>
@@ -139,11 +140,13 @@ async function OrgCard({
       </div>
 
       {isExcess ? (
-        <p className="text-sm text-amber-500/70 mb-4">
-          This organization exceeds your free plan limit.{" "}
-          <Link href="/settings?tab=billing" className="text-blue-400 underline underline-offset-2">Upgrade to Pro</Link>{" "}
-          or delete it to restore access.
-        </p>
+        <div>
+          <p className="text-sm text-amber-500/70 mb-3">
+            Paused — free plan limit. Make this your primary organization to activate it, or{" "}
+            <Link href="/settings?tab=billing" className="text-blue-400 underline underline-offset-2">upgrade to Pro</Link>.
+          </p>
+          <MakePrimaryButton endpoint={`/api/orgs/${org.id}/promote`} />
+        </div>
       ) : (
         <>
           {allProjects.length === 0 ? (
@@ -152,17 +155,29 @@ async function OrgCard({
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
               {allProjects.map((project) => {
                 const isProjectExcess = excessProjectIds.includes(project.id);
+                if (isProjectExcess) {
+                  return (
+                    <div
+                      key={project.id}
+                      className="border border-amber-500/20 bg-amber-500/3 rounded-lg p-3.5 opacity-60"
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="text-sm font-medium text-zinc-400 truncate">{project.name}</p>
+                        <span className="shrink-0 text-[10px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1 py-0.5 ml-2">paused</span>
+                      </div>
+                      <p className="text-xs text-zinc-600">{project.slug}</p>
+                      <MakePrimaryButton endpoint={`/api/orgs/${org.id}/projects/${project.id}/promote`} />
+                    </div>
+                  );
+                }
                 return (
                   <Link
                     key={project.id}
                     href={`/orgs/${org.id}/projects/${project.id}/dashboard`}
-                    className={`block border rounded-lg p-3.5 transition-colors hover:border-white/12 ${isProjectExcess ? "border-amber-500/20 bg-amber-500/3 opacity-75" : "border-white/6 bg-white/2 hover:bg-white/4"}`}
+                    className="block border border-white/6 bg-white/2 rounded-lg p-3.5 transition-colors hover:border-white/12 hover:bg-white/4"
                   >
                     <div className="flex items-center justify-between mb-1">
                       <p className="text-sm font-medium text-zinc-200 truncate">{project.name}</p>
-                      {isProjectExcess && (
-                        <span className="shrink-0 text-[10px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1 py-0.5 ml-2">Over limit</span>
-                      )}
                     </div>
                     <p className="text-xs text-zinc-600">{project.slug}</p>
                   </Link>

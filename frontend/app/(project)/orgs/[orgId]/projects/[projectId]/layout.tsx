@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getSession, getOrgAndProject, getOverLimitState } from "@/lib/queries/user";
 import { getSubscription } from "@/lib/queries/user";
 import { Sidebar } from "@/app/components/layout/Sidebar";
+import { MakePrimaryButton } from "@/app/components/MakePrimaryButton";
 
 interface ProjectLayoutProps {
   children: React.ReactNode;
@@ -44,6 +45,7 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
             <LockedProjectPage
               orgId={orgId}
               orgName={org.name}
+              projectId={projectId}
               projectName={project.name}
               isOrgExcess={isOrgExcess}
             />
@@ -75,14 +77,20 @@ export default async function ProjectLayout({ children, params }: ProjectLayoutP
 function LockedProjectPage({
   orgId,
   orgName,
+  projectId,
   projectName,
   isOrgExcess,
 }: {
   orgId: string;
   orgName: string;
+  projectId: string;
   projectName: string;
   isOrgExcess: boolean;
 }) {
+  const promoteEndpoint = isOrgExcess
+    ? `/api/orgs/${orgId}/promote`
+    : `/api/orgs/${orgId}/projects/${projectId}/promote`;
+
   return (
     <div className="flex flex-col items-center justify-center py-24 text-center">
       <div className="h-16 w-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-5">
@@ -91,14 +99,15 @@ function LockedProjectPage({
         </svg>
       </div>
       <h2 className="text-lg font-semibold text-white mb-2">
-        {isOrgExcess ? `Organization "${orgName}" is over your plan limit` : `Project "${projectName}" is over your plan limit`}
+        {isOrgExcess ? `Organization "${orgName}" is paused` : `Project "${projectName}" is paused`}
       </h2>
       <p className="text-zinc-500 text-sm max-w-sm mb-6 leading-relaxed">
         {isOrgExcess
-          ? "This organization exceeds the number allowed on your current plan. Upgrade to Pro or delete excess organizations."
-          : "This project exceeds the number allowed on your current plan. Upgrade to Pro or delete excess projects."}
+          ? "This organization exceeds the number allowed on your current plan. Make it primary to activate it, or upgrade to Pro."
+          : "This project exceeds the number allowed on your current plan. Make it primary to activate it, or upgrade to Pro."}
       </p>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap justify-center gap-3">
+        <MakePrimaryButton endpoint={promoteEndpoint} variant="page" />
         <a
           href="/settings?tab=billing"
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors"
@@ -107,7 +116,7 @@ function LockedProjectPage({
         </a>
         <a
           href={isOrgExcess ? "/dashboard" : `/orgs/${orgId}`}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/6 hover:bg-white/10 text-zinc-300 text-sm font-medium transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 text-sm font-medium transition-colors"
         >
           Go back
         </a>

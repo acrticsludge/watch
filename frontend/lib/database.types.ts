@@ -19,6 +19,7 @@ export type Database = {
           owner_id: string;
           name: string;
           slug: string;
+          sort_order: number;
           created_at: string;
         };
         Insert: {
@@ -26,6 +27,7 @@ export type Database = {
           owner_id: string;
           name: string;
           slug: string;
+          sort_order?: number;
           created_at?: string;
         };
         Update: {
@@ -33,6 +35,7 @@ export type Database = {
           owner_id?: string;
           name?: string;
           slug?: string;
+          sort_order?: number;
           created_at?: string;
         };
         Relationships: [];
@@ -43,6 +46,7 @@ export type Database = {
           org_id: string;
           name: string;
           slug: string;
+          sort_order: number;
           created_at: string;
         };
         Insert: {
@@ -50,6 +54,7 @@ export type Database = {
           org_id: string;
           name: string;
           slug: string;
+          sort_order?: number;
           created_at?: string;
         };
         Update: {
@@ -57,6 +62,7 @@ export type Database = {
           org_id?: string;
           name?: string;
           slug?: string;
+          sort_order?: number;
           created_at?: string;
         };
         Relationships: [
