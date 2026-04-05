@@ -174,6 +174,8 @@ const faqLd = {
   ],
 };
 
+export const revalidate = 3600; // revalidate landing page shell hourly
+
 // ─── Dynamic async sub-components ────────────────────────────────────────────
 
 async function DynamicNav() {
