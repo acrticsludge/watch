@@ -15,7 +15,7 @@ FROM (
   FROM organizations
 ) sub
 WHERE o.id = sub.id;
-
+e
 -- Step 3: Backfill projects
 -- Rank each org's projects by created_at asc → earliest = 0 (primary), rest get 1, 2, ...
 UPDATE projects p
