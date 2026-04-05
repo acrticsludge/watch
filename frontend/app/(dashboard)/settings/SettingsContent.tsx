@@ -194,6 +194,10 @@ interface SettingsContentProps {
   defaultTab?: string;
   snapshotMetrics?: Record<string, string[]>;
   spikeConfigs?: SpikeConfig[];
+  /** When provided, only these tabs are rendered. */
+  visibleTabs?: Array<"alerts" | "notifications" | "account" | "billing">;
+  /** When provided, new alert channels are scoped to this project. */
+  projectId?: string;
 }
 
 const DEFAULT_METRICS: Record<string, string[]> = {
@@ -467,7 +471,11 @@ export function SettingsContent({
   defaultTab = "alerts",
   snapshotMetrics = {},
   spikeConfigs = [],
+  visibleTabs,
+  projectId,
 }: SettingsContentProps) {
+  const showTab = (tab: string) => !visibleTabs || visibleTabs.includes(tab as "alerts" | "notifications" | "account" | "billing");
+  const effectiveDefaultTab = visibleTabs && !visibleTabs.includes(defaultTab as never) ? visibleTabs[0] : defaultTab;
   const isPro = tier === "pro" || tier === "team";
   const isTrialing = subscriptionStatus === "trialing";
   const isPastDue = subscriptionStatus === "past_due";
@@ -592,6 +600,7 @@ export function SettingsContent({
           type: "email",
           config: { email: userEmail },
           enabled: emailEnabled,
+          ...(projectId && !emailChannel ? { project_id: projectId } : {}),
         }),
       });
       if (!res.ok) {
@@ -625,6 +634,7 @@ export function SettingsContent({
           type,
           config: { webhook_url: webhookUrl },
           enabled,
+          ...(projectId && !existing ? { project_id: projectId } : {}),
         }),
       });
       if (!res.ok) {
@@ -708,36 +718,44 @@ export function SettingsContent({
   }
 
   return (
-    <Tabs defaultValue={defaultTab}>
+    <Tabs defaultValue={effectiveDefaultTab}>
       <TabsList className="mb-6 bg-white/[0.04] border border-white/[0.06]">
-        <TabsTrigger
-          value="alerts"
-          className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500"
-        >
-          Alert Thresholds
-        </TabsTrigger>
-        <TabsTrigger
-          value="notifications"
-          className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500"
-        >
-          Notifications
-        </TabsTrigger>
-        <TabsTrigger
-          value="account"
-          className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500"
-        >
-          Account
-        </TabsTrigger>
-        <TabsTrigger
-          value="billing"
-          className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500"
-        >
-          Billing
-        </TabsTrigger>
+        {showTab("alerts") && (
+          <TabsTrigger
+            value="alerts"
+            className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500"
+          >
+            Alert Thresholds
+          </TabsTrigger>
+        )}
+        {showTab("notifications") && (
+          <TabsTrigger
+            value="notifications"
+            className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500"
+          >
+            Notifications
+          </TabsTrigger>
+        )}
+        {showTab("account") && (
+          <TabsTrigger
+            value="account"
+            className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500"
+          >
+            Account
+          </TabsTrigger>
+        )}
+        {showTab("billing") && (
+          <TabsTrigger
+            value="billing"
+            className="data-[state=active]:bg-white/[0.08] data-[state=active]:text-white text-zinc-500"
+          >
+            Billing
+          </TabsTrigger>
+        )}
       </TabsList>
 
       {/* ── Alert Thresholds ── */}
-      <TabsContent value="alerts">
+      {showTab("alerts") && <TabsContent value="alerts">
         {integrations.length === 0 ? (
           <p className="text-zinc-600 text-sm">
             Connect at least one service first.
@@ -877,10 +895,10 @@ export function SettingsContent({
             })}
           </div>
         )}
-      </TabsContent>
+      </TabsContent>}
 
       {/* ── Notifications ── */}
-      <TabsContent value="notifications">
+      {showTab("notifications") && <TabsContent value="notifications">
         <div className="space-y-4">
           {/* Email */}
           <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6">
@@ -1058,10 +1076,10 @@ export function SettingsContent({
             )}
           </div>
         </div>
-      </TabsContent>
+      </TabsContent>}
 
       {/* ── Billing ── */}
-      <TabsContent value="billing">
+      {showTab("billing") && <TabsContent value="billing">
         <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6 max-w-lg">
           <h3 className="font-semibold text-white mb-1 text-sm">Current plan</h3>
 
@@ -1157,10 +1175,10 @@ export function SettingsContent({
             </div>
           )}
         </div>
-      </TabsContent>
+      </TabsContent>}
 
       {/* ── Account ── */}
-      <TabsContent value="account">
+      {showTab("account") && <TabsContent value="account">
         <div className="bg-[#111] border border-white/[0.06] rounded-xl p-6 max-w-lg">
           <h3 className="font-semibold text-white mb-4 text-sm">
             Change password
@@ -1189,7 +1207,7 @@ export function SettingsContent({
           </form>
           <MfaSection />
         </div>
-      </TabsContent>
+      </TabsContent>}
     </Tabs>
   );
 }

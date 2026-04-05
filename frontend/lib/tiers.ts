@@ -146,6 +146,7 @@ export async function checkAlertChannelLimit(
   supabase: Awaited<ReturnType<typeof import("@/lib/supabase/server").createClient>>,
   userId: string,
   channelType: ChannelType,
+  projectId?: string | null,
 ): Promise<void> {
   const tier = await getUserTier(supabase, userId);
   const allowed = TIER_LIMITS[tier].alertChannels;
@@ -157,11 +158,19 @@ export async function checkAlertChannelLimit(
   }
 
   if (channelType === "email") {
-    const { count } = await supabase
+    let query = supabase
       .from("alert_channels")
       .select("id", { count: "exact", head: true })
       .eq("user_id", userId)
       .eq("type", "email");
+
+    if (projectId) {
+      query = query.eq("project_id", projectId);
+    } else {
+      query = query.is("project_id", null);
+    }
+
+    const { count } = await query;
 
     if ((count ?? 0) >= 1) {
       throw new TierLimitError("You already have an email channel configured.");

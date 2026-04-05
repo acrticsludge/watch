@@ -2,6 +2,7 @@ import type { ChannelType, Json } from "../database.types";
 
 export interface AlertPayload {
   userId: string;
+  projectId?: string | null;
   integrationId: string;
   service: string;
   accountLabel: string;
@@ -18,6 +19,7 @@ export interface AlertPayload {
 export interface AlertChannel {
   id: string;
   user_id: string;
+  project_id: string | null;
   type: ChannelType;
   config: Json;
   enabled: boolean;

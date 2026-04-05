@@ -135,6 +135,7 @@ create index if not exists alert_configs_user_id_idx on alert_configs(user_id);
 create table if not exists alert_channels (
   id          uuid primary key default uuid_generate_v4(),
   user_id     uuid not null references auth.users(id) on delete cascade,
+  project_id  uuid references projects(id) on delete cascade,   -- null = user-level fallback
   type        text not null check (type in ('email', 'slack', 'discord', 'push')),
   config      jsonb not null default '{}',
   enabled     boolean not null default true,
