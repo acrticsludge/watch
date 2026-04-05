@@ -17,8 +17,8 @@ export async function GET() {
 
   const { data, error } = await supabase
     .from("organizations")
-    .select("id, name, slug, created_at")
-    .order("created_at", { ascending: true });
+    .select("id, name, slug, sort_order, created_at")
+    .order("sort_order", { ascending: true });
 
   if (error) {
     console.error("[orgs GET]", error);
@@ -58,11 +58,17 @@ export async function POST(request: Request) {
     throw err;
   }
 
+  // Assign sort_order = current count (first org gets 0 = primary)
+  const { count: orgCount } = await supabase
+    .from("organizations")
+    .select("id", { count: "exact", head: true })
+    .eq("owner_id", user.id);
+
   const serviceClient = createServiceClient();
   const { data, error } = await serviceClient
     .from("organizations")
-    .insert({ owner_id: user.id, name: parsed.data.name, slug: parsed.data.slug })
-    .select("id, name, slug, created_at")
+    .insert({ owner_id: user.id, name: parsed.data.name, slug: parsed.data.slug, sort_order: orgCount ?? 0 })
+    .select("id, name, slug, sort_order, created_at")
     .single();
 
   if (error) {
