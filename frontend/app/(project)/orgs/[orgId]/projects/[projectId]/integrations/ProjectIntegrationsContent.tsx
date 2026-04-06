@@ -316,10 +316,10 @@ export function ProjectIntegrationsContent({
                             {intg.status === "unsupported" ? "plan limit" : intg.status}
                           </Badge>
                         )}
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-600 hover:text-zinc-200 hover:bg-white/6" onClick={() => openEdit(intg)}>
+                        <Button variant="ghost" size="icon" className="text-zinc-600 hover:text-zinc-200 hover:bg-white/6" onClick={() => openEdit(intg)}>
                           <Pencil className="h-3.5 w-3.5" />
                         </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-600 hover:text-red-400 hover:bg-red-500/10" onClick={() => handleDelete(intg.id)} disabled={deletingId === intg.id}>
+                        <Button variant="ghost" size="icon" className="text-zinc-600 hover:text-red-400 hover:bg-red-500/10" onClick={() => handleDelete(intg.id)} disabled={deletingId === intg.id}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
