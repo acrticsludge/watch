@@ -8,6 +8,8 @@ export function HeroDemoLoader() {
           muted
           loop
           playsInline
+          preload="none"
+          poster="/StackwatchDemo-poster.jpg"
           className="w-full block"
           style={{ aspectRatio: "16/9" }}
         />

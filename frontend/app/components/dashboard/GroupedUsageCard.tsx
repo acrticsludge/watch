@@ -492,7 +492,7 @@ function UsageDetailModal({
           </div>
           <button
             onClick={onClose}
-            className="h-7 w-7 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
+            className="h-10 w-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors"
           >
             <X className="h-3.5 w-3.5 text-zinc-400" />
           </button>

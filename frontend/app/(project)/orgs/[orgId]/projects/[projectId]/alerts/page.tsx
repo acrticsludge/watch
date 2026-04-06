@@ -121,7 +121,8 @@ async function AlertsContent({
 
   return (
     <div className="bg-[#111] border border-white/6 rounded-xl overflow-hidden">
-      <table className="w-full text-sm">
+      <div className="overflow-x-auto">
+      <table className="w-full text-sm min-w-140">
         <thead>
           <tr className="border-b border-white/6 bg-white/2">
             <th className="text-left px-5 py-3 text-xs font-medium text-zinc-600 uppercase tracking-wide">Service</th>
@@ -152,6 +153,7 @@ async function AlertsContent({
           })}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
@@ -173,14 +175,17 @@ function EmptyState() {
 function AlertsSkeleton() {
   return (
     <div className="bg-[#111] border border-white/6 rounded-xl overflow-hidden">
-      <div className="border-b border-white/6 bg-white/2 px-5 py-3 flex gap-8">
-        {[80, 120, 60, 80, 80].map((w, i) => (
-          <div key={i} className={`h-3 w-${w} bg-white/5 rounded animate-pulse`} />
-        ))}
+      <div className="overflow-x-auto">
+      <div className="border-b border-white/6 bg-white/2 px-5 py-3 flex gap-8 min-w-140">
+        <div className="h-3 w-20 bg-white/5 rounded animate-pulse" />
+        <div className="h-3 w-28 bg-white/5 rounded animate-pulse" />
+        <div className="h-3 w-16 bg-white/5 rounded animate-pulse" />
+        <div className="h-3 w-20 bg-white/5 rounded animate-pulse" />
+        <div className="h-3 w-20 bg-white/5 rounded animate-pulse" />
       </div>
       <div className="divide-y divide-white/4">
         {[0, 1, 2, 3, 4].map((i) => (
-          <div key={i} className="px-5 py-3.5 flex gap-8 items-center">
+          <div key={i} className="px-5 py-3.5 flex gap-8 items-center min-w-140">
             <div className="space-y-1.5 w-24">
               <div className="h-3 w-20 bg-white/5 rounded animate-pulse" />
               <div className="h-2.5 w-14 bg-white/4 rounded animate-pulse" />
@@ -191,6 +196,7 @@ function AlertsSkeleton() {
             <div className="h-3 w-20 bg-white/5 rounded animate-pulse" />
           </div>
         ))}
+      </div>
       </div>
     </div>
   );
