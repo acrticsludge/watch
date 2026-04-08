@@ -73,6 +73,20 @@ export const Sidebar: React.FC<{ active: NavItem }> = ({ active }) => (
       </div>
     </div>
 
+    {/* Project context */}
+    <div style={{
+      padding: "8px 12px 10px", borderBottom: `1px solid ${C.border}`,
+      display: "flex", flexDirection: "column", gap: 3,
+    }}>
+      <span style={{ fontSize: 10, color: C.textDim, fontFamily: F.mono, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+        Acme Corp
+      </span>
+      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+        <div style={{ width: 6, height: 6, borderRadius: 2, background: "#3b82f6", flexShrink: 0 }} />
+        <span style={{ fontSize: 12, fontWeight: 500, color: C.textMuted }}>Production</span>
+      </div>
+    </div>
+
     {/* Nav */}
     <div style={{ flex: 1, padding: "12px 8px 8px" }}>
       {NAV.map(({ id, label, Icon }) => {

@@ -189,7 +189,7 @@ const videoLd = {
     "A walkthrough of the Stackwatch dashboard — connecting GitHub Actions, Vercel, and Supabase integrations, setting threshold alerts, and viewing usage history.",
   thumbnailUrl: `${APP_URL}/StackwatchDemo-poster.jpg`,
   uploadDate: "2026-03-26T00:00:00Z",
-  duration: "PT1M30S",
+  duration: "PT46S",
   contentUrl: `${APP_URL}/StackwatchDemo.mp4`,
 };
 
