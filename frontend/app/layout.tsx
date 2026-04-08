@@ -14,7 +14,11 @@ import { PostHogProvider } from "@/app/components/PostHogProvider";
 import { PostHogPageView } from "@/app/components/PostHogPageView";
 import { Suspense } from "react";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
@@ -58,6 +62,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  verification: {
+    google: "4eGnqhMoXEd9e_Fl_M-JCOBl31koRuqMpr1rn16tjoY",
   },
 };
 

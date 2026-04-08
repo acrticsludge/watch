@@ -65,7 +65,7 @@ export const Scene2Dashboard: React.FC = () => {
                 fontSize: 13, color: "#71717a", maxWidth: 280,
                 lineHeight: 1.65, margin: "0 auto 24px",
               }}>
-                Connect GitHub Actions, Vercel, or Supabase to start monitoring your usage and get alerted before you hit limits.
+                Connect GitHub Actions, Vercel, Supabase, Railway, or MongoDB Atlas to start monitoring your usage and get alerted before you hit limits.
               </p>
 
               <div style={{

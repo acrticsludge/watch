@@ -4,6 +4,41 @@ import { PricingSection, type PlanState } from "@/app/components/landing/Pricing
 import { LandingFooter } from "@/app/components/landing/LandingFooter";
 import { createClient } from "@/lib/supabase/server";
 
+const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
+
+const pricingLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Stackwatch",
+  applicationCategory: "DeveloperApplication",
+  url: APP_URL,
+  description:
+    "Stackwatch is a usage monitoring platform for developer teams. Monitor GitHub Actions, Vercel, Supabase, and Railway quotas from a single dashboard.",
+  offers: [
+    {
+      "@type": "Offer",
+      name: "Free",
+      description:
+        "1 account per service, email alerts only, 15-minute polling interval, 7-day usage history.",
+      price: "0",
+      priceCurrency: "USD",
+      availability: "https://schema.org/OnlineOnly",
+      url: `${APP_URL}/signup`,
+    },
+    {
+      "@type": "Offer",
+      name: "Pro",
+      description:
+        "Multiple accounts per service, all alert channels (Email, Slack, Discord, Browser Push), 5-minute polling, 30-day history, usage history graphs.",
+      price: "10",
+      priceCurrency: "USD",
+      availability: "https://schema.org/OnlineOnly",
+      url: `${APP_URL}/pricing`,
+    },
+  ],
+};
+
 export const metadata: Metadata = {
   title: "Pricing Plans",
   description:
@@ -44,6 +79,7 @@ export default async function PricingPage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingLd) }} />
       <LandingNav isLoggedIn={!!user} />
       <main className="pt-16">
         <div className="max-w-5xl mx-auto px-6 pt-16 pb-4 text-center">

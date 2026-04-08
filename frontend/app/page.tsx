@@ -50,6 +50,13 @@ const jsonLd = {
     "Team dashboard with shared pooled usage",
   ],
   screenshot: `${APP_URL}/og`,
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "5",
+    bestRating: "5",
+    worstRating: "1",
+    ratingCount: "3",
+  },
   author: {
     "@type": "Organization",
     "@id": `${APP_URL}/#organization`,
@@ -174,6 +181,18 @@ const faqLd = {
   ],
 };
 
+const videoLd = {
+  "@context": "https://schema.org",
+  "@type": "VideoObject",
+  name: "Stackwatch product demo",
+  description:
+    "A walkthrough of the Stackwatch dashboard — connecting GitHub Actions, Vercel, and Supabase integrations, setting threshold alerts, and viewing usage history.",
+  thumbnailUrl: `${APP_URL}/StackwatchDemo-poster.jpg`,
+  uploadDate: "2026-03-26T00:00:00Z",
+  duration: "PT46S",
+  contentUrl: `${APP_URL}/StackwatchDemo.mp4`,
+};
+
 export const revalidate = 3600; // revalidate landing page shell hourly
 
 // ─── Dynamic async sub-components ────────────────────────────────────────────
@@ -194,6 +213,7 @@ export default function LandingPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(videoLd) }} />
 
       {/* Nav: streams in with auth state; static fallback shows immediately */}
       <Suspense fallback={<LandingNav isLoggedIn={false} />}>
