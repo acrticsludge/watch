@@ -123,7 +123,7 @@ function CancelSubscriptionButton({
   );
 }
 
-function UpgradeButton() {
+function UpgradeButton({ hasUsedTrial }: { hasUsedTrial?: boolean }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   async function startCheckout() {
@@ -149,7 +149,7 @@ function UpgradeButton() {
       disabled={loading}
       className="inline-flex items-center justify-center rounded-md bg-blue-500 hover:bg-blue-400 px-4 py-2.5 text-sm font-medium text-white transition-colors shadow-lg shadow-blue-500/20 disabled:opacity-50"
     >
-      {loading ? "Loading..." : "Start free 14-day trial"}
+      {loading ? "Loading..." : hasUsedTrial ? "Upgrade to Pro" : "Start free 14-day trial"}
     </button>
   );
 }
@@ -191,6 +191,7 @@ interface SettingsContentProps {
   trialEndsAt?: string | null;
   nextBillingAt?: string | null;
   cancelAtPeriodEnd?: boolean;
+  hasUsedTrial?: boolean;
   defaultTab?: string;
   snapshotMetrics?: Record<string, string[]>;
   spikeConfigs?: SpikeConfig[];
@@ -468,6 +469,7 @@ export function SettingsContent({
   trialEndsAt,
   nextBillingAt,
   cancelAtPeriodEnd = false,
+  hasUsedTrial = false,
   defaultTab = "alerts",
   snapshotMetrics = {},
   spikeConfigs = [],
@@ -1152,14 +1154,14 @@ export function SettingsContent({
               <p className="text-sm text-zinc-300 mb-3">
                 To restore Pro access, start a new subscription below.
               </p>
-              <UpgradeButton />
+              <UpgradeButton hasUsedTrial={hasUsedTrial} />
             </div>
           ) : !isPro && !isTrialing ? (
             <div>
               <p className="text-zinc-400 text-sm mb-4">
                 Upgrade to Pro for multiple accounts, Slack &amp; Discord alerts, 5-minute polling, and 30-day history.
               </p>
-              <UpgradeButton />
+              <UpgradeButton hasUsedTrial={hasUsedTrial} />
             </div>
           ) : cancelAtPeriodEnd ? (
             <p className="text-sm text-zinc-600">
