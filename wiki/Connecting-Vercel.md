@@ -24,11 +24,12 @@ Stackwatch tracks your Vercel bandwidth, build minutes, and function invocations
 
 ## Step 2 — Add the Integration in Stackwatch
 
-1. Go to **Integrations** in the Stackwatch dashboard
-2. Click **Add integration → Vercel**
-3. Paste your token into the **API Token** field
-4. Give the integration a label (e.g. `vercel-prod`)
-5. Click **Connect**
+1. Navigate to your project in the Stackwatch dashboard
+2. Go to the project's **Integrations** tab
+3. Find **Vercel** and click **Add account**
+4. Paste your token into the **API Token** field
+5. Give the integration a label (e.g. `vercel-prod`)
+6. Click **Connect**
 
 ---
 
@@ -57,7 +58,7 @@ Stackwatch tracks your Vercel bandwidth, build minutes, and function invocations
 ## Troubleshooting
 
 ### "Invalid or expired API token"
-The token was revoked or expired. Generate a new one and reconnect from the **Integrations** page.
+The token was revoked or expired. Generate a new one and reconnect from the project's **Integrations** tab.
 
 ### "Token lacks billing read permissions"
 The token scope doesn't cover billing data. Make sure you selected **Full Account** scope when creating it. Team-scoped tokens for a specific team may not have access to account-level billing.
@@ -73,5 +74,5 @@ Vercel's usage API updates periodically, not in real time. If you've just starte
 ## Token Rotation
 
 1. Create a new token at [vercel.com/account/tokens](https://vercel.com/account/tokens)
-2. In Stackwatch, go to **Integrations**, find your Vercel integration, and click **Edit**
+2. In Stackwatch, go to the project's **Integrations** tab, find your Vercel integration, and click the **edit (pencil)** icon
 3. Paste the new token and save

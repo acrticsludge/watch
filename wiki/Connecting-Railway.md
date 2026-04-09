@@ -1,6 +1,6 @@
 # Connecting Railway
 
-Stackwatch tracks memory and CPU usage across all your Railway projects and services, with per-project breakdowns and network/disk metrics on Pro.
+Stackwatch tracks memory and CPU usage across all your Railway projects and services. Per-project breakdowns are available on both Free and Pro. Network, disk, and peak metrics are Pro-only.
 
 ---
 
@@ -23,11 +23,12 @@ A **Railway API Token** from your Railway account settings.
 
 ## Step 2 — Add the Integration in Stackwatch
 
-1. Go to **Integrations** in the Stackwatch dashboard
-2. Click **Add integration → Railway**
-3. Paste your token into the **API Token** field
-4. Give the integration a label (e.g. `railway-prod`)
-5. Click **Connect**
+1. Navigate to your project in the Stackwatch dashboard
+2. Go to the project's **Integrations** tab
+3. Find **Railway** and click **Add account**
+4. Paste your token into the **API Token** field
+5. Give the integration a label (e.g. `railway-prod`)
+6. Click **Connect**
 
 Stackwatch will automatically discover all projects and services in your Railway account — no project IDs needed.
 
@@ -93,5 +94,5 @@ CPU and memory values shown are averages across the billing period, not current 
 ## Token Rotation
 
 1. Create a new token at [railway.com/account/tokens](https://railway.com/account/tokens)
-2. In Stackwatch, go to **Integrations**, find your Railway integration, and click **Edit**
+2. In Stackwatch, go to the project's **Integrations** tab, find your Railway integration, and click the **edit (pencil)** icon
 3. Paste the new token and save
