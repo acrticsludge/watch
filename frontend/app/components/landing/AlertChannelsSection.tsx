@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 
 const channels = [
   {
@@ -51,17 +50,26 @@ const channels = [
 ];
 
 export function AlertChannelsSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const ref = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setIsInView(true); observer.disconnect(); } },
+      { rootMargin: "-80px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section id="features" className="py-14 bg-[#0a0a0a] border-t border-[#161616]" ref={ref}>
       <div className="max-w-2xl mx-auto px-6">
-        <motion.div
-          className="text-center mb-8"
-          initial={{ opacity: 0, y: 16 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+        <div
+          className="text-center mb-8 transition-all duration-400 ease-out"
+          style={{ opacity: isInView ? 1 : 0, transform: isInView ? "translateY(0)" : "translateY(16px)" }}
         >
           <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.18em] mb-3">
             Alert channels
@@ -69,13 +77,11 @@ export function AlertChannelsSection() {
           <h2 className="text-xl font-semibold text-white tracking-tight">
             Alerts where you already work
           </h2>
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4"
-          initial={{ opacity: 0, y: 16 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4, ease: "easeOut", delay: 0.1 }}
+        <div
+          className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 transition-all duration-400 ease-out"
+          style={{ opacity: isInView ? 1 : 0, transform: isInView ? "translateY(0)" : "translateY(16px)", transitionDelay: isInView ? "100ms" : "0ms" }}
         >
           {channels.map((c) => (
             <div key={c.name} className="flex items-center gap-2.5">
@@ -87,7 +93,7 @@ export function AlertChannelsSection() {
               <span className="text-sm text-zinc-400">{c.name}</span>
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

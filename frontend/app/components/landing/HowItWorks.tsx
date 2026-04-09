@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 
 const steps = [
   {
@@ -43,8 +42,19 @@ const steps = [
 ];
 
 export function HowItWorks() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const ref = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setIsInView(true); observer.disconnect(); } },
+      { rootMargin: "-80px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
@@ -53,11 +63,9 @@ export function HowItWorks() {
       ref={ref}
     >
       <div className="max-w-2xl mx-auto px-6">
-        <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 16 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+        <div
+          className="text-center mb-12 transition-all duration-400 ease-out"
+          style={{ opacity: isInView ? 1 : 0, transform: isInView ? "translateY(0)" : "translateY(16px)" }}
         >
           <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-[0.18em] mb-3">
             How it works
@@ -68,20 +76,18 @@ export function HowItWorks() {
           <p className="text-zinc-500 text-sm">
             Three steps. No dashboards to babysit.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="divide-y divide-[#161616]"
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={{ visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } } }}
-        >
+        <div className="divide-y divide-[#161616]">
           {steps.map((s, i) => (
-            <motion.div
+            <div
               key={s.step}
-              variants={{ hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0 } }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="flex items-start gap-5 py-7"
+              className="flex items-start gap-5 py-7 transition-all duration-400 ease-out"
+              style={{
+                opacity: isInView ? 1 : 0,
+                transform: isInView ? "translateY(0)" : "translateY(16px)",
+                transitionDelay: isInView ? `${(i + 1) * 100}ms` : "0ms",
+              }}
             >
               <div
                 className={`h-8 w-8 rounded-md border border-[#1f1f1f] bg-[#141414] flex items-center justify-center shrink-0 mt-0.5 ${s.iconColor}`}
@@ -95,9 +101,9 @@ export function HowItWorks() {
                 </div>
                 <p className="text-zinc-500 text-sm leading-relaxed">{s.description}</p>
               </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

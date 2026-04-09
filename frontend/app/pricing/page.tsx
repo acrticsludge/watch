@@ -10,6 +10,7 @@ const APP_URL =
 const pricingLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
+  "@id": `${APP_URL}/#software`,
   name: "Stackwatch",
   applicationCategory: "DeveloperApplication",
   url: APP_URL,
@@ -31,10 +32,34 @@ const pricingLd = {
       name: "Pro",
       description:
         "Multiple accounts per service, all alert channels (Email, Slack, Discord, Browser Push), 5-minute polling, 30-day history, usage history graphs.",
-      price: "10",
+      price: "120",
       priceCurrency: "USD",
       availability: "https://schema.org/OnlineOnly",
       url: `${APP_URL}/pricing`,
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: "120",
+        priceCurrency: "USD",
+        billingDuration: 1,
+        unitCode: "ANN",
+      },
+    },
+    {
+      "@type": "Offer",
+      name: "Team",
+      description:
+        "Everything in Pro plus team member invites, shared pooled usage dashboard, and team admin controls.",
+      price: "360",
+      priceCurrency: "USD",
+      availability: "https://schema.org/OnlineOnly",
+      url: `${APP_URL}/pricing`,
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: "360",
+        priceCurrency: "USD",
+        billingDuration: 1,
+        unitCode: "ANN",
+      },
     },
   ],
 };
@@ -43,8 +68,8 @@ export const metadata: Metadata = {
   title: "Pricing Plans",
   description:
     "Stackwatch pricing: Free ($0), Pro ($120/yr). Free plan includes 1 account per service and email alerts. Pro adds Slack, Discord, and 5-minute polling. No credit card required to start.",
-  alternates: { canonical: "/pricing" },
-  openGraph: { url: "/pricing" },
+  alternates: { canonical: `${APP_URL}/pricing` },
+  openGraph: { url: `${APP_URL}/pricing` },
 };
 
 export default async function PricingPage() {
