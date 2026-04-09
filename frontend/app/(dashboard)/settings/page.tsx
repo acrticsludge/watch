@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { createClient } from "@/lib/supabase/server";
 import { getSession, getSubscription } from "@/lib/queries/user";
 import { SettingsContent } from "./SettingsContent";
 
@@ -34,10 +35,13 @@ async function SettingsData({
 }) {
   const { tab } = await searchParams;
 
-  const [session, subscription] = await Promise.all([
+  const supabase = await createClient();
+  const [session, subscription, anySubResult] = await Promise.all([
     getSession(),
     getSubscription(),
+    supabase.from("subscriptions").select("id", { count: "exact", head: true }),
   ]);
+  const hasUsedTrial = (anySubResult.count ?? 0) > 0;
 
   return (
     <SettingsContent
@@ -50,6 +54,7 @@ async function SettingsData({
       trialEndsAt={subscription?.trial_ends_at ?? null}
       nextBillingAt={subscription?.next_billing_at ?? null}
       cancelAtPeriodEnd={subscription?.cancel_at_period_end ?? false}
+      hasUsedTrial={hasUsedTrial}
       defaultTab={tab ?? "account"}
       visibleTabs={["account", "billing"]}
       snapshotMetrics={{}}

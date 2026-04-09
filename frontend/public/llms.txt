@@ -27,8 +27,8 @@ Each alert includes: service name, metric name, current value, plan limit, perce
 ## Plans
 
 - **Free** — $0/month. 1 account per service, email alerts, 15-minute polling, 7-day usage history.
-- **Pro** — $10/month. 5 accounts per service, all alert channels, 5-minute polling, 30-day history, usage history charts.
-- **Team** — $30/month. Unlimited accounts, all alert channels, 1-minute polling, 90-day history, shared team dashboard for invited members.
+- **Pro** — $120/year. 5 accounts per service, all alert channels, 5-minute polling, 30-day history, usage history charts.
+- **Team** — $TBD/month. Unlimited accounts, all alert channels, 1-minute polling, 90-day history, shared team dashboard for invited members.
 
 ## Security
 
