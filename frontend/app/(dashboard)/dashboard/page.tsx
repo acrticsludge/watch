@@ -6,6 +6,7 @@ import { TIER_LIMITS } from "@/lib/tiers";
 import Link from "next/link";
 import { Button } from "@/app/components/ui/button";
 import { MakePrimaryButton } from "@/app/components/MakePrimaryButton";
+import { DeleteWithConfirmButton } from "@/app/components/DeleteWithConfirmButton";
 import { DashboardRefresher } from "./DashboardRefresher";
 
 export const metadata: Metadata = { title: "Dashboard" };
@@ -145,7 +146,14 @@ async function OrgCard({
             Paused — free plan limit. Make this your primary organization to activate it, or{" "}
             <Link href="/settings?tab=billing" className="text-blue-400 underline underline-offset-2">upgrade to Pro</Link>.
           </p>
-          <MakePrimaryButton endpoint={`/api/orgs/${org.id}/promote`} />
+          <div className="flex items-center gap-4">
+            <MakePrimaryButton endpoint={`/api/orgs/${org.id}/promote`} />
+            <DeleteWithConfirmButton
+              endpoint={`/api/orgs/${org.id}`}
+              title={`Delete "${org.name}"?`}
+              description={`This will permanently delete the organization "${org.name}" and all of its projects, integrations, and usage data.`}
+            />
+          </div>
         </div>
       ) : (
         <>
@@ -166,7 +174,14 @@ async function OrgCard({
                         <span className="shrink-0 text-[10px] font-semibold text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1 py-0.5 ml-2">paused</span>
                       </div>
                       <p className="text-xs text-zinc-600">{project.slug}</p>
-                      <MakePrimaryButton endpoint={`/api/orgs/${org.id}/projects/${project.id}/promote`} />
+                      <div className="flex items-center gap-4">
+                        <MakePrimaryButton endpoint={`/api/orgs/${org.id}/projects/${project.id}/promote`} />
+                        <DeleteWithConfirmButton
+                          endpoint={`/api/orgs/${org.id}/projects/${project.id}`}
+                          title={`Delete "${project.name}"?`}
+                          description={`This will permanently delete the project "${project.name}" and all of its integrations, alerts, and usage data.`}
+                        />
+                      </div>
                     </div>
                   );
                 }
