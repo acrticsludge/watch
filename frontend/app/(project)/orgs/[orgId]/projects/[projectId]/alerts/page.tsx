@@ -33,6 +33,25 @@ export default function ProjectAlertsPage({
   );
 }
 
+/** Returns the PostgREST OR filter that covers both new and pre-migration rows. */
+async function buildAlertFilter(projectId: string): Promise<{ filter: string; integrationIds: string[] }> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("integrations")
+    .select("id")
+    .eq("project_id", projectId);
+  const integrationIds = (data ?? []).map((i) => i.id);
+
+  // New/backfilled rows have project_id set. Old pre-migration rows have project_id NULL
+  // but their integration_id still belongs to this project.
+  const filter =
+    integrationIds.length > 0
+      ? `project_id.eq.${projectId},and(project_id.is.null,integration_id.in.(${integrationIds.join(",")}))`
+      : `project_id.eq.${projectId}`;
+
+  return { filter, integrationIds };
+}
+
 async function AlertsSubtitle({
   params,
 }: {
@@ -45,28 +64,18 @@ async function AlertsSubtitle({
   const historyDays = TIER_LIMITS[tier]?.historyDays ?? TIER_LIMITS.free.historyDays;
   const since = new Date(Date.now() - historyDays * 24 * 60 * 60 * 1000).toISOString();
 
-  // Get integration IDs for this project
-  const { data: projectIntegrations } = await supabase
-    .from("integrations")
-    .select("id")
-    .eq("project_id", projectId);
+  const { filter } = await buildAlertFilter(projectId);
+  const { count } = await supabase
+    .from("alert_history")
+    .select("id", { count: "exact", head: true })
+    .or(filter)
+    .gte("sent_at", since);
 
-  const integrationIds = (projectIntegrations ?? []).map((i) => i.id);
-
-  let count = 0;
-  if (integrationIds.length > 0) {
-    const { count: c } = await supabase
-      .from("alert_history")
-      .select("id", { count: "exact", head: true })
-      .in("integration_id", integrationIds)
-      .gte("sent_at", since);
-    count = c ?? 0;
-  }
-
+  const rows = count ?? 0;
   return (
     <p className="text-zinc-500 text-sm mt-1">
-      {count > 0
-        ? `${count} alert${count !== 1 ? "s" : ""} in the last ${historyDays} days`
+      {rows > 0
+        ? `${rows} alert${rows !== 1 ? "s" : ""} in the last ${historyDays} days`
         : `A log of alerts from the last ${historyDays} days`}
     </p>
   );
@@ -96,22 +105,11 @@ async function AlertsContent({
   const historyDays = TIER_LIMITS[tier]?.historyDays ?? TIER_LIMITS.free.historyDays;
   const since = new Date(Date.now() - historyDays * 24 * 60 * 60 * 1000).toISOString();
 
-  // Get integration IDs for this project
-  const { data: projectIntegrations } = await supabase
-    .from("integrations")
-    .select("id")
-    .eq("project_id", projectId);
-
-  const integrationIds = (projectIntegrations ?? []).map((i) => i.id);
-
-  if (integrationIds.length === 0) {
-    return <EmptyState />;
-  }
-
+  const { filter } = await buildAlertFilter(projectId);
   const { data: history } = await supabase
     .from("alert_history")
     .select("id, metric_name, percent_used, channel, sent_at, integration_id, integration:integrations(id, service, account_label)")
-    .in("integration_id", integrationIds)
+    .or(filter)
     .gte("sent_at", since)
     .order("sent_at", { ascending: false })
     .limit(200);
