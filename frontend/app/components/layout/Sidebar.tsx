@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/browser";
+import { signOut } from "@/app/actions/auth";
 import {
   LayoutDashboard,
   Plug,
@@ -43,8 +43,6 @@ export function Sidebar({
   projectName,
 }: SidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
-  const supabase = createClient();
   const isProjectMode = !!(orgId && projectId);
 
   const projectBase = isProjectMode ? `/orgs/${orgId}/projects/${projectId}` : "";
@@ -54,12 +52,6 @@ export function Sidebar({
     { href: `${projectBase}/alerts`, label: "Alert History", icon: Bell },
     { href: `${projectBase}/settings`, label: "Settings", icon: Settings },
   ];
-
-  async function handleSignOut() {
-    await supabase.auth.signOut();
-    router.push("/login");
-    router.refresh();
-  }
 
   const avatarInitial = email ? email.charAt(0).toUpperCase() : "?";
 
@@ -155,13 +147,15 @@ export function Sidebar({
               </span>
             </div>
           )}
-          <button
-            onClick={handleSignOut}
-            className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-600 hover:bg-white/4 hover:text-zinc-300 transition-colors w-full"
-          >
-            <LogOut className="h-4 w-4 shrink-0" />
-            Sign out
-          </button>
+          <form action={signOut}>
+            <button
+              type="submit"
+              className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-600 hover:bg-white/4 hover:text-zinc-300 transition-colors w-full"
+            >
+              <LogOut className="h-4 w-4 shrink-0" />
+              Sign out
+            </button>
+          </form>
         </div>
       </aside>
 
