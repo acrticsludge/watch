@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LandingNav } from "@/app/components/landing/LandingNav";
+import { getSession } from "@/lib/queries/user";
 
 import { Hero } from "@/app/components/landing/Hero";
 import { HowItWorks } from "@/app/components/landing/HowItWorks";
@@ -134,15 +135,16 @@ export const revalidate = 3600; // revalidate landing page shell hourly
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const session = await getSession();
+
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(videoLd) }} />
 
-      {/* Nav: auth state detected client-side to enable edge caching */}
-      <LandingNav />
+      <LandingNav isLoggedIn={!!session} />
 
       <main>
         <Hero />

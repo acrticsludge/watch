@@ -3,27 +3,18 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/browser";
 
 interface LandingNavProps {
   isLoggedIn?: boolean;
 }
 
-export function LandingNav({ isLoggedIn: initialLoggedIn = false }: LandingNavProps) {
+export function LandingNav({ isLoggedIn = false }: LandingNavProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(initialLoggedIn);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 12);
     window.addEventListener("scroll", handler, { passive: true });
     return () => window.removeEventListener("scroll", handler);
-  }, []);
-
-  useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => {
-      setIsLoggedIn(!!data.user);
-    });
   }, []);
 
   return (
