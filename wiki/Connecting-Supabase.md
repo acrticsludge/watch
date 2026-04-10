@@ -1,6 +1,6 @@
 # Connecting Supabase
 
-Stackwatch tracks your Supabase database size, monthly active users, storage buckets, and more. On Pro, it also monitors connections, realtime usage, edge function invocations, and gives you a per-table storage breakdown.
+Stackwatch tracks your Supabase database size, monthly active users, storage buckets, and more. On Pro, it also monitors connections, cache hit ratio, realtime usage, edge function invocations, database egress, and gives you a per-table storage breakdown.
 
 ---
 
@@ -36,12 +36,13 @@ You can also find it in your project URL: `https://supabase.com/dashboard/projec
 
 ## Step 3 — Add the Integration in Stackwatch
 
-1. Go to **Integrations** in the Stackwatch dashboard
-2. Click **Add integration → Supabase**
-3. Paste your **Management API key** into the API Key field
-4. Paste your **Project Reference ID** into the Project Ref field
-5. Give the integration a label (e.g. `my-app-prod`)
-6. Click **Connect**
+1. Navigate to your project in the Stackwatch dashboard
+2. Go to the project's **Integrations** tab
+3. Find **Supabase** and click **Add account**
+4. Paste your **Management API key** into the API Key field
+5. Paste your **Project Reference ID** into the Project Ref field
+6. Give the integration a label (e.g. `my-app-prod`)
+7. Click **Connect**
 
 ---
 
@@ -63,9 +64,9 @@ You can also find it in your project URL: `https://supabase.com/dashboard/projec
 | Active DB connections | Current open connections vs 60 connection limit |
 | Cache hit ratio | PostgreSQL buffer cache hit ratio (higher is better; shown as % of 100) |
 | Per-table storage | Size of each table in your `public` schema |
-| Realtime messages | Messages sent via Realtime this month vs limit |
+| Realtime messages | Messages sent via Realtime this month vs 2,000,000 limit |
 | Realtime peak connections | Peak concurrent Realtime connections vs limit |
-| Edge function invocations | Edge function calls this month vs limit |
+| Edge function invocations | Edge function calls this month vs 500,000 limit |
 | Database egress | Data egressed from the database vs limit (MB) |
 
 > **Per-table storage** only includes tables in your `public` schema. Supabase's internal `auth`, `storage`, and `realtime` schemas are intentionally excluded.
@@ -99,7 +100,7 @@ If you have no storage buckets, storage will show as 0. The metric only appears 
 Supabase Management API tokens don't expire automatically, but you should rotate them periodically.
 
 1. Generate a new token at [supabase.com/dashboard/account/tokens](https://supabase.com/dashboard/account/tokens)
-2. In Stackwatch, go to **Integrations**, find your Supabase integration, and click **Edit**
+2. In Stackwatch, go to the project's **Integrations** tab, find your Supabase integration, and click the **edit (pencil)** icon
 3. Paste the new token and save
 
 You do **not** need to change the Project Ref unless you're switching projects.

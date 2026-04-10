@@ -80,7 +80,7 @@ const faqLd = {
 };
 
 export const metadata: Metadata = {
-  title: "FAQ — Stackwatch",
+  title: "FAQ",
   description:
     "Frequently asked questions about Stackwatch — pricing, security, integrations, alerts, and more.",
   alternates: {
@@ -88,7 +88,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: `${APP_URL}/faq`,
-    title: "FAQ — Stackwatch",
+    title: "FAQ | Stackwatch",
     description:
       "Frequently asked questions about Stackwatch — pricing, security, integrations, alerts, and more.",
   },

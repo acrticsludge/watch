@@ -1,6 +1,8 @@
 # Stackwatch
 
-Stackwatch is a usage monitoring platform for developer teams. It connects to GitHub Actions, Vercel, Supabase, and Railway via API tokens, continuously polls usage metrics, and alerts users when usage approaches configurable thresholds — before limits cause production incidents.
+Stackwatch is a usage monitoring platform for developer teams. It connects to GitHub Actions, Vercel, Supabase, Railway, and MongoDB Atlas via API tokens, continuously polls usage metrics, and alerts users when usage approaches configurable thresholds — before limits cause production incidents.
+
+Stackwatch is designed for small teams who find Datadog, Grafana, or self-hosted monitoring too complex or too expensive for early-stage use.
 
 ## What it monitors
 
@@ -8,6 +10,7 @@ Stackwatch is a usage monitoring platform for developer teams. It connects to Gi
 - **Vercel**: bandwidth, build minutes, function invocations vs plan limits
 - **Supabase**: database size, row count, storage, monthly active users vs free tier limits
 - **Railway**: memory and CPU usage per service
+- **MongoDB Atlas**: connection count, data transfer, and storage vs Atlas free tier limits
 
 ## Polling intervals
 
@@ -27,8 +30,8 @@ Each alert includes: service name, metric name, current value, plan limit, perce
 ## Plans
 
 - **Free** — $0/month. 1 account per service, email alerts, 15-minute polling, 7-day usage history.
-- **Pro** — $120/year. 5 accounts per service, all alert channels, 5-minute polling, 30-day history, usage history charts.
-- **Team** — $TBD/month. Unlimited accounts, all alert channels, 1-minute polling, 90-day history, shared team dashboard for invited members.
+- **Pro** — $120/year ($10/month equivalent). 5 accounts per service, all alert channels, 5-minute polling, 30-day history, usage history charts.
+- **Team** — $360/year ($30/month equivalent). Unlimited accounts, all alert channels, 1-minute polling, 90-day history, shared team dashboard for invited members.
 
 ## Security
 
@@ -38,5 +41,7 @@ API tokens are encrypted with AES-256 at rest. The encryption key is never store
 
 - Homepage: https://stackwatch.pulsemonitor.dev
 - Pricing: https://stackwatch.pulsemonitor.dev/pricing
+- FAQ: https://stackwatch.pulsemonitor.dev/faq
 - Privacy Policy: https://stackwatch.pulsemonitor.dev/privacy
 - Terms of Service: https://stackwatch.pulsemonitor.dev/terms
+- Sign up: https://stackwatch.pulsemonitor.dev/signup

@@ -209,6 +209,7 @@ export type Database = {
           id: string;
           user_id: string;
           integration_id: string;
+          project_id: string | null;
           metric_name: string;
           percent_used: number | null;
           channel: ChannelType;
@@ -219,6 +220,7 @@ export type Database = {
           id?: string;
           user_id: string;
           integration_id: string;
+          project_id?: string | null;
           metric_name: string;
           percent_used: number | null;
           channel: ChannelType;
@@ -229,6 +231,7 @@ export type Database = {
           id?: string;
           user_id?: string;
           integration_id?: string;
+          project_id?: string | null;
           metric_name?: string;
           percent_used?: number;
           channel?: ChannelType;

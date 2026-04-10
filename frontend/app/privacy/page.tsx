@@ -3,12 +3,15 @@ import { LandingNav } from "@/app/components/landing/LandingNav";
 import { LandingFooter } from "@/app/components/landing/LandingFooter";
 import { createClient } from "@/lib/supabase/server";
 
+const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
+
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "How Stackwatch collects, uses, and protects your personal data. Covers API key encryption, data retention, your rights under DPDP Act 2023, and how to contact our Grievance Officer.",
-  alternates: { canonical: "/privacy" },
-  openGraph: { url: "/privacy" },
+  alternates: { canonical: `${APP_URL}/privacy` },
+  openGraph: { url: `${APP_URL}/privacy` },
   robots: { index: true, follow: true },
 };
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getSubscription } from "@/lib/queries/user";
 import { METRIC_LABELS, SERVICE_LABELS, relativeTime } from "@/lib/utils";
@@ -8,7 +9,36 @@ import { TIER_LIMITS } from "@/lib/tiers";
 
 export const metadata: Metadata = { title: "Alert History" };
 
-export default function AlertsPage() {
+export default async function AlertsPage() {
+  // Redirect to the project-scoped alerts page for the user's first org/project.
+  // This route is kept for backwards compatibility (bookmarks, direct links).
+  const supabase = await createClient();
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("id")
+    .order("sort_order", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (org) {
+    const { data: project } = await supabase
+      .from("projects")
+      .select("id")
+      .eq("org_id", org.id)
+      .order("sort_order", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (project) {
+      redirect(`/orgs/${org.id}/projects/${project.id}/alerts`);
+    }
+  }
+
+  // Fallback: no org/project yet — render the legacy view below
+  return <LegacyAlertsPage />;
+}
+
+function LegacyAlertsPage() {
   return (
     <div>
       <div className="flex items-start justify-between mb-8">

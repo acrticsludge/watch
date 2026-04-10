@@ -65,6 +65,7 @@ export async function fireAlerts(
       await supabase.from("alert_history").insert({
         user_id: alert.userId,
         integration_id: alert.integrationId,
+        project_id: alert.projectId ?? null,
         metric_name: alert.metricName,
         percent_used: alert.percentUsed,
         channel: channel.type,

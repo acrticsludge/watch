@@ -82,14 +82,15 @@ Stackwatch connects to MongoDB Atlas via the Atlas Admin API to track storage an
 
 ## Step 3 — Connect in Stackwatch
 
-1. Go to **Integrations** in Stackwatch
-2. Find **MongoDB Atlas** and click **Add account**
-3. Fill in the form:
+1. Navigate to your project in the Stackwatch dashboard
+2. Go to the project's **Integrations** tab
+3. Find **MongoDB Atlas** and click **Add account**
+4. Fill in the form:
    - **Atlas Public Key** — the short key from Step 2
    - **Atlas Private Key** — the long private key from Step 2 (stored encrypted)
    - **Project ID** — the 24-character ID from Step 1
    - **Account label** — a friendly name (e.g. `prod-cluster`)
-4. Click **Connect**
+5. Click **Connect**
 
 Stackwatch will poll your cluster on the next cycle (within 15 minutes on Free, 5 minutes on Pro).
 
@@ -120,7 +121,7 @@ If you're on an M0/free-tier cluster, or you want per-database and per-collectio
 
 ### Add it in Stackwatch
 
-1. Go to **Integrations** → find your MongoDB Atlas account → click the **edit (pencil)** icon
+1. Go to the project's **Integrations** tab → find your MongoDB Atlas account → click the **edit (pencil)** icon
 2. Paste the connection string into the **Connection String (optional)** field
 3. Click **Save changes**
 

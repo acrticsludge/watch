@@ -153,11 +153,14 @@ create table if not exists alert_history (
   id              uuid primary key default uuid_generate_v4(),
   user_id         uuid not null references auth.users(id) on delete cascade,
   integration_id  uuid not null references integrations(id) on delete cascade,
+  project_id      uuid references projects(id) on delete set null,
   metric_name     text not null,
   percent_used    numeric not null,
   channel         text not null check (channel in ('email', 'slack', 'discord', 'push')),
+  alert_kind      text not null default 'threshold' check (alert_kind in ('threshold', 'spike')),
   sent_at         timestamptz not null default now()
 );
 
 create index if not exists alert_history_user_id_idx on alert_history(user_id);
+create index if not exists alert_history_project_id_idx on alert_history(project_id);
 create index if not exists alert_history_sent_at_idx on alert_history(sent_at desc);

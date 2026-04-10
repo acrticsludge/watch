@@ -3,12 +3,15 @@ import { LandingNav } from "@/app/components/landing/LandingNav";
 import { LandingFooter } from "@/app/components/landing/LandingFooter";
 import { createClient } from "@/lib/supabase/server";
 
+const APP_URL =
+  process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
+
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
     "Terms and conditions for using Stackwatch. Covers acceptable use, payment terms, data handling, warranties, limitation of liability, and how to cancel your subscription.",
-  alternates: { canonical: "/terms" },
-  openGraph: { url: "/terms" },
+  alternates: { canonical: `${APP_URL}/terms` },
+  openGraph: { url: `${APP_URL}/terms` },
   robots: { index: true, follow: true },
 };
 
