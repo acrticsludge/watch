@@ -2854,8 +2854,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_stackwatch",
-      "community": 1
+      "community": 1,
+      "id": "readme_stackwatch"
     },
     {
       "label": "Next.js Frontend",
@@ -2866,8 +2866,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_nextjs_frontend",
-      "community": 1
+      "community": 1,
+      "id": "readme_nextjs_frontend"
     },
     {
       "label": "Polling Worker (Railway)",
@@ -2878,8 +2878,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_worker",
-      "community": 1
+      "community": 1,
+      "id": "readme_worker"
     },
     {
       "label": "Supabase Auth + DB",
@@ -2890,8 +2890,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_supabase_auth_db",
-      "community": 2
+      "community": 2,
+      "id": "readme_supabase_auth_db"
     },
     {
       "label": "Dodo Payments",
@@ -2902,8 +2902,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_dodo_payments",
-      "community": 1
+      "community": 1,
+      "id": "readme_dodo_payments"
     },
     {
       "label": "Resend Email Service",
@@ -2914,8 +2914,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_resend_email",
-      "community": 2
+      "community": 2,
+      "id": "readme_resend_email"
     },
     {
       "label": "Vercel Hosting",
@@ -2926,8 +2926,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_vercel_hosting",
-      "community": 1
+      "community": 1,
+      "id": "readme_vercel_hosting"
     },
     {
       "label": "GitHub Actions Integration",
@@ -2938,8 +2938,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_github_actions_integration",
-      "community": 1
+      "community": 1,
+      "id": "readme_github_actions_integration"
     },
     {
       "label": "Vercel Integration",
@@ -2950,8 +2950,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_vercel_integration",
-      "community": 1
+      "community": 1,
+      "id": "readme_vercel_integration"
     },
     {
       "label": "Supabase Integration",
@@ -2962,8 +2962,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_supabase_integration",
-      "community": 1
+      "community": 1,
+      "id": "readme_supabase_integration"
     },
     {
       "label": "Railway Integration",
@@ -2974,8 +2974,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_railway_integration",
-      "community": 1
+      "community": 1,
+      "id": "readme_railway_integration"
     },
     {
       "label": "MongoDB Atlas Integration",
@@ -2986,8 +2986,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_mongodb_integration",
-      "community": 1
+      "community": 1,
+      "id": "readme_mongodb_integration"
     },
     {
       "label": "Free Tier Plan",
@@ -2998,8 +2998,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_free_tier",
-      "community": 1
+      "community": 1,
+      "id": "readme_free_tier"
     },
     {
       "label": "Pro Tier Plan",
@@ -3010,8 +3010,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_pro_tier",
-      "community": 2
+      "community": 2,
+      "id": "readme_pro_tier"
     },
     {
       "label": "Team Tier Plan",
@@ -3022,8 +3022,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_team_tier",
-      "community": 1
+      "community": 1,
+      "id": "readme_team_tier"
     },
     {
       "label": "Stackwatch Overview (CLAUDE.md)",
@@ -3034,8 +3034,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_stackwatch_overview",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_stackwatch_overview"
     },
     {
       "label": "Authentication System",
@@ -3046,8 +3046,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_authentication",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_authentication"
     },
     {
       "label": "Integrations Feature",
@@ -3058,8 +3058,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_integrations",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_integrations"
     },
     {
       "label": "Usage Dashboard",
@@ -3070,8 +3070,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_usage_dashboard",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_usage_dashboard"
     },
     {
       "label": "Threshold Alerts Feature",
@@ -3082,8 +3082,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_threshold_alerts",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_threshold_alerts"
     },
     {
       "label": "Polling Worker Design",
@@ -3094,8 +3094,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_polling_worker",
-      "community": 1
+      "community": 1,
+      "id": "claude_md_polling_worker"
     },
     {
       "label": "Notifications Setup",
@@ -3106,8 +3106,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_notifications_setup",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_notifications_setup"
     },
     {
       "label": "Settings Page",
@@ -3118,8 +3118,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_settings_page",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_settings_page"
     },
     {
       "label": "Database Schema",
@@ -3130,8 +3130,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_db_schema",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_db_schema"
     },
     {
       "label": "Pricing Tiers Design",
@@ -3142,8 +3142,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_pricing_tiers",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_pricing_tiers"
     },
     {
       "label": "Usage History Graphs",
@@ -3154,8 +3154,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_usage_history_graphs",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_usage_history_graphs"
     },
     {
       "label": "Team Dashboard Feature",
@@ -3166,8 +3166,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_team_dashboard",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_team_dashboard"
     },
     {
       "label": "Landing Page Design",
@@ -3178,8 +3178,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_landing_page",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_landing_page"
     },
     {
       "label": "Project Structure",
@@ -3190,8 +3190,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_project_structure",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_project_structure"
     },
     {
       "label": "Key Rules for Development",
@@ -3202,8 +3202,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_key_rules",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_key_rules"
     },
     {
       "label": "API Key Encryption",
@@ -3214,8 +3214,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_encryption",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_encryption"
     },
     {
       "label": "Row Level Security (RLS)",
@@ -3226,8 +3226,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "claude_md_rls",
-      "community": 2
+      "community": 2,
+      "id": "claude_md_rls"
     },
     {
       "label": "code-review-graph MCP Tools (AGENTS.md)",
@@ -3238,8 +3238,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "agents_md_code_review_graph",
-      "community": 87
+      "community": 87,
+      "id": "agents_md_code_review_graph"
     },
     {
       "label": "code-review-graph MCP Tools (GEMINI.md)",
@@ -3250,8 +3250,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "gemini_md_code_review_graph",
-      "community": 87
+      "community": 87,
+      "id": "gemini_md_code_review_graph"
     },
     {
       "label": "LLMs.txt AI Discovery File",
@@ -3262,8 +3262,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "llms_txt_stackwatch_summary",
-      "community": 5
+      "community": 5,
+      "id": "llms_txt_stackwatch_summary"
     },
     {
       "label": "Security Policy (AES-256 + RLS)",
@@ -3274,8 +3274,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "llms_txt_security_policy",
-      "community": 2
+      "community": 2,
+      "id": "llms_txt_security_policy"
     },
     {
       "label": "SEO Action Plan",
@@ -3286,8 +3286,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "action_plan_seo",
-      "community": 5
+      "community": 5,
+      "id": "action_plan_seo"
     },
     {
       "label": "C1: Missing Video Poster Image",
@@ -3298,8 +3298,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "action_plan_c1_poster",
-      "community": 5
+      "community": 5,
+      "id": "action_plan_c1_poster"
     },
     {
       "label": "C2: Remove Unverifiable AggregateRating",
@@ -3310,8 +3310,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "action_plan_c2_aggregate_rating",
-      "community": 5
+      "community": 5,
+      "id": "action_plan_c2_aggregate_rating"
     },
     {
       "label": "C3: Fix Pro Plan Price in Schema",
@@ -3322,8 +3322,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "action_plan_c3_price_mismatch",
-      "community": 5
+      "community": 5,
+      "id": "action_plan_c3_price_mismatch"
     },
     {
       "label": "C4: Add HSTS Header",
@@ -3334,8 +3334,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "action_plan_c4_hsts",
-      "community": 5
+      "community": 5,
+      "id": "action_plan_c4_hsts"
     },
     {
       "label": "H3: Fix DynamicNav for Edge Caching",
@@ -3346,8 +3346,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "action_plan_h3_dynamic_nav",
-      "community": 5
+      "community": 5,
+      "id": "action_plan_h3_dynamic_nav"
     },
     {
       "label": "H6: Update llms.txt",
@@ -3358,8 +3358,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "action_plan_h6_llms_txt",
-      "community": 5
+      "community": 5,
+      "id": "action_plan_h6_llms_txt"
     },
     {
       "label": "SEO Audit Score 62/100",
@@ -3370,8 +3370,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "full_audit_seo_score",
-      "community": 5
+      "community": 5,
+      "id": "full_audit_seo_score"
     },
     {
       "label": "Technical SEO Category (74/100)",
@@ -3382,8 +3382,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "full_audit_technical_seo",
-      "community": 5
+      "community": 5,
+      "id": "full_audit_technical_seo"
     },
     {
       "label": "Content Quality / E-E-A-T (54/100)",
@@ -3394,8 +3394,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "full_audit_content_quality",
-      "community": 5
+      "community": 5,
+      "id": "full_audit_content_quality"
     },
     {
       "label": "Schema / Structured Data (58/100)",
@@ -3406,8 +3406,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "full_audit_structured_data",
-      "community": 5
+      "community": 5,
+      "id": "full_audit_structured_data"
     },
     {
       "label": "API Security Audit (AuditBuffet)",
@@ -3418,8 +3418,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "api_security_audit",
-      "community": 1
+      "community": 1,
+      "id": "api_security_audit"
     },
     {
       "label": "Error Handling Audit (AuditBuffet)",
@@ -3430,8 +3430,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "error_handling_audit",
-      "community": 1
+      "community": 1,
+      "id": "error_handling_audit"
     },
     {
       "label": "Wiki Home",
@@ -3442,8 +3442,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_home",
-      "community": 1
+      "community": 1,
+      "id": "wiki_home"
     },
     {
       "label": "Organization-Project Hierarchy",
@@ -3454,8 +3454,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_org_project_hierarchy",
-      "community": 1
+      "community": 1,
+      "id": "wiki_org_project_hierarchy"
     },
     {
       "label": "Alerts Documentation",
@@ -3466,8 +3466,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_alerts",
-      "community": 2
+      "community": 2,
+      "id": "wiki_alerts"
     },
     {
       "label": "Threshold Alerts (wiki)",
@@ -3478,8 +3478,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_threshold_alerts",
-      "community": 2
+      "community": 2,
+      "id": "wiki_threshold_alerts"
     },
     {
       "label": "Spike Detection Alerts (Pro)",
@@ -3490,8 +3490,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_spike_detection",
-      "community": 2
+      "community": 2,
+      "id": "wiki_spike_detection"
     },
     {
       "label": "Notification Channels",
@@ -3502,8 +3502,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_notification_channels",
-      "community": 2
+      "community": 2,
+      "id": "wiki_notification_channels"
     },
     {
       "label": "GitHub Actions Connection Guide",
@@ -3514,8 +3514,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_github_actions",
-      "community": 1
+      "community": 1,
+      "id": "wiki_github_actions"
     },
     {
       "label": "GitHub Personal Access Token",
@@ -3526,8 +3526,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_github_pat",
-      "community": 1
+      "community": 1,
+      "id": "wiki_github_pat"
     },
     {
       "label": "Vercel Connection Guide",
@@ -3538,8 +3538,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_vercel",
-      "community": 1
+      "community": 1,
+      "id": "wiki_vercel"
     },
     {
       "label": "Vercel API Token",
@@ -3550,8 +3550,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_vercel_api_token",
-      "community": 1
+      "community": 1,
+      "id": "wiki_vercel_api_token"
     },
     {
       "label": "Supabase Connection Guide",
@@ -3562,8 +3562,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_supabase",
-      "community": 1
+      "community": 1,
+      "id": "wiki_supabase"
     },
     {
       "label": "Supabase Management API Key",
@@ -3574,8 +3574,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_supabase_management_key",
-      "community": 1
+      "community": 1,
+      "id": "wiki_supabase_management_key"
     },
     {
       "label": "Railway Connection Guide",
@@ -3586,8 +3586,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_railway",
-      "community": 1
+      "community": 1,
+      "id": "wiki_railway"
     },
     {
       "label": "Railway API Token",
@@ -3598,8 +3598,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_railway_api_token",
-      "community": 1
+      "community": 1,
+      "id": "wiki_railway_api_token"
     },
     {
       "label": "MongoDB Atlas Connection Guide",
@@ -3610,8 +3610,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_mongodb",
-      "community": 1
+      "community": 1,
+      "id": "wiki_mongodb"
     },
     {
       "label": "MongoDB Atlas Admin API Key",
@@ -3622,8 +3622,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_mongodb_atlas_api_key",
-      "community": 1
+      "community": 1,
+      "id": "wiki_mongodb_atlas_api_key"
     },
     {
       "label": "MongoDB Connection String (optional)",
@@ -3634,8 +3634,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "wiki_mongodb_connection_string",
-      "community": 1
+      "community": 1,
+      "id": "wiki_mongodb_connection_string"
     },
     {
       "label": "Next.js Frontend README",
@@ -3646,8 +3646,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "frontend_readme",
-      "community": 1
+      "community": 1,
+      "id": "frontend_readme"
     },
     {
       "label": "App Favicon / Browser Icon",
@@ -3658,8 +3658,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "icon_svg_appicon",
-      "community": 17
+      "community": 17,
+      "id": "icon_svg_appicon"
     },
     {
       "label": "File Document SVG Icon",
@@ -3670,8 +3670,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "public_file_svg",
-      "community": 88
+      "community": 88,
+      "id": "public_file_svg"
     },
     {
       "label": "Globe / Web SVG Icon",
@@ -3682,8 +3682,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "public_globe_svg",
-      "community": 17
+      "community": 17,
+      "id": "public_globe_svg"
     },
     {
       "label": "Next.js Logo SVG",
@@ -3694,8 +3694,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "public_next_svg",
-      "community": 17
+      "community": 17,
+      "id": "public_next_svg"
     },
     {
       "label": "Vercel Logo SVG (Triangle)",
@@ -3706,8 +3706,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "public_vercel_svg",
-      "community": 17
+      "community": 17,
+      "id": "public_vercel_svg"
     },
     {
       "label": "Browser Window SVG Icon",
@@ -3718,8 +3718,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "public_window_svg",
-      "community": 88
+      "community": 88,
+      "id": "public_window_svg"
     },
     {
       "label": "Stackwatch Demo Video Poster (Black Frame)",
@@ -3730,8 +3730,8 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "public_stackwatch_demo_poster",
-      "community": 17
+      "community": 17,
+      "id": "public_stackwatch_demo_poster"
     }
   ],
   "links": [
@@ -7366,8 +7366,8 @@
       "source_file": "Audits/api-security-audit.md",
       "source_location": null,
       "weight": 1.0,
-      "_src": "api_security_audit",
-      "_tgt": "readme_stackwatch",
+      "_src": "readme_stackwatch",
+      "_tgt": "api_security_audit",
       "source": "readme_stackwatch",
       "target": "api_security_audit"
     },
@@ -7378,8 +7378,8 @@
       "source_file": "Audits/error-handling-audit.md",
       "source_location": null,
       "weight": 1.0,
-      "_src": "error_handling_audit",
-      "_tgt": "readme_stackwatch",
+      "_src": "readme_stackwatch",
+      "_tgt": "error_handling_audit",
       "source": "readme_stackwatch",
       "target": "error_handling_audit"
     },
@@ -7390,8 +7390,8 @@
       "source_file": "frontend/README.md",
       "source_location": null,
       "weight": 0.9,
-      "_src": "frontend_readme",
-      "_tgt": "readme_nextjs_frontend",
+      "_src": "readme_nextjs_frontend",
+      "_tgt": "frontend_readme",
       "source": "readme_nextjs_frontend",
       "target": "frontend_readme"
     },
@@ -7402,8 +7402,8 @@
       "source_file": "CLAUDE.md",
       "source_location": null,
       "weight": 0.95,
-      "_src": "claude_md_polling_worker",
-      "_tgt": "readme_worker",
+      "_src": "readme_worker",
+      "_tgt": "claude_md_polling_worker",
       "source": "readme_worker",
       "target": "claude_md_polling_worker"
     },
@@ -7426,8 +7426,8 @@
       "source_file": "CLAUDE.md",
       "source_location": null,
       "weight": 1.0,
-      "_src": "claude_md_authentication",
-      "_tgt": "readme_supabase_auth_db",
+      "_src": "readme_supabase_auth_db",
+      "_tgt": "claude_md_authentication",
       "source": "readme_supabase_auth_db",
       "target": "claude_md_authentication"
     },
@@ -7438,8 +7438,8 @@
       "source_file": "CLAUDE.md",
       "source_location": null,
       "weight": 1.0,
-      "_src": "claude_md_notifications_setup",
-      "_tgt": "readme_resend_email",
+      "_src": "readme_resend_email",
+      "_tgt": "claude_md_notifications_setup",
       "source": "readme_resend_email",
       "target": "claude_md_notifications_setup"
     },
@@ -7450,8 +7450,8 @@
       "source_file": "wiki/Connecting-GitHub-Actions.md",
       "source_location": null,
       "weight": 0.95,
-      "_src": "wiki_github_actions",
-      "_tgt": "readme_github_actions_integration",
+      "_src": "readme_github_actions_integration",
+      "_tgt": "wiki_github_actions",
       "source": "readme_github_actions_integration",
       "target": "wiki_github_actions"
     },
@@ -7462,8 +7462,8 @@
       "source_file": "wiki/Connecting-Vercel.md",
       "source_location": null,
       "weight": 0.95,
-      "_src": "wiki_vercel",
-      "_tgt": "readme_vercel_integration",
+      "_src": "readme_vercel_integration",
+      "_tgt": "wiki_vercel",
       "source": "readme_vercel_integration",
       "target": "wiki_vercel"
     },
@@ -7474,8 +7474,8 @@
       "source_file": "wiki/Connecting-Supabase.md",
       "source_location": null,
       "weight": 0.95,
-      "_src": "wiki_supabase",
-      "_tgt": "readme_supabase_integration",
+      "_src": "readme_supabase_integration",
+      "_tgt": "wiki_supabase",
       "source": "readme_supabase_integration",
       "target": "wiki_supabase"
     },
@@ -7486,8 +7486,8 @@
       "source_file": "wiki/Connecting-Railway.md",
       "source_location": null,
       "weight": 0.95,
-      "_src": "wiki_railway",
-      "_tgt": "readme_railway_integration",
+      "_src": "readme_railway_integration",
+      "_tgt": "wiki_railway",
       "source": "readme_railway_integration",
       "target": "wiki_railway"
     },
@@ -7498,8 +7498,8 @@
       "source_file": "wiki/Connecting-MongoDB-Atlas.md",
       "source_location": null,
       "weight": 0.95,
-      "_src": "wiki_mongodb",
-      "_tgt": "readme_mongodb_integration",
+      "_src": "readme_mongodb_integration",
+      "_tgt": "wiki_mongodb",
       "source": "readme_mongodb_integration",
       "target": "wiki_mongodb"
     },
@@ -7510,8 +7510,8 @@
       "source_file": "wiki/Alerts.md",
       "source_location": null,
       "weight": 1.0,
-      "_src": "wiki_spike_detection",
-      "_tgt": "readme_pro_tier",
+      "_src": "readme_pro_tier",
+      "_tgt": "wiki_spike_detection",
       "source": "readme_pro_tier",
       "target": "wiki_spike_detection"
     },
@@ -7522,8 +7522,8 @@
       "source_file": "CLAUDE.md",
       "source_location": null,
       "weight": 0.9,
-      "_src": "claude_md_usage_history_graphs",
-      "_tgt": "readme_pro_tier",
+      "_src": "readme_pro_tier",
+      "_tgt": "claude_md_usage_history_graphs",
       "source": "readme_pro_tier",
       "target": "claude_md_usage_history_graphs"
     },
@@ -7534,8 +7534,8 @@
       "source_file": "CLAUDE.md",
       "source_location": null,
       "weight": 0.9,
-      "_src": "claude_md_team_dashboard",
-      "_tgt": "readme_team_tier",
+      "_src": "readme_team_tier",
+      "_tgt": "claude_md_team_dashboard",
       "source": "readme_team_tier",
       "target": "claude_md_team_dashboard"
     },
@@ -7714,8 +7714,8 @@
       "source_file": "wiki/Alerts.md",
       "source_location": null,
       "weight": 0.95,
-      "_src": "wiki_threshold_alerts",
-      "_tgt": "claude_md_threshold_alerts",
+      "_src": "claude_md_threshold_alerts",
+      "_tgt": "wiki_threshold_alerts",
       "source": "claude_md_threshold_alerts",
       "target": "wiki_threshold_alerts"
     },
@@ -7798,8 +7798,8 @@
       "source_file": "Audits/ACTION-PLAN.md",
       "source_location": null,
       "weight": 1.0,
-      "_src": "action_plan_h6_llms_txt",
-      "_tgt": "llms_txt_stackwatch_summary",
+      "_src": "llms_txt_stackwatch_summary",
+      "_tgt": "action_plan_h6_llms_txt",
       "source": "llms_txt_stackwatch_summary",
       "target": "action_plan_h6_llms_txt"
     },
@@ -8146,8 +8146,8 @@
       "source_file": "frontend/public/StackwatchDemo-poster.jpg",
       "source_location": null,
       "weight": 0.7,
-      "_src": "public_stackwatch_demo_poster",
-      "_tgt": "icon_svg_appicon",
+      "_src": "icon_svg_appicon",
+      "_tgt": "public_stackwatch_demo_poster",
       "source": "icon_svg_appicon",
       "target": "public_stackwatch_demo_poster"
     },
@@ -8170,8 +8170,8 @@
       "source_file": "frontend/public/StackwatchDemo-poster.jpg",
       "source_location": null,
       "weight": 0.6,
-      "_src": "public_stackwatch_demo_poster",
-      "_tgt": "public_globe_svg",
+      "_src": "public_globe_svg",
+      "_tgt": "public_stackwatch_demo_poster",
       "source": "public_globe_svg",
       "target": "public_stackwatch_demo_poster"
     },
@@ -8182,8 +8182,8 @@
       "source_file": "frontend/public/vercel.svg",
       "source_location": null,
       "weight": 0.85,
-      "_src": "public_vercel_svg",
-      "_tgt": "public_next_svg",
+      "_src": "public_next_svg",
+      "_tgt": "public_vercel_svg",
       "source": "public_next_svg",
       "target": "public_vercel_svg"
     }
