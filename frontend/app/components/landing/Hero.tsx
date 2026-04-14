@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/app/components/ui/button";
+import { HeroDemoLoader } from "./HeroDemoLoader";
 
 export function Hero() {
   return (
@@ -56,6 +57,10 @@ export function Hero() {
           >
             <a href="#how-it-works">How it works →</a>
           </Button>
+        </div>
+
+        <div className="mt-12 px-0 sm:px-4">
+          <HeroDemoLoader />
         </div>
       </div>
     </section>

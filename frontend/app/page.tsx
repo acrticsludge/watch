@@ -8,7 +8,6 @@ import { AlertChannelsSection } from "@/app/components/landing/AlertChannelsSect
 import { CTASection } from "@/app/components/landing/CTASection";
 import { LandingFooter } from "@/app/components/landing/LandingFooter";
 import { ServicesStrip } from "@/app/components/landing/ServicesStrip";
-import { HeroDemoLoader } from "@/app/components/landing/HeroDemoLoader";
 
 const APP_URL =
   process.env.NEXT_PUBLIC_APP_URL ?? "https://stackwatch.pulsemonitor.dev";
@@ -148,15 +147,8 @@ export default async function LandingPage() {
 
       <main>
         <Hero />
+
         <ServicesStrip />
-
-        {/* Demo video */}
-        <section className="py-16 bg-[#0a0a0a] border-t border-[#161616]">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6">
-            <HeroDemoLoader />
-          </div>
-        </section>
-
         <HowItWorks />
         <AlertChannelsSection />
         <CTASection />

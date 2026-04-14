@@ -1,0 +1,10 @@
+{
+  "pages": [
+    "index",
+    "---Service Setup---",
+    "services",
+    "---Reference---",
+    "alert-config",
+    "security-faq"
+  ]
+}

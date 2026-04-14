@@ -74,25 +74,6 @@ export function PricingSection({
       href: null,
       highlight: true,
     },
-    {
-      name: "Team",
-      price: "-$",
-      period: "/month",
-      description: "For teams sharing infrastructure",
-      features: [
-        "Unlimited accounts",
-        "All services",
-        "Multiple email, Slack and discord support",
-        "1-minute polling",
-        "90-day alert history",
-        "Team dashboard",
-        "Shared alert configs",
-      ],
-      cta: "Coming soon",
-      href: null,
-      highlight: false,
-      comingSoon: true,
-    },
   ];
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
