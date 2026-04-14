@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import { createMDX } from 'fumadocs-mdx/next';
 
 const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
@@ -20,7 +20,8 @@ const securityHeaders = [
   },
 ];
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   serverExternalPackages: ["crypto"],
   images: {
     remotePatterns: [
@@ -29,13 +30,8 @@ const nextConfig: NextConfig = {
     ],
   },
   async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: securityHeaders,
-      },
-    ];
+    return [{ source: "/(.*)", headers: securityHeaders }];
   },
 };
 
-export default nextConfig;
+export default createMDX()(nextConfig);

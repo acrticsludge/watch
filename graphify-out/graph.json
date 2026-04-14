@@ -144,16 +144,16 @@
     {
       "label": "page.tsx",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\page.tsx",
+      "source_file": "frontend\\app\\page.tsx",
       "source_location": "L1",
-      "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_page_tsx",
+      "id": "frontend_app_page_tsx",
       "community": 43
     },
     {
       "label": "LandingPage()",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\page.tsx",
-      "source_location": "L138",
+      "source_file": "frontend\\app\\page.tsx",
+      "source_location": "L137",
       "id": "page_landingpage",
       "community": 43
     },
@@ -1368,16 +1368,16 @@
     {
       "label": "Hero.tsx",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\Hero.tsx",
+      "source_file": "frontend\\app\\components\\landing\\Hero.tsx",
       "source_location": "L1",
-      "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_hero_tsx",
+      "id": "frontend_app_components_landing_hero_tsx",
       "community": 63
     },
     {
       "label": "Hero()",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\Hero.tsx",
-      "source_location": "L4",
+      "source_file": "frontend\\app\\components\\landing\\Hero.tsx",
+      "source_location": "L5",
       "id": "hero_hero",
       "community": 63
     },
@@ -1456,15 +1456,15 @@
     {
       "label": "PricingSection.tsx",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\PricingSection.tsx",
+      "source_file": "frontend\\app\\components\\landing\\PricingSection.tsx",
       "source_location": "L1",
-      "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_pricingsection_tsx",
+      "id": "frontend_app_components_landing_pricingsection_tsx",
       "community": 68
     },
     {
       "label": "handleProCheckout()",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\PricingSection.tsx",
+      "source_file": "frontend\\app\\components\\landing\\PricingSection.tsx",
       "source_location": "L30",
       "id": "pricingsection_handleprocheckout",
       "community": 68
@@ -3786,12 +3786,12 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\page.tsx",
-      "source_location": "L138",
+      "source_file": "frontend\\app\\page.tsx",
+      "source_location": "L137",
       "weight": 1.0,
-      "_src": "c_anubhav_web_dev_projects_watch_watch_frontend_app_page_tsx",
+      "_src": "frontend_app_page_tsx",
       "_tgt": "page_landingpage",
-      "source": "c_anubhav_web_dev_projects_watch_watch_frontend_app_page_tsx",
+      "source": "frontend_app_page_tsx",
       "target": "page_landingpage",
       "confidence_score": 1.0
     },
@@ -5298,12 +5298,12 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\Hero.tsx",
-      "source_location": "L4",
+      "source_file": "frontend\\app\\components\\landing\\Hero.tsx",
+      "source_location": "L5",
       "weight": 1.0,
-      "_src": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_hero_tsx",
+      "_src": "frontend_app_components_landing_hero_tsx",
       "_tgt": "hero_hero",
-      "source": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_hero_tsx",
+      "source": "frontend_app_components_landing_hero_tsx",
       "target": "hero_hero",
       "confidence_score": 1.0
     },
@@ -5358,12 +5358,12 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\PricingSection.tsx",
+      "source_file": "frontend\\app\\components\\landing\\PricingSection.tsx",
       "source_location": "L30",
       "weight": 1.0,
-      "_src": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_pricingsection_tsx",
+      "_src": "frontend_app_components_landing_pricingsection_tsx",
       "_tgt": "pricingsection_handleprocheckout",
-      "source": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_pricingsection_tsx",
+      "source": "frontend_app_components_landing_pricingsection_tsx",
       "target": "pricingsection_handleprocheckout",
       "confidence_score": 1.0
     },

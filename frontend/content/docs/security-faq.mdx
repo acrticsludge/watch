@@ -1,0 +1,59 @@
+---
+title: Security & Token FAQ
+description: How tokens are stored, what permissions are needed, and how to rotate credentials
+---
+
+## How are my API tokens stored?
+
+All tokens and credentials you provide are encrypted with **AES-256-GCM** before being written to the database. The plaintext value is never persisted — only the encrypted form is stored. Decryption only happens at poll time, inside the worker, to make the API call.
+
+Row-level security (RLS) on the database ensures your credentials are only readable by your own account — no other user can access them, and they're never returned in API responses.
+
+## What permissions does Stackwatch need per service?
+
+Stackwatch requests only the minimum permissions required to read usage data. It never writes to, modifies, or deletes any resource in your connected services.
+
+| Service | Permission required | Why |
+|---------|-------------------|-----|
+| GitHub | `read:user`, `read:org`, `repo` (Pro) | Read billing/usage data; `repo` for per-repo breakdown |
+| Vercel | Full Account token | Only billing-scoped tokens can read usage data |
+| Supabase | Account-level Management API key | Project-level keys don't have access to usage metrics |
+| Railway | Account token (read-only by design) | Railway tokens give read access to all projects |
+| MongoDB Atlas | Project Read Only role | `clusterMonitor` + `readAnyDatabase` for direct connection |
+
+## Can Stackwatch write to my services or modify anything?
+
+No. Stackwatch only reads usage/billing data. It never creates, modifies, or deletes any resource in GitHub, Vercel, Supabase, Railway, or MongoDB Atlas. The permissions listed above are read-only scopes wherever the service supports them.
+
+## What about MongoDB connection strings?
+
+If you add an optional MongoDB connection string for M0/live data, Stackwatch connects to your cluster with a DB user that has `clusterMonitor` (monitoring commands only) and `readAnyDatabase` (list and inspect collections). It runs `db.stats()`, `serverStatus`, `replSetGetStatus`, and `currentOp` — all read-only. It never issues write commands.
+
+The connection string itself is encrypted with AES-256-GCM before storage, same as all other credentials.
+
+## How do I rotate a token?
+
+For any service:
+
+1. Create a new token/key in that service's dashboard (same permissions as the original)
+2. In Stackwatch, go to your project's **Integrations** tab
+3. Find the integration and click the **edit (pencil)** icon
+4. Paste the new token and save
+
+Stackwatch will use the new token on the next poll cycle. The old token can then be safely revoked in the service's dashboard.
+
+## How do I fully revoke Stackwatch's access?
+
+1. **Delete the integration in Stackwatch** (Integrations tab → delete icon) — this removes the encrypted credential from the database
+2. **Revoke the token in the service's dashboard**:
+   - GitHub: github.com/settings/tokens
+   - Vercel: vercel.com/account/tokens
+   - Supabase: supabase.com/dashboard/account/tokens
+   - Railway: railway.com/account/tokens
+   - MongoDB Atlas: Atlas → Identity & Access → API Keys, and Database Access → delete the DB user
+
+After step 1, Stackwatch will no longer poll that service. After step 2, the credential is invalid even if somehow obtained.
+
+## Does Stackwatch expose my tokens in responses or logs?
+
+No. Tokens are never returned in API responses, never logged, and never appear in error messages. Internal logs reference integration IDs, not credential values.

@@ -1,0 +1,67 @@
+---
+title: Quickstart
+description: Connect your first service and get alerted in 5 minutes
+---
+
+Stackwatch monitors your developer tool usage — GitHub Actions, Vercel, Supabase, Railway, MongoDB Atlas — and alerts you before you hit quota limits.
+
+## Step 1 — Create an organization
+
+Sign in and click **New organization** from the dashboard. An organization is a top-level grouping (e.g. a company, team, or personal workspace).
+
+On the **Free plan**, you get one primary organization. Additional organizations can be created but will be paused until you upgrade or set a different one as primary.
+
+## Step 2 — Create a project
+
+Inside your organization, click **New project**. A project maps to a distinct environment (e.g. `prod`, `staging`, `side-project`). Each project has its own integrations, alert configs, and settings.
+
+On the **Free plan**, you get one primary project per organization.
+
+## Step 3 — Connect a service
+
+Navigate into your project and open the **Integrations** tab. Click **Add account** next to any service.
+
+| Service | What you need |
+|---------|--------------|
+| [GitHub Actions](/docs/services/github) | Personal Access Token |
+| [Vercel](/docs/services/vercel) | API Token (Pro/Team plan required) |
+| [Supabase](/docs/services/supabase) | Management API Key + Project Ref |
+| [Railway](/docs/services/railway) | API Token |
+| [MongoDB Atlas](/docs/services/mongodb) | Atlas Public Key + Private Key + Project ID |
+
+Each guide walks through creating the right token with the minimum required permissions.
+
+## Step 4 — Set alert thresholds
+
+Go to **Settings → Alert Thresholds** inside your project. Each connected metric shows a slider — drag it to the percentage at which you want to be notified (default: 80%).
+
+Stackwatch won't re-fire on the same metric until usage drops below the threshold and crosses it again.
+
+## Step 5 — Configure notification channels
+
+Go to **Settings → Notifications**. Email is enabled by default. Pro users can also enable Slack webhooks, Discord webhooks, and browser push notifications.
+
+---
+
+## How Stackwatch is organized
+
+- **Organizations** hold one or more projects
+- **Projects** each have their own integrations, alerts, and settings
+- **Integrations** connect to a single service account and poll usage on a schedule
+
+## Polling intervals
+
+| Plan | Interval |
+|------|---------|
+| Free | Every 15 minutes |
+| Pro | Every 5 minutes |
+
+## Status indicators
+
+| Color | Meaning |
+|-------|---------|
+| Green | Under 60% of limit |
+| Yellow | 60–80% of limit |
+| Red | Over 80% of limit |
+
+The **Last synced** timestamp on each integration card shows when data was last fetched. If an integration enters an error state, the worker keeps retrying on the next cycle without affecting your other integrations.
