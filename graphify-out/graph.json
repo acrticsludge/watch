@@ -51,7 +51,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\global.d.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_global_d_ts",
-      "community": 89
+      "community": 91
     },
     {
       "label": "middleware.ts",
@@ -59,7 +59,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\middleware.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_middleware_ts",
-      "community": 39
+      "community": 40
     },
     {
       "label": "middleware()",
@@ -67,7 +67,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\middleware.ts",
       "source_location": "L4",
       "id": "middleware_middleware",
-      "community": 39
+      "community": 40
     },
     {
       "label": "next-env.d.ts",
@@ -75,15 +75,15 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\next-env.d.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_next_env_d_ts",
-      "community": 90
+      "community": 92
     },
     {
-      "label": "next.config.ts",
+      "label": "source.config.ts",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\next.config.ts",
+      "source_file": "frontend\\source.config.ts",
       "source_location": "L1",
-      "id": "c_anubhav_web_dev_projects_watch_watch_frontend_next_config_ts",
-      "community": 91
+      "id": "frontend_source_config_ts",
+      "community": 93
     },
     {
       "label": "error.tsx",
@@ -91,7 +91,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\error.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_error_tsx",
-      "community": 40
+      "community": 41
     },
     {
       "label": "ErrorPage()",
@@ -99,7 +99,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\error.tsx",
       "source_location": "L6",
       "id": "error_errorpage",
-      "community": 40
+      "community": 41
     },
     {
       "label": "global-error.tsx",
@@ -107,7 +107,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\global-error.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_global_error_tsx",
-      "community": 92
+      "community": 94
     },
     {
       "label": "layout.tsx",
@@ -115,7 +115,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\layout.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_layout_tsx",
-      "community": 41
+      "community": 42
     },
     {
       "label": "RootLayout()",
@@ -123,7 +123,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\layout.tsx",
       "source_location": "L81",
       "id": "layout_rootlayout",
-      "community": 41
+      "community": 42
     },
     {
       "label": "not-found.tsx",
@@ -131,7 +131,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\not-found.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_not_found_tsx",
-      "community": 42
+      "community": 43
     },
     {
       "label": "NotFound()",
@@ -139,7 +139,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\not-found.tsx",
       "source_location": "L4",
       "id": "not_found_notfound",
-      "community": 42
+      "community": 43
     },
     {
       "label": "page.tsx",
@@ -147,7 +147,7 @@
       "source_file": "frontend\\app\\page.tsx",
       "source_location": "L1",
       "id": "frontend_app_page_tsx",
-      "community": 43
+      "community": 44
     },
     {
       "label": "LandingPage()",
@@ -155,7 +155,7 @@
       "source_file": "frontend\\app\\page.tsx",
       "source_location": "L137",
       "id": "page_landingpage",
-      "community": 43
+      "community": 44
     },
     {
       "label": "robots.ts",
@@ -163,7 +163,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\robots.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_robots_ts",
-      "community": 44
+      "community": 45
     },
     {
       "label": "robots()",
@@ -171,7 +171,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\robots.ts",
       "source_location": "L3",
       "id": "robots_robots",
-      "community": 44
+      "community": 45
     },
     {
       "label": "sitemap.ts",
@@ -179,7 +179,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\sitemap.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_sitemap_ts",
-      "community": 45
+      "community": 46
     },
     {
       "label": "sitemap()",
@@ -187,7 +187,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\sitemap.ts",
       "source_location": "L3",
       "id": "sitemap_sitemap",
-      "community": 45
+      "community": 46
     },
     {
       "label": "layout.tsx",
@@ -195,7 +195,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\layout.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_auth_layout_tsx",
-      "community": 46
+      "community": 47
     },
     {
       "label": "AuthLayout()",
@@ -203,7 +203,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\layout.tsx",
       "source_location": "L4",
       "id": "layout_authlayout",
-      "community": 46
+      "community": 47
     },
     {
       "label": "LoginForm.tsx",
@@ -211,7 +211,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\login\\LoginForm.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_auth_login_loginform_tsx",
-      "community": 24
+      "community": 25
     },
     {
       "label": "handleSignIn()",
@@ -219,7 +219,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\login\\LoginForm.tsx",
       "source_location": "L25",
       "id": "loginform_handlesignin",
-      "community": 24
+      "community": 25
     },
     {
       "label": "handleMagicLink()",
@@ -227,7 +227,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\login\\LoginForm.tsx",
       "source_location": "L42",
       "id": "loginform_handlemagiclink",
-      "community": 24
+      "community": 25
     },
     {
       "label": "page.tsx",
@@ -235,7 +235,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\login\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_auth_login_page_tsx",
-      "community": 47
+      "community": 48
     },
     {
       "label": "LoginPage()",
@@ -243,7 +243,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\login\\page.tsx",
       "source_location": "L10",
       "id": "page_loginpage",
-      "community": 47
+      "community": 48
     },
     {
       "label": "page.tsx",
@@ -251,7 +251,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\signup\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_auth_signup_page_tsx",
-      "community": 48
+      "community": 49
     },
     {
       "label": "SignupPage()",
@@ -259,7 +259,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\signup\\page.tsx",
       "source_location": "L9",
       "id": "page_signuppage",
-      "community": 48
+      "community": 49
     },
     {
       "label": "SignupForm.tsx",
@@ -267,7 +267,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\signup\\SignupForm.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_auth_signup_signupform_tsx",
-      "community": 49
+      "community": 50
     },
     {
       "label": "handleSignUp()",
@@ -275,7 +275,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(auth)\\signup\\SignupForm.tsx",
       "source_location": "L20",
       "id": "signupform_handlesignup",
-      "community": 49
+      "community": 50
     },
     {
       "label": "layout.tsx",
@@ -283,7 +283,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\layout.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_layout_tsx",
-      "community": 93
+      "community": 95
     },
     {
       "label": "loading.tsx",
@@ -291,7 +291,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\alerts\\loading.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_alerts_loading_tsx",
-      "community": 94
+      "community": 96
     },
     {
       "label": "page.tsx",
@@ -299,7 +299,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\alerts\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_alerts_page_tsx",
-      "community": 95
+      "community": 97
     },
     {
       "label": "DashboardRefresher.tsx",
@@ -307,7 +307,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\dashboard\\DashboardRefresher.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_dashboard_dashboardrefresher_tsx",
-      "community": 50
+      "community": 51
     },
     {
       "label": "DashboardRefresher()",
@@ -315,7 +315,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\dashboard\\DashboardRefresher.tsx",
       "source_location": "L9",
       "id": "dashboardrefresher_dashboardrefresher",
-      "community": 50
+      "community": 51
     },
     {
       "label": "error.tsx",
@@ -323,7 +323,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\dashboard\\error.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_dashboard_error_tsx",
-      "community": 51
+      "community": 52
     },
     {
       "label": "DashboardError()",
@@ -331,7 +331,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\dashboard\\error.tsx",
       "source_location": "L6",
       "id": "error_dashboarderror",
-      "community": 51
+      "community": 52
     },
     {
       "label": "loading.tsx",
@@ -339,7 +339,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\dashboard\\loading.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_dashboard_loading_tsx",
-      "community": 96
+      "community": 98
     },
     {
       "label": "NewOrgButtonClient.tsx",
@@ -347,7 +347,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\dashboard\\NewOrgButtonClient.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_dashboard_neworgbuttonclient_tsx",
-      "community": 25
+      "community": 26
     },
     {
       "label": "slugify()",
@@ -355,7 +355,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\dashboard\\NewOrgButtonClient.tsx",
       "source_location": "L17",
       "id": "neworgbuttonclient_slugify",
-      "community": 25
+      "community": 26
     },
     {
       "label": "NewOrgButtonClient()",
@@ -363,7 +363,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\dashboard\\NewOrgButtonClient.tsx",
       "source_location": "L25",
       "id": "neworgbuttonclient_neworgbuttonclient",
-      "community": 25
+      "community": 26
     },
     {
       "label": "page.tsx",
@@ -371,7 +371,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\dashboard\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_dashboard_page_tsx",
-      "community": 97
+      "community": 99
     },
     {
       "label": "IntegrationsContent.tsx",
@@ -443,7 +443,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\integrations\\loading.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_integrations_loading_tsx",
-      "community": 98
+      "community": 100
     },
     {
       "label": "page.tsx",
@@ -451,7 +451,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\integrations\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_integrations_page_tsx",
-      "community": 99
+      "community": 101
     },
     {
       "label": "page.tsx",
@@ -459,7 +459,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\orgs\\[orgId]\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_orgs_orgid_page_tsx",
-      "community": 100
+      "community": 102
     },
     {
       "label": "page.tsx",
@@ -467,7 +467,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\orgs\\[orgId]\\new-project\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_orgs_orgid_new_project_page_tsx",
-      "community": 52
+      "community": 53
     },
     {
       "label": "NewProjectPage()",
@@ -475,7 +475,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\orgs\\[orgId]\\new-project\\page.tsx",
       "source_location": "L13",
       "id": "page_newprojectpage",
-      "community": 52
+      "community": 53
     },
     {
       "label": "loading.tsx",
@@ -483,7 +483,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\settings\\loading.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_settings_loading_tsx",
-      "community": 101
+      "community": 103
     },
     {
       "label": "page.tsx",
@@ -491,7 +491,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(dashboard)\\settings\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_dashboard_settings_page_tsx",
-      "community": 102
+      "community": 104
     },
     {
       "label": "SettingsContent.tsx",
@@ -635,7 +635,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(onboarding)\\onboarding\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_onboarding_onboarding_page_tsx",
-      "community": 53
+      "community": 54
     },
     {
       "label": "OnboardingPage()",
@@ -643,7 +643,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(onboarding)\\onboarding\\page.tsx",
       "source_location": "L5",
       "id": "page_onboardingpage",
-      "community": 53
+      "community": 54
     },
     {
       "label": "layout.tsx",
@@ -651,7 +651,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(project)\\layout.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_project_layout_tsx",
-      "community": 54
+      "community": 55
     },
     {
       "label": "ProjectGroupLayout()",
@@ -659,7 +659,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(project)\\layout.tsx",
       "source_location": "L1",
       "id": "layout_projectgrouplayout",
-      "community": 54
+      "community": 55
     },
     {
       "label": "layout.tsx",
@@ -667,7 +667,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(project)\\orgs\\[orgId]\\projects\\[projectId]\\layout.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_project_orgs_orgid_projects_projectid_layout_tsx",
-      "community": 103
+      "community": 105
     },
     {
       "label": "page.tsx",
@@ -707,7 +707,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(project)\\orgs\\[orgId]\\projects\\[projectId]\\dashboard\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_project_orgs_orgid_projects_projectid_dashboard_page_tsx",
-      "community": 104
+      "community": 106
     },
     {
       "label": "page.tsx",
@@ -715,7 +715,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(project)\\orgs\\[orgId]\\projects\\[projectId]\\integrations\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_project_orgs_orgid_projects_projectid_integrations_page_tsx",
-      "community": 105
+      "community": 107
     },
     {
       "label": "ProjectIntegrationsContent.tsx",
@@ -787,7 +787,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\(project)\\orgs\\[orgId]\\projects\\[projectId]\\settings\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_project_orgs_orgid_projects_projectid_settings_page_tsx",
-      "community": 106
+      "community": 108
     },
     {
       "label": "auth.ts",
@@ -795,7 +795,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\actions\\auth.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_actions_auth_ts",
-      "community": 55
+      "community": 56
     },
     {
       "label": "signOut()",
@@ -803,7 +803,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\actions\\auth.ts",
       "source_location": "L6",
       "id": "auth_signout",
-      "community": 55
+      "community": 56
     },
     {
       "label": "route.ts",
@@ -1016,6 +1016,14 @@
     {
       "label": "route.ts",
       "file_type": "code",
+      "source_file": "frontend\\app\\api\\search\\route.ts",
+      "source_location": "L1",
+      "id": "frontend_app_api_search_route_ts",
+      "community": 109
+    },
+    {
+      "label": "route.ts",
+      "file_type": "code",
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\api\\usage\\route.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_api_usage_route_ts",
@@ -1051,7 +1059,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\DeleteWithConfirmButton.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_deletewithconfirmbutton_tsx",
-      "community": 56
+      "community": 57
     },
     {
       "label": "handleDelete()",
@@ -1059,37 +1067,37 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\DeleteWithConfirmButton.tsx",
       "source_location": "L30",
       "id": "deletewithconfirmbutton_handledelete",
-      "community": 56
+      "community": 57
     },
     {
       "label": "FeedbackWidget.tsx",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\FeedbackWidget.tsx",
+      "source_file": "frontend\\app\\components\\FeedbackWidget.tsx",
       "source_location": "L1",
-      "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_feedbackwidget_tsx",
+      "id": "frontend_app_components_feedbackwidget_tsx",
       "community": 19
     },
     {
       "label": "handle()",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\FeedbackWidget.tsx",
-      "source_location": "L18",
+      "source_file": "frontend\\app\\components\\FeedbackWidget.tsx",
+      "source_location": "L19",
       "id": "feedbackwidget_handle",
       "community": 19
     },
     {
       "label": "reset()",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\FeedbackWidget.tsx",
-      "source_location": "L34",
+      "source_file": "frontend\\app\\components\\FeedbackWidget.tsx",
+      "source_location": "L35",
       "id": "feedbackwidget_reset",
       "community": 19
     },
     {
       "label": "submit()",
       "file_type": "code",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\FeedbackWidget.tsx",
-      "source_location": "L41",
+      "source_file": "frontend\\app\\components\\FeedbackWidget.tsx",
+      "source_location": "L42",
       "id": "feedbackwidget_submit",
       "community": 19
     },
@@ -1099,7 +1107,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\MakePrimaryButton.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_makeprimarybutton_tsx",
-      "community": 57
+      "community": 58
     },
     {
       "label": "MakePrimaryButton()",
@@ -1107,7 +1115,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\MakePrimaryButton.tsx",
       "source_location": "L12",
       "id": "makeprimarybutton_makeprimarybutton",
-      "community": 57
+      "community": 58
     },
     {
       "label": "PostHogPageView.tsx",
@@ -1115,7 +1123,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\PostHogPageView.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_posthogpageview_tsx",
-      "community": 58
+      "community": 59
     },
     {
       "label": "PostHogPageView()",
@@ -1123,7 +1131,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\PostHogPageView.tsx",
       "source_location": "L7",
       "id": "posthogpageview_posthogpageview",
-      "community": 58
+      "community": 59
     },
     {
       "label": "PostHogProvider.tsx",
@@ -1131,7 +1139,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\PostHogProvider.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_posthogprovider_tsx",
-      "community": 59
+      "community": 60
     },
     {
       "label": "PostHogProvider()",
@@ -1139,7 +1147,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\PostHogProvider.tsx",
       "source_location": "L7",
       "id": "posthogprovider_posthogprovider",
-      "community": 59
+      "community": 60
     },
     {
       "label": "OAuthButtons.tsx",
@@ -1147,7 +1155,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\auth\\OAuthButtons.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_auth_oauthbuttons_tsx",
-      "community": 60
+      "community": 61
     },
     {
       "label": "handleOAuth()",
@@ -1155,7 +1163,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\auth\\OAuthButtons.tsx",
       "source_location": "L17",
       "id": "oauthbuttons_handleoauth",
-      "community": 60
+      "community": 61
     },
     {
       "label": "GroupedUsageCard.tsx",
@@ -1211,7 +1219,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\dashboard\\ProLaunchBanner.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_dashboard_prolaunchbanner_tsx",
-      "community": 61
+      "community": 62
     },
     {
       "label": "ProLaunchBanner()",
@@ -1219,7 +1227,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\dashboard\\ProLaunchBanner.tsx",
       "source_location": "L8",
       "id": "prolaunchbanner_prolaunchbanner",
-      "community": 61
+      "community": 62
     },
     {
       "label": "UsageCard.tsx",
@@ -1291,7 +1299,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\AlertChannelsSection.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_alertchannelssection_tsx",
-      "community": 107
+      "community": 110
     },
     {
       "label": "CTASection.tsx",
@@ -1299,7 +1307,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\CTASection.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_ctasection_tsx",
-      "community": 62
+      "community": 63
     },
     {
       "label": "CTASection()",
@@ -1307,7 +1315,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\CTASection.tsx",
       "source_location": "L3",
       "id": "ctasection_ctasection",
-      "community": 62
+      "community": 63
     },
     {
       "label": "DemoWidget.tsx",
@@ -1363,7 +1371,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\FAQSection.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_faqsection_tsx",
-      "community": 108
+      "community": 111
     },
     {
       "label": "Hero.tsx",
@@ -1371,7 +1379,7 @@
       "source_file": "frontend\\app\\components\\landing\\Hero.tsx",
       "source_location": "L1",
       "id": "frontend_app_components_landing_hero_tsx",
-      "community": 63
+      "community": 64
     },
     {
       "label": "Hero()",
@@ -1379,7 +1387,7 @@
       "source_file": "frontend\\app\\components\\landing\\Hero.tsx",
       "source_location": "L5",
       "id": "hero_hero",
-      "community": 63
+      "community": 64
     },
     {
       "label": "HeroDashboardDemo.tsx",
@@ -1387,7 +1395,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\HeroDashboardDemo.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_herodashboarddemo_tsx",
-      "community": 64
+      "community": 65
     },
     {
       "label": "barColor()",
@@ -1395,7 +1403,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\HeroDashboardDemo.tsx",
       "source_location": "L70",
       "id": "herodashboarddemo_barcolor",
-      "community": 64
+      "community": 65
     },
     {
       "label": "HeroDemoLoader.tsx",
@@ -1403,7 +1411,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\HeroDemoLoader.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_herodemoloader_tsx",
-      "community": 65
+      "community": 66
     },
     {
       "label": "HeroDemoLoader()",
@@ -1411,7 +1419,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\HeroDemoLoader.tsx",
       "source_location": "L1",
       "id": "herodemoloader_herodemoloader",
-      "community": 65
+      "community": 66
     },
     {
       "label": "HowItWorks.tsx",
@@ -1419,7 +1427,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\HowItWorks.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_howitworks_tsx",
-      "community": 109
+      "community": 112
     },
     {
       "label": "LandingFooter.tsx",
@@ -1427,7 +1435,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\LandingFooter.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_landingfooter_tsx",
-      "community": 66
+      "community": 67
     },
     {
       "label": "LandingFooter()",
@@ -1435,7 +1443,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\LandingFooter.tsx",
       "source_location": "L1",
       "id": "landingfooter_landingfooter",
-      "community": 66
+      "community": 67
     },
     {
       "label": "LandingNav.tsx",
@@ -1443,7 +1451,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\LandingNav.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_landingnav_tsx",
-      "community": 67
+      "community": 68
     },
     {
       "label": "handler()",
@@ -1451,7 +1459,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\LandingNav.tsx",
       "source_location": "L15",
       "id": "landingnav_handler",
-      "community": 67
+      "community": 68
     },
     {
       "label": "PricingSection.tsx",
@@ -1459,7 +1467,7 @@
       "source_file": "frontend\\app\\components\\landing\\PricingSection.tsx",
       "source_location": "L1",
       "id": "frontend_app_components_landing_pricingsection_tsx",
-      "community": 68
+      "community": 69
     },
     {
       "label": "handleProCheckout()",
@@ -1467,7 +1475,7 @@
       "source_file": "frontend\\app\\components\\landing\\PricingSection.tsx",
       "source_location": "L30",
       "id": "pricingsection_handleprocheckout",
-      "community": 68
+      "community": 69
     },
     {
       "label": "ProblemSection.tsx",
@@ -1475,7 +1483,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\ProblemSection.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_problemsection_tsx",
-      "community": 110
+      "community": 113
     },
     {
       "label": "ServicesSection.tsx",
@@ -1483,7 +1491,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\ServicesSection.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_servicessection_tsx",
-      "community": 111
+      "community": 114
     },
     {
       "label": "ServicesStrip.tsx",
@@ -1491,7 +1499,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\ServicesStrip.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_servicesstrip_tsx",
-      "community": 69
+      "community": 70
     },
     {
       "label": "ServicesStrip()",
@@ -1499,7 +1507,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\ServicesStrip.tsx",
       "source_location": "L45",
       "id": "servicesstrip_servicesstrip",
-      "community": 69
+      "community": 70
     },
     {
       "label": "TestimonialsSection.tsx",
@@ -1507,7 +1515,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\landing\\TestimonialsSection.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_landing_testimonialssection_tsx",
-      "community": 112
+      "community": 115
     },
     {
       "label": "Sidebar.tsx",
@@ -1515,7 +1523,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\layout\\Sidebar.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_layout_sidebar_tsx",
-      "community": 113
+      "community": 116
     },
     {
       "label": "badge.tsx",
@@ -1523,7 +1531,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\badge.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_badge_tsx",
-      "community": 70
+      "community": 71
     },
     {
       "label": "Badge()",
@@ -1531,7 +1539,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\badge.tsx",
       "source_location": "L35",
       "id": "badge_badge",
-      "community": 70
+      "community": 71
     },
     {
       "label": "button.tsx",
@@ -1539,7 +1547,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\button.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_button_tsx",
-      "community": 114
+      "community": 117
     },
     {
       "label": "card.tsx",
@@ -1547,7 +1555,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\card.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_card_tsx",
-      "community": 115
+      "community": 118
     },
     {
       "label": "dialog.tsx",
@@ -1555,7 +1563,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\dialog.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_dialog_tsx",
-      "community": 116
+      "community": 119
     },
     {
       "label": "input.tsx",
@@ -1563,7 +1571,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\input.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_input_tsx",
-      "community": 117
+      "community": 120
     },
     {
       "label": "label.tsx",
@@ -1571,7 +1579,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\label.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_label_tsx",
-      "community": 118
+      "community": 121
     },
     {
       "label": "progress.tsx",
@@ -1579,7 +1587,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\progress.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_progress_tsx",
-      "community": 119
+      "community": 122
     },
     {
       "label": "select.tsx",
@@ -1587,7 +1595,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\select.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_select_tsx",
-      "community": 120
+      "community": 123
     },
     {
       "label": "slider.tsx",
@@ -1595,7 +1603,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\slider.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_slider_tsx",
-      "community": 121
+      "community": 124
     },
     {
       "label": "switch.tsx",
@@ -1603,7 +1611,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\switch.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_switch_tsx",
-      "community": 122
+      "community": 125
     },
     {
       "label": "tabs.tsx",
@@ -1611,7 +1619,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\tabs.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_tabs_tsx",
-      "community": 123
+      "community": 126
     },
     {
       "label": "toast.tsx",
@@ -1619,7 +1627,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\toast.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_toast_tsx",
-      "community": 124
+      "community": 127
     },
     {
       "label": "toaster.tsx",
@@ -1627,7 +1635,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\ui\\toaster.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_ui_toaster_tsx",
-      "community": 125
+      "community": 128
     },
     {
       "label": "use-toast.ts",
@@ -1686,12 +1694,60 @@
       "community": 12
     },
     {
+      "label": "layout.tsx",
+      "file_type": "code",
+      "source_file": "frontend\\app\\docs\\layout.tsx",
+      "source_location": "L1",
+      "id": "frontend_app_docs_layout_tsx",
+      "community": 72
+    },
+    {
+      "label": "Layout()",
+      "file_type": "code",
+      "source_file": "frontend\\app\\docs\\layout.tsx",
+      "source_location": "L6",
+      "id": "layout_layout",
+      "community": 72
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "frontend\\app\\docs\\[[...slug]]\\page.tsx",
+      "source_location": "L1",
+      "id": "frontend_app_docs_slug_page_tsx",
+      "community": 22
+    },
+    {
+      "label": "Page()",
+      "file_type": "code",
+      "source_file": "frontend\\app\\docs\\[[...slug]]\\page.tsx",
+      "source_location": "L14",
+      "id": "page_page",
+      "community": 22
+    },
+    {
+      "label": "generateStaticParams()",
+      "file_type": "code",
+      "source_file": "frontend\\app\\docs\\[[...slug]]\\page.tsx",
+      "source_location": "L32",
+      "id": "page_generatestaticparams",
+      "community": 22
+    },
+    {
+      "label": "generateMetadata()",
+      "file_type": "code",
+      "source_file": "frontend\\app\\docs\\[[...slug]]\\page.tsx",
+      "source_location": "L36",
+      "id": "page_generatemetadata",
+      "community": 22
+    },
+    {
       "label": "page.tsx",
       "file_type": "code",
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\faq\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_faq_page_tsx",
-      "community": 26
+      "community": 27
     },
     {
       "label": "DynamicNav()",
@@ -1699,7 +1755,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\faq\\page.tsx",
       "source_location": "L97",
       "id": "page_dynamicnav",
-      "community": 26
+      "community": 27
     },
     {
       "label": "FAQPage()",
@@ -1707,7 +1763,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\faq\\page.tsx",
       "source_location": "L105",
       "id": "page_faqpage",
-      "community": 26
+      "community": 27
     },
     {
       "label": "route.tsx",
@@ -1715,7 +1771,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\og\\route.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_og_route_tsx",
-      "community": 126
+      "community": 129
     },
     {
       "label": "page.tsx",
@@ -1723,7 +1779,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\pricing\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_pricing_page_tsx",
-      "community": 71
+      "community": 73
     },
     {
       "label": "PricingPage()",
@@ -1731,7 +1787,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\pricing\\page.tsx",
       "source_location": "L75",
       "id": "page_pricingpage",
-      "community": 71
+      "community": 73
     },
     {
       "label": "page.tsx",
@@ -1739,7 +1795,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\privacy\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_privacy_page_tsx",
-      "community": 72
+      "community": 74
     },
     {
       "label": "PrivacyPage()",
@@ -1747,7 +1803,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\privacy\\page.tsx",
       "source_location": "L18",
       "id": "page_privacypage",
-      "community": 72
+      "community": 74
     },
     {
       "label": "page.tsx",
@@ -1755,7 +1811,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\terms\\page.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_app_terms_page_tsx",
-      "community": 73
+      "community": 75
     },
     {
       "label": "TermsPage()",
@@ -1763,7 +1819,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\terms\\page.tsx",
       "source_location": "L18",
       "id": "page_termspage",
-      "community": 73
+      "community": 75
     },
     {
       "label": "GroupedUsageCard.tsx",
@@ -1787,7 +1843,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\api.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_api_ts",
-      "community": 22
+      "community": 23
     },
     {
       "label": "requireJsonBody()",
@@ -1795,7 +1851,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\api.ts",
       "source_location": "L13",
       "id": "api_requirejsonbody",
-      "community": 22
+      "community": 23
     },
     {
       "label": "isAuthRateLimited()",
@@ -1803,7 +1859,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\api.ts",
       "source_location": "L53",
       "id": "api_isauthratelimited",
-      "community": 22
+      "community": 23
     },
     {
       "label": "isWebhookRateLimited()",
@@ -1811,7 +1867,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\api.ts",
       "source_location": "L75",
       "id": "api_iswebhookratelimited",
-      "community": 22
+      "community": 23
     },
     {
       "label": "database.types.ts",
@@ -1819,7 +1875,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\database.types.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_database_types_ts",
-      "community": 127
+      "community": 130
     },
     {
       "label": "dodo.ts",
@@ -1827,7 +1883,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\dodo.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_dodo_ts",
-      "community": 128
+      "community": 131
     },
     {
       "label": "encryption.ts",
@@ -1860,6 +1916,14 @@
       "source_location": "L28",
       "id": "encryption_decrypt",
       "community": 16
+    },
+    {
+      "label": "source.ts",
+      "file_type": "code",
+      "source_file": "frontend\\lib\\source.ts",
+      "source_location": "L1",
+      "id": "frontend_lib_source_ts",
+      "community": 132
     },
     {
       "label": "tiers.ts",
@@ -1995,7 +2059,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\notifications\\discord.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_notifications_discord_ts",
-      "community": 27
+      "community": 28
     },
     {
       "label": "sendDiscordAlert()",
@@ -2003,7 +2067,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\discord.ts",
       "source_location": "L4",
       "id": "discord_senddiscordalert",
-      "community": 27
+      "community": 28
     },
     {
       "label": "email.ts",
@@ -2011,7 +2075,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\notifications\\email.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_notifications_email_ts",
-      "community": 28
+      "community": 29
     },
     {
       "label": "sendAlertEmail()",
@@ -2019,7 +2083,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\email.ts",
       "source_location": "L9",
       "id": "email_sendalertemail",
-      "community": 28
+      "community": 29
     },
     {
       "label": "index.ts",
@@ -2027,7 +2091,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\notifications\\index.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_notifications_index_ts",
-      "community": 29
+      "community": 30
     },
     {
       "label": "fireAlerts()",
@@ -2035,7 +2099,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\index.ts",
       "source_location": "L9",
       "id": "index_firealerts",
-      "community": 29
+      "community": 30
     },
     {
       "label": "slack.ts",
@@ -2043,7 +2107,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\notifications\\slack.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_notifications_slack_ts",
-      "community": 30
+      "community": 31
     },
     {
       "label": "sendSlackAlert()",
@@ -2051,7 +2115,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\slack.ts",
       "source_location": "L4",
       "id": "slack_sendslackalert",
-      "community": 30
+      "community": 31
     },
     {
       "label": "types.ts",
@@ -2059,7 +2123,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\notifications\\types.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_notifications_types_ts",
-      "community": 129
+      "community": 133
     },
     {
       "label": "emails.ts",
@@ -2131,7 +2195,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\queries\\user.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_queries_user_ts",
-      "community": 74
+      "community": 76
     },
     {
       "label": "getOverLimitState()",
@@ -2139,7 +2203,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\queries\\user.ts",
       "source_location": "L87",
       "id": "user_getoverlimitstate",
-      "community": 74
+      "community": 76
     },
     {
       "label": "browser.ts",
@@ -2147,7 +2211,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\supabase\\browser.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_supabase_browser_ts",
-      "community": 75
+      "community": 77
     },
     {
       "label": "createClient()",
@@ -2155,7 +2219,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\supabase\\browser.ts",
       "source_location": "L4",
       "id": "browser_createclient",
-      "community": 75
+      "community": 77
     },
     {
       "label": "server.ts",
@@ -2163,7 +2227,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\supabase\\server.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_supabase_server_ts",
-      "community": 76
+      "community": 78
     },
     {
       "label": "createClient()",
@@ -2171,7 +2235,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\supabase\\server.ts",
       "source_location": "L5",
       "id": "server_createclient",
-      "community": 76
+      "community": 78
     },
     {
       "label": "service.ts",
@@ -2179,7 +2243,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\lib\\supabase\\service.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_lib_supabase_service_ts",
-      "community": 31
+      "community": 32
     },
     {
       "label": "createServiceClient()",
@@ -2187,7 +2251,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\supabase\\service.ts",
       "source_location": "L4",
       "id": "service_createserviceclient",
-      "community": 31
+      "community": 32
     },
     {
       "label": "sw.js",
@@ -2195,7 +2259,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\public\\sw.js",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_frontend_public_sw_js",
-      "community": 130
+      "community": 134
     },
     {
       "label": "remotion.config.ts",
@@ -2203,7 +2267,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\remotion.config.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_remotion_config_ts",
-      "community": 131
+      "community": 135
     },
     {
       "label": "index.ts",
@@ -2211,7 +2275,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\index.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_index_ts",
-      "community": 132
+      "community": 136
     },
     {
       "label": "Root.tsx",
@@ -2219,7 +2283,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\Root.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_root_tsx",
-      "community": 133
+      "community": 137
     },
     {
       "label": "styles.ts",
@@ -2227,7 +2291,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\styles.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_styles_ts",
-      "community": 32
+      "community": 33
     },
     {
       "label": "barColor()",
@@ -2235,7 +2299,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\styles.ts",
       "source_location": "L31",
       "id": "styles_barcolor",
-      "community": 32
+      "community": 33
     },
     {
       "label": "statusColor()",
@@ -2243,7 +2307,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\styles.ts",
       "source_location": "L34",
       "id": "styles_statuscolor",
-      "community": 32
+      "community": 33
     },
     {
       "label": "Video.tsx",
@@ -2251,7 +2315,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\Video.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_video_tsx",
-      "community": 77
+      "community": 79
     },
     {
       "label": "StackwatchDemo()",
@@ -2259,7 +2323,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\Video.tsx",
       "source_location": "L23",
       "id": "video_stackwatchdemo",
-      "community": 77
+      "community": 79
     },
     {
       "label": "Sidebar.tsx",
@@ -2323,7 +2387,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene1Landing.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_scenes_scene1landing_tsx",
-      "community": 78
+      "community": 80
     },
     {
       "label": "GridIcon()",
@@ -2331,7 +2395,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene1Landing.tsx",
       "source_location": "L6",
       "id": "scene1landing_gridicon",
-      "community": 78
+      "community": 80
     },
     {
       "label": "Scene2Dashboard.tsx",
@@ -2339,7 +2403,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene2Dashboard.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_scenes_scene2dashboard_tsx",
-      "community": 79
+      "community": 81
     },
     {
       "label": "BarChartIcon()",
@@ -2347,7 +2411,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene2Dashboard.tsx",
       "source_location": "L7",
       "id": "scene2dashboard_barcharticon",
-      "community": 79
+      "community": 81
     },
     {
       "label": "Scene2Onboarding.tsx",
@@ -2355,7 +2419,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene2Onboarding.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_scenes_scene2onboarding_tsx",
-      "community": 23
+      "community": 24
     },
     {
       "label": "GridLogo()",
@@ -2363,7 +2427,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene2Onboarding.tsx",
       "source_location": "L20",
       "id": "scene2onboarding_gridlogo",
-      "community": 23
+      "community": 24
     },
     {
       "label": "CheckIcon()",
@@ -2371,7 +2435,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene2Onboarding.tsx",
       "source_location": "L26",
       "id": "scene2onboarding_checkicon",
-      "community": 23
+      "community": 24
     },
     {
       "label": "typeText()",
@@ -2379,7 +2443,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene2Onboarding.tsx",
       "source_location": "L32",
       "id": "scene2onboarding_typetext",
-      "community": 23
+      "community": 24
     },
     {
       "label": "Scene3Integration.tsx",
@@ -2387,7 +2451,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene3Integration.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_scenes_scene3integration_tsx",
-      "community": 33
+      "community": 34
     },
     {
       "label": "typeText()",
@@ -2395,7 +2459,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene3Integration.tsx",
       "source_location": "L58",
       "id": "scene3integration_typetext",
-      "community": 33
+      "community": 34
     },
     {
       "label": "ConnectedRow()",
@@ -2403,7 +2467,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene3Integration.tsx",
       "source_location": "L66",
       "id": "scene3integration_connectedrow",
-      "community": 33
+      "community": 34
     },
     {
       "label": "Scene4Monitoring.tsx",
@@ -2411,7 +2475,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene4Monitoring.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_scenes_scene4monitoring_tsx",
-      "community": 34
+      "community": 35
     },
     {
       "label": "GithubIcon()",
@@ -2419,7 +2483,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene4Monitoring.tsx",
       "source_location": "L7",
       "id": "scene4monitoring_githubicon",
-      "community": 34
+      "community": 35
     },
     {
       "label": "VercelIcon()",
@@ -2427,7 +2491,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene4Monitoring.tsx",
       "source_location": "L12",
       "id": "scene4monitoring_vercelicon",
-      "community": 34
+      "community": 35
     },
     {
       "label": "Scene5Alert.tsx",
@@ -2435,7 +2499,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene5Alert.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_scenes_scene5alert_tsx",
-      "community": 134
+      "community": 138
     },
     {
       "label": "Scene6AlertSettings.tsx",
@@ -2443,7 +2507,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene6AlertSettings.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_scenes_scene6alertsettings_tsx",
-      "community": 80
+      "community": 82
     },
     {
       "label": "VercelIcon()",
@@ -2451,7 +2515,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene6AlertSettings.tsx",
       "source_location": "L15",
       "id": "scene6alertsettings_vercelicon",
-      "community": 80
+      "community": 82
     },
     {
       "label": "Scene7EndFrame.tsx",
@@ -2459,7 +2523,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene7EndFrame.tsx",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_video_src_scenes_scene7endframe_tsx",
-      "community": 35
+      "community": 36
     },
     {
       "label": "GridIcon()",
@@ -2467,7 +2531,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene7EndFrame.tsx",
       "source_location": "L6",
       "id": "scene7endframe_gridicon",
-      "community": 35
+      "community": 36
     },
     {
       "label": "Scene7EndFrame()",
@@ -2475,7 +2539,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\video\\src\\scenes\\Scene7EndFrame.tsx",
       "source_location": "L15",
       "id": "scene7endframe_scene7endframe",
-      "community": 35
+      "community": 36
     },
     {
       "label": "index.ts",
@@ -2483,7 +2547,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\index.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_index_ts",
-      "community": 135
+      "community": 139
     },
     {
       "label": "pollCycle.ts",
@@ -2491,7 +2555,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\pollCycle.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_pollcycle_ts",
-      "community": 81
+      "community": 83
     },
     {
       "label": "runPollCycle()",
@@ -2499,7 +2563,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\pollCycle.ts",
       "source_location": "L20",
       "id": "pollcycle_runpollcycle",
-      "community": 81
+      "community": 83
     },
     {
       "label": "spikes.ts",
@@ -2507,7 +2571,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\spikes.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_spikes_ts",
-      "community": 82
+      "community": 84
     },
     {
       "label": "checkSpikes()",
@@ -2515,7 +2579,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\spikes.ts",
       "source_location": "L5",
       "id": "spikes_checkspikes",
-      "community": 82
+      "community": 84
     },
     {
       "label": "thresholds.ts",
@@ -2523,7 +2587,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\thresholds.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_thresholds_ts",
-      "community": 83
+      "community": 85
     },
     {
       "label": "checkThresholds()",
@@ -2531,7 +2595,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\thresholds.ts",
       "source_location": "L5",
       "id": "thresholds_checkthresholds",
-      "community": 83
+      "community": 85
     },
     {
       "label": "database.types.ts",
@@ -2539,7 +2603,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\database.types.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_database_types_ts",
-      "community": 136
+      "community": 140
     },
     {
       "label": "encryption.ts",
@@ -2555,7 +2619,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\utils.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_utils_ts",
-      "community": 137
+      "community": 141
     },
     {
       "label": "discord.ts",
@@ -2563,7 +2627,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\discord.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_notifications_discord_ts",
-      "community": 27
+      "community": 28
     },
     {
       "label": "email.ts",
@@ -2571,7 +2635,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\email.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_notifications_email_ts",
-      "community": 28
+      "community": 29
     },
     {
       "label": "index.ts",
@@ -2579,7 +2643,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\index.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_notifications_index_ts",
-      "community": 29
+      "community": 30
     },
     {
       "label": "push.ts",
@@ -2587,7 +2651,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\push.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_notifications_push_ts",
-      "community": 84
+      "community": 86
     },
     {
       "label": "sendPushAlert()",
@@ -2595,7 +2659,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\push.ts",
       "source_location": "L11",
       "id": "push_sendpushalert",
-      "community": 84
+      "community": 86
     },
     {
       "label": "slack.ts",
@@ -2603,7 +2667,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\slack.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_notifications_slack_ts",
-      "community": 30
+      "community": 31
     },
     {
       "label": "types.ts",
@@ -2611,7 +2675,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\notifications\\types.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_notifications_types_ts",
-      "community": 138
+      "community": 142
     },
     {
       "label": "emails.ts",
@@ -2659,7 +2723,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\onboarding\\nudgeCheck.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_onboarding_nudgecheck_ts",
-      "community": 85
+      "community": 87
     },
     {
       "label": "runActivationNudgeCheck()",
@@ -2667,7 +2731,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\onboarding\\nudgeCheck.ts",
       "source_location": "L6",
       "id": "nudgecheck_runactivationnudgecheck",
-      "community": 85
+      "community": 87
     },
     {
       "label": "service.ts",
@@ -2675,7 +2739,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\lib\\supabase\\service.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_lib_supabase_service_ts",
-      "community": 31
+      "community": 32
     },
     {
       "label": "github.ts",
@@ -2683,7 +2747,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\github.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_services_github_ts",
-      "community": 36
+      "community": 37
     },
     {
       "label": "handleGitHubError()",
@@ -2691,7 +2755,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\github.ts",
       "source_location": "L13",
       "id": "github_handlegithuberror",
-      "community": 36
+      "community": 37
     },
     {
       "label": "fetchGitHubUsage()",
@@ -2699,7 +2763,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\github.ts",
       "source_location": "L29",
       "id": "github_fetchgithubusage",
-      "community": 36
+      "community": 37
     },
     {
       "label": "mongodb.ts",
@@ -2787,7 +2851,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\railway.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_services_railway_ts",
-      "community": 37
+      "community": 38
     },
     {
       "label": "railwayQuery()",
@@ -2795,7 +2859,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\railway.ts",
       "source_location": "L15",
       "id": "railway_railwayquery",
-      "community": 37
+      "community": 38
     },
     {
       "label": "fetchRailwayUsage()",
@@ -2803,7 +2867,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\railway.ts",
       "source_location": "L119",
       "id": "railway_fetchrailwayusage",
-      "community": 37
+      "community": 38
     },
     {
       "label": "supabase.ts",
@@ -2811,7 +2875,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\supabase.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_services_supabase_ts",
-      "community": 38
+      "community": 39
     },
     {
       "label": "runQuery()",
@@ -2819,7 +2883,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\supabase.ts",
       "source_location": "L27",
       "id": "supabase_runquery",
-      "community": 38
+      "community": 39
     },
     {
       "label": "fetchSupabaseUsage()",
@@ -2827,7 +2891,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\supabase.ts",
       "source_location": "L55",
       "id": "supabase_fetchsupabaseusage",
-      "community": 38
+      "community": 39
     },
     {
       "label": "vercel.ts",
@@ -2835,7 +2899,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\vercel.ts",
       "source_location": "L1",
       "id": "c_anubhav_web_dev_projects_watch_watch_worker_services_vercel_ts",
-      "community": 86
+      "community": 88
     },
     {
       "label": "fetchVercelUsage()",
@@ -2843,7 +2907,7 @@
       "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\worker\\services\\vercel.ts",
       "source_location": "L18",
       "id": "vercel_fetchvercelusage",
-      "community": 86
+      "community": 88
     },
     {
       "label": "Stackwatch Project",
@@ -3238,7 +3302,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 89,
       "id": "agents_md_code_review_graph"
     },
     {
@@ -3250,7 +3314,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 87,
+      "community": 89,
       "id": "gemini_md_code_review_graph"
     },
     {
@@ -3670,7 +3734,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 88,
+      "community": 90,
       "id": "public_file_svg"
     },
     {
@@ -3718,7 +3782,7 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "community": 88,
+      "community": 90,
       "id": "public_window_svg"
     },
     {
@@ -4974,36 +5038,36 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\FeedbackWidget.tsx",
-      "source_location": "L18",
+      "source_file": "frontend\\app\\components\\FeedbackWidget.tsx",
+      "source_location": "L19",
       "weight": 1.0,
-      "_src": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_feedbackwidget_tsx",
+      "_src": "frontend_app_components_feedbackwidget_tsx",
       "_tgt": "feedbackwidget_handle",
-      "source": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_feedbackwidget_tsx",
+      "source": "frontend_app_components_feedbackwidget_tsx",
       "target": "feedbackwidget_handle",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\FeedbackWidget.tsx",
-      "source_location": "L34",
+      "source_file": "frontend\\app\\components\\FeedbackWidget.tsx",
+      "source_location": "L35",
       "weight": 1.0,
-      "_src": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_feedbackwidget_tsx",
+      "_src": "frontend_app_components_feedbackwidget_tsx",
       "_tgt": "feedbackwidget_reset",
-      "source": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_feedbackwidget_tsx",
+      "source": "frontend_app_components_feedbackwidget_tsx",
       "target": "feedbackwidget_reset",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "c:\\Anubhav\\Web Dev Projects\\Watch\\watch\\frontend\\app\\components\\FeedbackWidget.tsx",
-      "source_location": "L41",
+      "source_file": "frontend\\app\\components\\FeedbackWidget.tsx",
+      "source_location": "L42",
       "weight": 1.0,
-      "_src": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_feedbackwidget_tsx",
+      "_src": "frontend_app_components_feedbackwidget_tsx",
       "_tgt": "feedbackwidget_submit",
-      "source": "c_anubhav_web_dev_projects_watch_watch_frontend_app_components_feedbackwidget_tsx",
+      "source": "frontend_app_components_feedbackwidget_tsx",
       "target": "feedbackwidget_submit",
       "confidence_score": 1.0
     },
@@ -5509,6 +5573,54 @@
       "_tgt": "use_toast_dispatch",
       "source": "use_toast_dispatch",
       "target": "use_toast_toast",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend\\app\\docs\\layout.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_src": "frontend_app_docs_layout_tsx",
+      "_tgt": "layout_layout",
+      "source": "frontend_app_docs_layout_tsx",
+      "target": "layout_layout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend\\app\\docs\\[[...slug]]\\page.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_src": "frontend_app_docs_slug_page_tsx",
+      "_tgt": "page_page",
+      "source": "frontend_app_docs_slug_page_tsx",
+      "target": "page_page",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend\\app\\docs\\[[...slug]]\\page.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_src": "frontend_app_docs_slug_page_tsx",
+      "_tgt": "page_generatestaticparams",
+      "source": "frontend_app_docs_slug_page_tsx",
+      "target": "page_generatestaticparams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "frontend\\app\\docs\\[[...slug]]\\page.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_src": "frontend_app_docs_slug_page_tsx",
+      "_tgt": "page_generatemetadata",
+      "source": "frontend_app_docs_slug_page_tsx",
+      "target": "page_generatemetadata",
       "confidence_score": 1.0
     },
     {
