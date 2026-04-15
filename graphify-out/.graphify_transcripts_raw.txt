@@ -1,2 +1,0 @@
-  warning: could not transcribe c:\Anubhav\Web Dev Projects\Watch\watch\frontend\public\StackwatchDemo.mp4: Video transcription requires faster-whisper. Run: pip install 'graphifyy[video]'
-[]
