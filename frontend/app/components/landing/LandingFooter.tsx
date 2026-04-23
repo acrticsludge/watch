@@ -13,6 +13,8 @@ export function LandingFooter() {
           </div>
           <span className="font-semibold text-zinc-500 text-sm tracking-tight">Stackwatch</span>
           <span className="text-zinc-700 text-sm">© {new Date().getFullYear()}</span>
+          <span className="text-zinc-700 text-sm">·</span>
+          <span className="text-zinc-700 text-sm">part of Pulsemonitor</span>
         </div>
 
         <nav className="flex items-center gap-1 flex-wrap justify-center">
