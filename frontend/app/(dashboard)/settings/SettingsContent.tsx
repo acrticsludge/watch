@@ -181,13 +181,6 @@ interface SpikeConfig {
   enabled: boolean;
 }
 
-interface CostAlertConfig {
-  integration_id: string;
-  metric_name: string;
-  drift_percent: number;
-  enabled: boolean;
-}
-
 interface SettingsContentProps {
   userEmail: string;
   integrations: Integration[];
@@ -202,7 +195,6 @@ interface SettingsContentProps {
   defaultTab?: string;
   snapshotMetrics?: Record<string, string[]>;
   spikeConfigs?: SpikeConfig[];
-  costAlertConfigs?: CostAlertConfig[];
   /** When provided, only these tabs are rendered. */
   visibleTabs?: Array<"alerts" | "notifications" | "account" | "billing">;
   /** When provided, new alert channels are scoped to this project. */
@@ -481,7 +473,6 @@ export function SettingsContent({
   defaultTab = "alerts",
   snapshotMetrics = {},
   spikeConfigs = [],
-  costAlertConfigs = [],
   visibleTabs,
   projectId,
 }: SettingsContentProps) {
@@ -551,46 +542,6 @@ export function SettingsContent({
       return map;
     },
   );
-
-  const [costEnabled, setCostEnabled] = useState<Record<string, boolean>>(
-    () => {
-      const map: Record<string, boolean> = {};
-      for (const cfg of costAlertConfigs) {
-        map[`${cfg.integration_id}::${cfg.metric_name}`] = cfg.enabled;
-      }
-      return map;
-    },
-  );
-
-  const [costDrift, setCostDrift] = useState<Record<string, number>>(
-    () => {
-      const map: Record<string, number> = {};
-      for (const cfg of costAlertConfigs) {
-        map[`${cfg.integration_id}::${cfg.metric_name}`] = cfg.drift_percent;
-      }
-      return map;
-    },
-  );
-
-  async function saveCostConfig(integrationId: string, metricName: string) {
-    const key = `${integrationId}::${metricName}`;
-    const enabled = costEnabled[key] ?? false;
-    const drift_percent = costDrift[key] ?? 10;
-    try {
-      const res = await fetch("/api/alerts/cost", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ integration_id: integrationId, metric_name: metricName, drift_percent, enabled }),
-      });
-      if (!res.ok) {
-        toast({ title: "Failed to save price-change config", variant: "destructive" });
-      } else {
-        toast({ title: "Price-change alert saved" });
-      }
-    } catch {
-      toast({ title: "Failed to save price-change config", description: "Network error. Please try again.", variant: "destructive" });
-    }
-  }
 
   async function saveSpikeConfig(integrationId: string, metricName: string) {
     const key = `${integrationId}::${metricName}`;
@@ -941,86 +892,6 @@ export function SettingsContent({
                       </div>
                     )}
                   </div>
-
-                  {/* Price-Change Alerts subsection (Railway + MongoDB only) */}
-                  {(intg.service === "railway" || intg.service === "mongodb") && (
-                    <div className="mt-6 pt-5 border-t border-white/[0.04]">
-                      <div className="flex items-center gap-2 mb-4">
-                        <h4 className="text-sm font-medium text-zinc-300">Price-Change Alerts</h4>
-                        {!isPro && (
-                          <span className="text-[10px] font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded px-1.5 py-0.5">
-                            Pro
-                          </span>
-                        )}
-                      </div>
-                      {!isPro ? (
-                        <p className="text-sm text-zinc-600">
-                          Price-change detection is available on the{" "}
-                          <a
-                            href="/pricing"
-                            className="text-zinc-400 hover:text-white underline underline-offset-2 transition-colors"
-                          >
-                            Pro plan
-                          </a>
-                          . Get alerted when your provider&apos;s unit rate drifts from the baseline.
-                        </p>
-                      ) : (
-                        <div className="space-y-5">
-                          {(intg.service === "railway"
-                            ? ["memory_usage_mb"]
-                            : ["storage_mb"]
-                          ).map((metric) => {
-                            const key = `${intg.id}::${metric}`;
-                            const enabled = costEnabled[key] ?? false;
-                            const drift = costDrift[key] ?? 10;
-                            return (
-                              <div key={`cost-${metric}`} className="space-y-3">
-                                <div className="flex items-center gap-4">
-                                  <Switch
-                                    checked={enabled}
-                                    onCheckedChange={(checked) =>
-                                      setCostEnabled((p) => ({ ...p, [key]: checked }))
-                                    }
-                                  />
-                                  <div className="flex-1">
-                                    <Label className="text-sm text-zinc-400">
-                                      {METRIC_LABELS[metric] ?? metric}
-                                    </Label>
-                                    <p className="text-xs text-zinc-600 mt-0.5">
-                                      Alert if rate drifts &gt;{drift}% from baseline
-                                    </p>
-                                  </div>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => saveCostConfig(intg.id, metric)}
-                                    className="border-white/10 text-zinc-300 hover:bg-white/[0.06]"
-                                  >
-                                    Save
-                                  </Button>
-                                </div>
-                                <div className="pl-10 flex items-center gap-3">
-                                  <span className="text-xs text-zinc-600 w-20 shrink-0">
-                                    Threshold: {drift}%
-                                  </span>
-                                  <Slider
-                                    min={5}
-                                    max={50}
-                                    step={5}
-                                    value={[drift]}
-                                    onValueChange={([v]) =>
-                                      setCostDrift((p) => ({ ...p, [key]: v }))
-                                    }
-                                    className="w-40"
-                                  />
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  )}
                 </div>
               );
             })}

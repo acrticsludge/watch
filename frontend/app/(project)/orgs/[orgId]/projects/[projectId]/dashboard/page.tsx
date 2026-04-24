@@ -107,7 +107,7 @@ async function UsageContent({
     getSubscription(),
     supabase
       .from("usage_snapshots")
-      .select("integration_id, metric_name, current_value, limit_value, percent_used, entity_id, entity_label, cost_usd, cost_per_unit, recorded_at")
+      .select("integration_id, metric_name, current_value, limit_value, percent_used, entity_id, entity_label, recorded_at")
       .in("integration_id", integrationIds)
       .order("recorded_at", { ascending: false })
       .limit(5000),

@@ -8,23 +8,9 @@ export async function sendDiscordAlert(
   try {
     const metricLabel = METRIC_LABELS[alert.metricName] ?? alert.metricName;
     const isSpike = alert.alertKind === "spike";
-    const isCostDrift = alert.alertKind === "cost_drift";
 
     let embed: Record<string, unknown>;
-    if (isCostDrift) {
-      const ctx = alert.costContext!;
-      const sign = ctx.currentCostPerUnit > ctx.previousCostPerUnit ? "+" : "-";
-      embed = {
-        title: `💰 Price Change: ${alert.service} — ${metricLabel}`,
-        description: `**${alert.accountLabel}**: unit rate changed **${sign}${Math.abs(ctx.deltaPct).toFixed(1)}%**`,
-        color: 0xf59e0b,
-        fields: [
-          { name: "Previous Rate", value: `$${ctx.previousCostPerUnit.toFixed(6)}`, inline: true },
-          { name: "Current Rate", value: `$${ctx.currentCostPerUnit.toFixed(6)}`, inline: true },
-        ],
-        timestamp: alert.recordedAt,
-      };
-    } else if (isSpike) {
+    if (isSpike) {
       const multiplier = alert.spikeContext?.multiplier.toFixed(1) ?? "?";
       const baseline = alert.spikeContext?.baseline.toLocaleString() ?? "?";
       embed = {

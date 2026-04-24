@@ -13,56 +13,6 @@ export async function sendAlertEmail(
   const metricLabel = METRIC_LABELS[alert.metricName] ?? alert.metricName;
   const unit = METRIC_UNITS[alert.metricName] ?? "";
   const isSpike = alert.alertKind === "spike";
-  const isCostDrift = alert.alertKind === "cost_drift";
-
-  if (isCostDrift) {
-    const ctx = alert.costContext!;
-    const direction = ctx.currentCostPerUnit > ctx.previousCostPerUnit ? "increased" : "decreased";
-    const sign = ctx.currentCostPerUnit > ctx.previousCostPerUnit ? "+" : "-";
-
-    await resend.emails.send({
-      from: FROM,
-      to,
-      subject: `[💰 Price Change] ${alert.service} ${metricLabel} rate ${direction} ${sign}${Math.abs(ctx.deltaPct).toFixed(1)}%`,
-      html: `
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"></head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9fafb; padding: 40px 20px;">
-  <div style="max-width: 560px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-    <div style="background: #f59e0b; padding: 24px 32px;">
-      <h1 style="margin: 0; color: #fff; font-size: 20px; font-weight: 600;">Price Change Detected</h1>
-      <p style="margin: 4px 0 0; color: rgba(255,255,255,0.85); font-size: 14px;">${alert.accountLabel} · ${alert.service}</p>
-    </div>
-    <div style="padding: 32px;">
-      <p style="margin: 0 0 24px; color: #374151; font-size: 16px;">
-        The unit rate for <strong>${metricLabel}</strong> ${direction} by <strong style="color: #f59e0b;">${sign}${Math.abs(ctx.deltaPct).toFixed(1)}%</strong> compared to the recent baseline.
-      </p>
-      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
-        <tr style="border-bottom: 1px solid #e5e7eb;">
-          <td style="padding: 10px 0; color: #6b7280; font-size: 14px;">Previous rate (avg)</td>
-          <td style="padding: 10px 0; text-align: right; font-weight: 600; color: #111827; font-size: 14px;">$${ctx.previousCostPerUnit.toFixed(6)} / ${unit || "unit"}</td>
-        </tr>
-        <tr style="border-bottom: 1px solid #e5e7eb;">
-          <td style="padding: 10px 0; color: #6b7280; font-size: 14px;">Current rate</td>
-          <td style="padding: 10px 0; text-align: right; font-weight: 600; color: #f59e0b; font-size: 14px;">$${ctx.currentCostPerUnit.toFixed(6)} / ${unit || "unit"}</td>
-        </tr>
-        <tr>
-          <td style="padding: 10px 0; color: #6b7280; font-size: 14px;">Detected at</td>
-          <td style="padding: 10px 0; text-align: right; color: #111827; font-size: 14px;">${new Date(alert.recordedAt).toLocaleString()}</td>
-        </tr>
-      </table>
-      <a href="${APP_URL}/dashboard" style="display: inline-block; background: #2563eb; color: #fff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 500;">View Dashboard</a>
-    </div>
-    <div style="padding: 16px 32px; background: #f9fafb; border-top: 1px solid #e5e7eb;">
-      <p style="margin: 0; color: #9ca3af; font-size: 12px;">You received this because you have price-change alerts enabled on Stackwatch. <a href="${APP_URL}/settings" style="color: #6b7280;">Manage alerts</a></p>
-    </div>
-  </div>
-</body>
-</html>`,
-    });
-    return;
-  }
 
   if (isSpike) {
     const multiplier = alert.spikeContext?.multiplier ?? 0;

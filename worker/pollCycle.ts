@@ -6,7 +6,6 @@ import { fetchRailwayUsage } from "./services/railway";
 import { fetchMongoDBUsage } from "./services/mongodb";
 import { checkThresholds } from "./thresholds";
 import { checkSpikes } from "./spikes";
-import { checkCostDrift } from "./costDrift";
 import { sendFirstSyncEmail } from "./lib/onboarding/emails";
 
 export interface UsageMetric {
@@ -16,8 +15,6 @@ export interface UsageMetric {
   percentUsed: number | null;  // null when limitValue is null
   entityId?: string;    // undefined = account-level aggregate; set = per-repo/project/bucket
   entityLabel?: string; // human-readable entity name for display
-  costUsd?: number;     // MTD cost in USD for this metric (Railway/MongoDB only)
-  costPerUnit?: number; // derived: costUsd / currentValue
 }
 
 export async function runPollCycle(): Promise<void> {
@@ -120,8 +117,6 @@ export async function runPollCycle(): Promise<void> {
             percent_used: m.percentUsed,
             entity_id: m.entityId ?? null,
             entity_label: m.entityLabel ?? null,
-            cost_usd: m.costUsd ?? null,
-            cost_per_unit: m.costPerUnit ?? null,
           });
 
           if (aggregateMetrics.length > 0) {
@@ -162,7 +157,6 @@ export async function runPollCycle(): Promise<void> {
           // Check thresholds only on aggregate (non-entity) metrics to avoid alert spam
           await checkThresholds(integration.user_id, integration.id, aggregateMetrics, integration.project_id);
           await checkSpikes(integration.user_id, integration.id, aggregateMetrics, tier, integration.project_id);
-          await checkCostDrift(integration.user_id, integration.id, aggregateMetrics, tier, integration.project_id);
         } else {
           // Service connected successfully but returned no data (e.g. plan doesn't expose billing API).
           // Mark as "unsupported" so the dashboard can show a clear message instead of an error.
