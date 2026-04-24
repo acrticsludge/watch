@@ -39,7 +39,7 @@ export async function GET(request: Request) {
 
   const { data: snapshots, error: snapError } = await supabase
     .from("usage_snapshots")
-    .select("integration_id, metric_name, current_value, limit_value, percent_used, recorded_at")
+    .select("integration_id, metric_name, current_value, limit_value, percent_used, cost_usd, cost_per_unit, recorded_at")
     .in("integration_id", ids)
     .order("recorded_at", { ascending: false })
     .limit(500);

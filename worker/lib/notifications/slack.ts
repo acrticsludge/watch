@@ -8,10 +8,16 @@ export async function sendSlackAlert(
   try {
     const metricLabel = METRIC_LABELS[alert.metricName] ?? alert.metricName;
     const isSpike = alert.alertKind === "spike";
+    const isCostDrift = alert.alertKind === "cost_drift";
 
     let color: string;
     let text: string;
-    if (isSpike) {
+    if (isCostDrift) {
+      const ctx = alert.costContext!;
+      const sign = ctx.currentCostPerUnit > ctx.previousCostPerUnit ? "+" : "-";
+      color = "#f59e0b";
+      text = `*💰 Price Change: ${alert.service} — ${metricLabel}*\n${alert.accountLabel}: unit rate changed ${sign}${Math.abs(ctx.deltaPct).toFixed(1)}% ($${ctx.previousCostPerUnit.toFixed(6)} → $${ctx.currentCostPerUnit.toFixed(6)})`;
+    } else if (isSpike) {
       color = "#f97316";
       const multiplier = alert.spikeContext?.multiplier.toFixed(1) ?? "?";
       const baseline = alert.spikeContext?.baseline.toLocaleString() ?? "?";

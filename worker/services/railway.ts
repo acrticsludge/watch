@@ -74,7 +74,7 @@ const PROJECT_USAGE_QUERY = `
       projectId: $projectId
       startDate: $startDate
       endDate: $endDate
-      measurements: [CPU_USAGE, MEMORY_USAGE_GB, NETWORK_TX_GB, NETWORK_RX_GB, DISK_USAGE_GB]
+      measurements: [CPU_USAGE, MEMORY_USAGE_GB, NETWORK_TX_GB, NETWORK_RX_GB, DISK_USAGE_GB, ESTIMATED_USD]
     ) {
       ... on AggregatedUsage {
         measurement
@@ -110,6 +110,7 @@ interface ProjectAgg {
   totalDiskGB: number;
   peakCpuFraction: number;
   peakMemoryGB: number;
+  estimatedUsd: number;
 }
 
 // Free-tier limits
@@ -162,6 +163,7 @@ export async function fetchRailwayUsage(
     totalDiskGB: 0,
     peakCpuFraction: 0,
     peakMemoryGB: 0,
+    estimatedUsd: 0,
   };
   let anyUsageFetched = false;
 
@@ -175,6 +177,7 @@ export async function fetchRailwayUsage(
       totalDiskGB: 0,
       peakCpuFraction: 0,
       peakMemoryGB: 0,
+      estimatedUsd: 0,
     };
 
     try {
@@ -215,6 +218,9 @@ export async function fetchRailwayUsage(
             agg.totalDiskGB += val;
             anyUsageFetched = true;
             break;
+          case "ESTIMATED_USD":
+            agg.estimatedUsd += val;
+            break;
         }
       }
 
@@ -226,6 +232,7 @@ export async function fetchRailwayUsage(
       globalAgg.totalDiskGB += agg.totalDiskGB;
       globalAgg.peakCpuFraction = Math.max(globalAgg.peakCpuFraction, agg.peakCpuFraction);
       globalAgg.peakMemoryGB = Math.max(globalAgg.peakMemoryGB, agg.peakMemoryGB);
+      globalAgg.estimatedUsd += agg.estimatedUsd;
 
       projectData.push({ project, serviceCount, agg });
     } catch (err) {
@@ -245,11 +252,16 @@ export async function fetchRailwayUsage(
 
   // ── AGGREGATE (entity_id = undefined) ──────────────────────────────────────
   const totalMemoryMB = Math.round(globalAgg.totalMemoryGB * 1024 * 100) / 100;
+  const globalCostUsd = globalAgg.estimatedUsd > 0 ? Math.round(globalAgg.estimatedUsd * 10000) / 10000 : undefined;
   metrics.push({
     metricName: "memory_usage_mb",
     currentValue: totalMemoryMB,
     limitValue: memoryLimitMB,
     percentUsed: memoryLimitMB > 0 ? Math.round((totalMemoryMB / memoryLimitMB) * 10000) / 100 : 0,
+    costUsd: globalCostUsd,
+    costPerUnit: globalCostUsd != null && totalMemoryMB > 0
+      ? Math.round((globalCostUsd / totalMemoryMB) * 1e8) / 1e8
+      : undefined,
   });
 
   const cpuPercent = Math.round(globalAgg.totalCpuFraction * 100 * 100) / 100;

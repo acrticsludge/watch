@@ -282,6 +282,50 @@ async function fetchViaDirectConnection(
   }
 }
 
+// ── MTD billing cost (Atlas Cost Explorer, Pro plan+ orgs only) ───────────────
+
+async function fetchMTDCostUsd(
+  projectId: string,
+  publicKey: string,
+  privateKey: string
+): Promise<number | null> {
+  try {
+    // Resolve orgId from the project/group
+    const groupRes = await digestFetch(`${ATLAS_BASE}/groups/${projectId}`, publicKey, privateKey);
+    if (!groupRes.ok) return null;
+    const groupData = await groupRes.json() as { orgId?: string };
+    const orgId = groupData.orgId;
+    if (!orgId) return null;
+
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split("T")[0];
+    const endDate = now.toISOString().split("T")[0];
+
+    const costRes = await digestFetch(
+      `${ATLAS_BASE}/orgs/${orgId}/billing/costExplorer/usage?startDate=${startDate}&endDate=${endDate}&groupId=${projectId}`,
+      publicKey,
+      privateKey
+    );
+    if (!costRes.ok) return null;
+
+    const costData = await costData_parse(costRes);
+    return costData;
+  } catch {
+    return null;
+  }
+}
+
+async function costData_parse(res: Response): Promise<number | null> {
+  try {
+    const json = await res.json() as { usageDetails?: Array<{ totalCostCents?: number }> };
+    if (!json.usageDetails) return null;
+    const totalCents = json.usageDetails.reduce((sum, d) => sum + (d.totalCostCents ?? 0), 0);
+    return totalCents > 0 ? Math.round((totalCents / 100) * 10000) / 10000 : null;
+  } catch {
+    return null;
+  }
+}
+
 // ── Main export ───────────────────────────────────────────────────────────────
 
 export async function fetchMongoDBUsage(
@@ -298,6 +342,11 @@ export async function fetchMongoDBUsage(
   }
 
   const isPro = tier === "pro" || tier === "team";
+
+  // Fetch MTD cost in parallel — non-blocking, Pro only
+  const costPromise = isPro
+    ? fetchMTDCostUsd(projectId, publicKey, privateKey).catch(() => null)
+    : Promise.resolve(null);
 
   // ── 1. Fetch clusters to determine instance sizes and limits ─────────────
   const clustersRes = await digestFetch(
@@ -352,15 +401,20 @@ export async function fetchMongoDBUsage(
     }
 
     try {
-      const directMetrics = await fetchViaDirectConnection(connectionString, primaryLimits, isPro);
+      const [directMetrics, costUsd] = await Promise.all([
+        fetchViaDirectConnection(connectionString, primaryLimits, isPro),
+        costPromise,
+      ]);
+
+      const metricsWithCost = attachCostToStorageMb(directMetrics, costUsd);
 
       // Pro: also get network metrics from Admin API (not available via direct connection)
       if (isPro) {
         const netMetrics = await fetchNetworkMetrics(integration, projectId, publicKey, privateKey, primaryLimits);
-        return [...directMetrics, ...netMetrics];
+        return [...metricsWithCost, ...netMetrics];
       }
 
-      return directMetrics;
+      return metricsWithCost;
     } catch (err) {
       console.warn(
         `[mongodb] Direct connection failed for integration ${integration.id} — falling back to Admin API:`,
@@ -370,7 +424,27 @@ export async function fetchMongoDBUsage(
     }
   }
 
-  return fetchViaAdminAPI(integration, projectId, publicKey, privateKey, clusters, clusterLimitsMap, primaryLimits, isPro);
+  const [adminMetrics, costUsd] = await Promise.all([
+    fetchViaAdminAPI(integration, projectId, publicKey, privateKey, clusters, clusterLimitsMap, primaryLimits, isPro),
+    costPromise,
+  ]);
+  return attachCostToStorageMb(adminMetrics, costUsd);
+}
+
+function attachCostToStorageMb(metrics: UsageMetric[], costUsd: number | null): UsageMetric[] {
+  if (costUsd == null) return metrics;
+  return metrics.map((m) => {
+    if (m.metricName === "storage_mb" && !m.entityId) {
+      return {
+        ...m,
+        costUsd,
+        costPerUnit: m.currentValue > 0
+          ? Math.round((costUsd / m.currentValue) * 1e8) / 1e8
+          : undefined,
+      };
+    }
+    return m;
+  });
 }
 
 // ── Admin API path (original, for non-connection-string or fallback) ──────────
