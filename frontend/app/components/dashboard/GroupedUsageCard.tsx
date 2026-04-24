@@ -19,8 +19,6 @@ interface Snapshot {
   percent_used: number | null;
   entity_id?: string | null;
   entity_label?: string | null;
-  cost_usd?: number | null;
-  cost_per_unit?: number | null;
 }
 
 interface HistoryEntry {
@@ -152,20 +150,6 @@ function getProjection(
     type: "safe",
     projectedPct: Math.min(99, Math.round((projected / limit) * 100)),
   };
-}
-
-function projectMonthlyCost(costUsd: number): number | null {
-  const now = new Date();
-  const dayOfMonth = now.getDate();
-  if (dayOfMonth < 3) return null;
-  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  return Math.round((costUsd * (daysInMonth / dayOfMonth)) * 100) / 100;
-}
-
-function formatCost(usd: number): string {
-  if (usd >= 100) return `$${Math.round(usd)}`;
-  if (usd >= 1) return `$${usd.toFixed(2)}`;
-  return `$${usd.toFixed(4)}`;
 }
 
 function getBadgeVariant(pct: number): "success" | "warning" | "danger" {
@@ -310,11 +294,6 @@ function MetricRow({
             </div>
           ))}
         </div>
-      )}
-      {snap.cost_per_unit != null && (
-        <p className="text-[10px] text-zinc-600 mt-1 tabular-nums">
-          Rate: ${snap.cost_per_unit.toFixed(6)} / {unit || "unit"}
-        </p>
       )}
       {service === "supabase" && snap.metric_name === "db_size_mb" && (
         <p className="text-[10px] text-zinc-600 mt-1.5 leading-relaxed">
@@ -673,14 +652,6 @@ export function GroupedUsageCard({
                         · ~{proj.projectedPct}%
                       </span>
                     ))}
-                  {snap.cost_usd != null && (() => {
-                    const monthly = projectMonthlyCost(snap.cost_usd);
-                    return monthly != null ? (
-                      <span className="text-[9px] text-zinc-600 tabular-nums">
-                        · {formatCost(monthly)}/mo
-                      </span>
-                    ) : null;
-                  })()}
                 </div>
               </div>
             );

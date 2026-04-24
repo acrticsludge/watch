@@ -108,7 +108,7 @@ async function AlertsContent({
   const { filter } = await buildAlertFilter(projectId);
   const { data: history } = await supabase
     .from("alert_history")
-    .select("id, metric_name, percent_used, channel, sent_at, alert_kind, cost_context, integration_id, integration:integrations(id, service, account_label)")
+    .select("id, metric_name, percent_used, channel, sent_at, integration_id, integration:integrations(id, service, account_label)")
     .or(filter)
     .gte("sent_at", since)
     .order("sent_at", { ascending: false })
@@ -133,9 +133,7 @@ async function AlertsContent({
         <tbody className="divide-y divide-white/4">
           {rows.map((row) => {
             const intg = Array.isArray(row.integration) ? row.integration[0] : row.integration;
-            const isCostDrift = row.alert_kind === "cost_drift";
-            const costCtx = row.cost_context as { deltaPct?: number } | null;
-            const pct = Math.round(row.percent_used ?? 0);
+            const pct = Math.round(row.percent_used);
             return (
               <tr key={row.id} className="hover:bg-white/2 transition-colors">
                 <td className="px-5 py-3">
@@ -144,13 +142,7 @@ async function AlertsContent({
                 </td>
                 <td className="px-5 py-3 text-zinc-400">{METRIC_LABELS[row.metric_name] ?? row.metric_name}</td>
                 <td className="px-5 py-3">
-                  {isCostDrift ? (
-                    <Badge variant="warning">
-                      💰 {costCtx?.deltaPct != null ? `${costCtx.deltaPct > 0 ? "+" : ""}${costCtx.deltaPct.toFixed(1)}%` : "rate change"}
-                    </Badge>
-                  ) : (
-                    <Badge variant={pct >= 80 ? "danger" : pct >= 60 ? "warning" : "success"}>{pct}%</Badge>
-                  )}
+                  <Badge variant={pct >= 80 ? "danger" : pct >= 60 ? "warning" : "success"}>{pct}%</Badge>
                 </td>
                 <td className="px-5 py-3 text-zinc-500 capitalize">{row.channel}</td>
                 <td className="px-5 py-3 text-zinc-700 text-xs">{relativeTime(row.sent_at)}</td>
