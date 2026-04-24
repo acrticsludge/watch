@@ -12,8 +12,13 @@ export interface AlertPayload {
   percentUsed: number | null;
   recordedAt: string;
   topEntity?: { label: string; valueMb: number }; // highest sub-entity (e.g. top DB for MongoDB storage_mb)
-  alertKind?: "threshold" | "spike";              // default 'threshold' when absent
-  spikeContext?: { baseline: number; multiplier: number }; // e.g. 3.2× above baseline of 120 MB
+  alertKind?: "threshold" | "spike" | "cost_drift"; // default 'threshold' when absent
+  spikeContext?: { baseline: number; multiplier: number };  // e.g. 3.2× above baseline of 120 MB
+  costContext?: {
+    previousCostPerUnit: number;
+    currentCostPerUnit: number;
+    deltaPct: number;                                       // e.g. 27.3 means +27.3%
+  };
 }
 
 export interface AlertChannel {

@@ -70,6 +70,7 @@ export async function fireAlerts(
         percent_used: alert.percentUsed,
         channel: channel.type,
         alert_kind: alert.alertKind ?? "threshold",
+        cost_context: alert.costContext ?? null,
       });
     })
   );

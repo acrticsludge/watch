@@ -127,6 +127,8 @@ export type Database = {
           percent_used: number | null;
           entity_id: string | null;
           entity_label: string | null;
+          cost_usd: number | null;
+          cost_per_unit: number | null;
           recorded_at: string;
         };
         Insert: {
@@ -138,6 +140,8 @@ export type Database = {
           percent_used?: number | null;
           entity_id?: string | null;
           entity_label?: string | null;
+          cost_usd?: number | null;
+          cost_per_unit?: number | null;
           recorded_at?: string;
         };
         Update: {
@@ -149,6 +153,8 @@ export type Database = {
           percent_used?: number | null;
           entity_id?: string | null;
           entity_label?: string | null;
+          cost_usd?: number | null;
+          cost_per_unit?: number | null;
           recorded_at?: string;
         };
         Relationships: [
@@ -266,6 +272,36 @@ export type Database = {
         };
         Relationships: [];
       };
+      cost_alert_configs: {
+        Row: {
+          id: string;
+          user_id: string;
+          integration_id: string;
+          metric_name: string;
+          drift_percent: number;
+          enabled: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          integration_id: string;
+          metric_name: string;
+          drift_percent?: number;
+          enabled?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          integration_id?: string;
+          metric_name?: string;
+          drift_percent?: number;
+          enabled?: boolean;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       spike_configs: {
         Row: {
           id: string;
@@ -295,31 +331,37 @@ export type Database = {
           id: string;
           user_id: string;
           integration_id: string;
+          project_id: string | null;
           metric_name: string;
-          percent_used: number;
+          percent_used: number | null;
           channel: ChannelType;
           sent_at: string;
-          alert_kind: "threshold" | "spike";
+          alert_kind: "threshold" | "spike" | "cost_drift";
+          cost_context: Json | null;
         };
         Insert: {
           id?: string;
           user_id: string;
           integration_id: string;
+          project_id?: string | null;
           metric_name: string;
-          percent_used: number;
+          percent_used?: number | null;
           channel: ChannelType;
           sent_at?: string;
-          alert_kind?: "threshold" | "spike";
+          alert_kind?: "threshold" | "spike" | "cost_drift";
+          cost_context?: Json | null;
         };
         Update: {
           id?: string;
           user_id?: string;
           integration_id?: string;
+          project_id?: string | null;
           metric_name?: string;
-          percent_used?: number;
+          percent_used?: number | null;
           channel?: ChannelType;
           sent_at?: string;
-          alert_kind?: "threshold" | "spike";
+          alert_kind?: "threshold" | "spike" | "cost_drift";
+          cost_context?: Json | null;
         };
         Relationships: [
           {
