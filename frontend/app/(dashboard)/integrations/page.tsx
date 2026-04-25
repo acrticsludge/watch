@@ -23,27 +23,18 @@ export default function IntegrationsPage() {
 async function IntegrationsData() {
   const supabase = await createClient();
 
-  const [{ data: integrations }, subscription, { data: { user } }] = await Promise.all([
+  const [{ data: integrations }, subscription] = await Promise.all([
     supabase
       .from("integrations")
       .select("id, service, account_label, status, created_at, last_synced_at, meta, sort_order")
       .neq("status", "disconnected")
       .order("sort_order", { ascending: true }),
     getSubscription(),
-    supabase.auth.getUser(),
   ]);
 
   const tier = subscription?.tier ?? "free";
-  const hasGithubIdentity =
-    user?.identities?.some((i) => i.provider === "github") ?? false;
 
-  return (
-    <IntegrationsContent
-      integrations={integrations ?? []}
-      tier={tier}
-      hasGithubIdentity={hasGithubIdentity}
-    />
-  );
+  return <IntegrationsContent integrations={integrations ?? []} tier={tier} />;
 }
 
 function IntegrationsSkeleton() {

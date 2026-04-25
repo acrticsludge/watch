@@ -5,11 +5,23 @@ description: Track Actions minutes, runner breakdowns, and storage limits
 
 Stackwatch tracks your GitHub Actions minutes, packages bandwidth, and shared storage against your plan's monthly limits.
 
-## What you need
+## Connecting via GitHub OAuth (recommended)
 
-A **GitHub Personal Access Token (PAT)** with the correct scopes for the account type you're connecting.
+If you signed up or logged in with GitHub, you can connect your GitHub integration in one click — no token required.
 
-## Step 1 — Create a Personal Access Token
+1. Go to **Integrations** in the Stackwatch dashboard
+2. Find **GitHub Actions** and click **Connect**
+3. Click **Use my GitHub account** at the top of the dialog
+4. GitHub will ask you to approve `read:user`, `read:org`, and `repo` permissions — these are the same scopes required for a PAT
+5. You're redirected back and the integration is created automatically
+
+If you haven't linked a GitHub account yet, you'll see a **Connect GitHub account** prompt instead. Clicking it links your GitHub identity to your Stackwatch account and creates the integration in one step.
+
+## Connecting via Personal Access Token
+
+Use this method if you prefer not to use OAuth, need to connect a separate GitHub account, or signed up with email or Google.
+
+### Step 1 — Create a Personal Access Token
 
 1. Go to [github.com/settings/tokens](https://github.com/settings/tokens)
 2. Click **Generate new token → Generate new token (classic)**
@@ -27,7 +39,7 @@ Select all three. If you only need personal-account billing and are on the Free 
 
 6. Click **Generate token** and copy it immediately — GitHub only shows it once.
 
-## Step 2 — Add the integration in Stackwatch
+### Step 2 — Add the integration in Stackwatch
 
 1. Navigate to your project in the Stackwatch dashboard
 2. Go to the project's **Integrations** tab
@@ -62,10 +74,10 @@ To monitor an organization's billing instead of your personal account, enter the
 ## Troubleshooting
 
 **"Invalid or expired Personal Access Token"**
-Your token has expired or was revoked. Generate a new one and reconnect from the project's **Integrations** tab.
+Your token has expired or was revoked. Generate a new one and reconnect from the project's **Integrations** tab. If you originally connected via OAuth, click **Connect** on the GitHub integration and use **Use my GitHub account** again to refresh the token.
 
 **"Token lacks required permissions"**
-You're missing a scope. Ensure `read:user` is checked for personal billing, `read:org` for org billing, and `repo` for per-repo breakdown (Pro).
+You're missing a scope. Ensure `read:user` is checked for personal billing, `read:org` for org billing, and `repo` for per-repo breakdown (Pro). If you connected via OAuth, disconnect and reconnect — GitHub will prompt you to approve the updated permissions.
 
 **"No Actions billing data for this plan"**
 The billing API returned a 404. This usually means the account has no GitHub Actions billing data exposed — common on free personal accounts with no Actions usage, and on accounts using GitHub's newer billing platform (post-2023). Data will appear once usage is recorded under the legacy billing system.
@@ -73,12 +85,8 @@ The billing API returned a 404. This usually means the account has no GitHub Act
 **Organization vs personal mismatch**
 If you're trying to monitor an org but left the org field blank (or vice versa), the wrong billing endpoint will be called. Check that the org slug in Stackwatch matches exactly what appears in your GitHub org URL.
 
-## Token rotation
+## Reconnecting / rotating credentials
 
-GitHub PATs expire. When your token expires:
+**OAuth:** Click **Connect** on the GitHub integration and use **Use my GitHub account** again. This refreshes the stored token without creating a duplicate integration.
 
-1. Generate a new token with the same scopes
-2. In Stackwatch, go to **Integrations**, find your GitHub integration, and click the **edit (pencil)** icon
-3. Paste the new token and save
-
-Stackwatch will resume polling on the next cycle.
+**PAT:** When your token expires, generate a new one with the same scopes, then go to **Integrations**, find your GitHub integration, click the **edit (pencil)** icon, paste the new token, and save. Stackwatch will resume polling on the next cycle.
