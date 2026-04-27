@@ -92,6 +92,24 @@ export default function RootLayout({
         <link rel="preconnect" href="https://us.i.posthog.com" />
         <link rel="dns-prefetch" href="https://avatars.githubusercontent.com" />
       </head>
+      <Script id="wireboard-init" strategy="afterInteractive">
+        {`
+        ;(function(w,i,r,e,b,oar,d){if(!w[b]){w.WireBoardNamespace=w.WireBoardNamespace||[];
+        w.WireBoardNamespace.push(b);w[b]=function(){(w[b].q=w[b].q||[]).push(arguments)};
+        w[b].q=w[b].q||[];oar=i.createElement(r);d=i.getElementsByTagName(r)[0];
+        oar.async=1;oar.src=e;d.parentNode.insertBefore(oar,d)}}(window,document,"script","https://static.wireboard.io/wireboard.js","wireboard"));
+        wireboard('newTracker', 'wb', 'pipeline-0.collector.wireboard.io', {
+          appId: 'bAeSbAuE',
+          forceSecureTracker: true,
+          contexts: {
+            performanceTiming: true,
+          },
+        });
+        window.wireboard('enableActivityTracking', 5, 10);
+        var customContext=[{schema:'wb:io.wireboard/publisher',data:{publisher:'1545fc87-f970-443f-b2f0-46142ce22ffd'}}];
+        window.wireboard('trackPageView', null, customContext);
+      `}
+      </Script>
       <body className="min-h-screen bg-background font-sans antialiased">
         <script
           type="application/ld+json"
