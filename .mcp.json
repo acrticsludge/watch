@@ -7,6 +7,10 @@
         "serve"
       ],
       "type": "stdio"
+    },
+    "impact-graph": {
+      "command": "impact-graph",
+      "type": "stdio"
     }
   }
 }
